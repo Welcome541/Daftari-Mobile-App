@@ -10,6 +10,13 @@ const amounts = [
   ['خمستاشر', 15],             // Egyptian / colloquial
   ['ثنين وخمسين', 52],          // Gulf / Yemeni
   ['تلتعش', 13],                // Levantine
+  ['تلتاشر', 13],               // Egyptian / Levantine
+  ['خمسطاش', 15],               // Maghrebi / Levantine
+  ['تمنتاشر', 18],               // Egyptian
+  ['حدعش', 11],                  // Levantine
+  ['طناش', 12],                  // Iraqi / Levantine
+  ['تلاتين', 30],                // Egyptian
+  ['تمانين', 80],                // Levantine / Maghrebi
   ['تمانتين', 80],              // Gulf / Levantine
   ['جوج وثلاثين', 32],          // Maghrebi
   ['تمنية وخمسين', 58],         // Maghrebi
@@ -42,6 +49,7 @@ const accepted = [
   ['دين أبو خالد رز خمسين ريال', 'c1', 50, 'رز'],
   ['سداد أبو خالد ٥٠ رز', 'c1', 50, 'رز'],
   ['دين أبو خالد اشتريت رز بخمسين ريال', 'c1', 50, 'رز'],
+  ['دين ابو خاليد رز خمسين', 'c1', 50, 'رز'], // one-character ASR error in a registered name
   ['دين أبو خالد 5 علب رز بسعر 200 ريال', 'c1', 200, 'علب رز'],
   ['دين أبو خالد منتج دواء خمسين', 'c1', 50, 'دواء'],
   ['payment سعيد rice fifty riyals', 'c2', 50, 'rice'],
@@ -69,6 +77,9 @@ for (const text of rejected) {
 }
 
 assert.equal(parse('دين أبو خالد منتج جوال خمسين').inScope, true, 'an explicit product cue permits a custom product name');
+assert.equal(speech.parseRecord('دين أبو خالد روبيان خمسين', { customers, knownProducts: ['روبيان'] }).inScope, true, 'a previously saved item can become part of the recognized vocabulary');
+assert.equal(speech.parseRecord('دين أبو خالد قلم خمسين', { customers, knownProducts: ['قلم'] }).note, 'قلم', 'a known custom product is returned as the item note');
+assert.equal(speech.parseRecord('دين أبو خاليد روبيان خمسين', { customers, knownProducts: ['روبيان'] }).customerId, 'c1', 'a slightly misheard name maps to the unique registered customer');
 assert.equal(parse('رز 50', { personal: true }).inScope, true, 'personal account may identify a product without a customer');
 assert.equal(parse('50', { personal: true }).inScope, false, 'amount alone is insufficient without a product');
 assert.equal(parse('دين أبو خالد رز خمسين', { contextCustomer: customers[1] }).customerId, 'c1', 'spoken customer name takes precedence over context');

@@ -13624,7 +13624,8 @@ function amtFromText(text){
 function parseSay(text,kind,contextId){
  text=String(text||'').trim();const amount=amtFromText(text),parsedAmount=Speech.parseAmount(text);
  const context=cust(contextId||((ui.rec&&ui.rec.pre)||ctxCust()));
- const record=Speech.parseRecord(text,{customers:DD().customers,contextCustomer:context,personal:isP(),maxAmount:1000000,
+ const knownProducts=DD().invoices.filter(x=>x&&x.note).map(x=>x.note);
+ const record=Speech.parseRecord(text,{customers:DD().customers,contextCustomer:context,knownProducts,personal:isP(),maxAmount:1000000,
   amountResult:{amt:amount.amt?Number(Money.dec(amount.amt)):0,start:parsedAmount.start,end:parsedAmount.end,source:parsedAmount.source}});
  return {name:record.name,amt:amount.amt||0,note:record.note,custId:record.customerId,inScope:record.inScope,ambiguous:record.ambiguous,source:record.source};
 }
@@ -13670,7 +13671,7 @@ window.voskEnsure=()=>{
 };
 window.voskAutoInit=()=>{
  if(window.voskStatus())return Promise.resolve(true);
- try{if(!window.Daftari||typeof Daftari.importedSummary!=='function')return Promise.resolve(false);const state=JSON.parse(Daftari.importedSummary()||'{}');if(!state.model||!state.modelBytes)return Promise.resolve(false)}catch(e){return Promise.resolve(false)}
+ try{if(!window.Daftari||typeof Daftari.importedSummary!=='function')return Promise.resolve(false);const state=JSON.parse(Daftari.importedSummary()||'{}');if(!state.model||!state.modelBytes)return Promise.resolve(false);if(!sec.vosk){sec.vosk=true;saveSec();render()}}catch(e){return Promise.resolve(false)}
  if(window.__voskAutoPromise)return window.__voskAutoPromise;
  toastMsg(t('voskLoad'));
  window.__voskAutoPromise=window.voskEnsure().then(ok=>{const err=window.voskError();toastMsg(ok?t('voskInitOk'):t('voskInitNo')+(err?' — '+err:''));return ok}).finally(()=>{window.__voskAutoPromise=null});

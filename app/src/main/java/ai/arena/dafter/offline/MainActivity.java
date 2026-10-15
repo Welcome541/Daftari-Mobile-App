@@ -210,7 +210,7 @@ public final class MainActivity extends Activity {
     }
     private void reportVoskState(){
         final boolean lib=voskLibReady(), model=voskModelReady();
-        runJs("(function(){try{var l="+lib+",m="+model+",msg=window.voskImpMsg?voskImpMsg(l,m):'';if(msg)toastMsg(msg);if(!l||!m)return;"
+        runJs("(function(){try{var l="+lib+",m="+model+",msg=window.voskImpMsg?voskImpMsg(l,m):'';if(msg)toastMsg(msg);if(!l||!m)return;if(typeof sec!=='undefined'&&!sec.vosk){sec.vosk=true;saveSec();render()}"
             +"busy(true);var p=window.libLoad?libLoad('lib/vosk-browser.js'):Promise.reject(new Error('Vosk library loader missing'));"
             +"Promise.resolve(p).then(function(){if(!window.voskReinit)throw new Error('Vosk adapter missing');return window.voskReinit(true)})"
             +".then(function(){busy(false);toastMsg(window.voskStatus&&voskStatus()?t('voskInitOk'):t('voskInitNo'))},function(e){busy(false);toastMsg(t('voskInitNo')+(e&&e.message?' — '+e.message:''))})"

@@ -70,13 +70,13 @@
 
   add(10, ['عشرة', 'عشر', 'عشره', 'عشره', 'ten']);
   add(11, ['احدعشر', 'حدعش', 'حداش', 'احدعش', 'eleven']);
-  add(12, ['اثناعشر', 'اثنيعشر', 'اثناعشر', 'اتناعشر', 'اتنعش', 'اتناش', 'تنعش', 'طناش', 'twelve']);
+  add(12, ['اثناعشر', 'اثنيعشر', 'اثناعشر', 'اتناعشر', 'اتناشر', 'تناشر', 'اتنعش', 'اتناش', 'تنعش', 'طناش', 'طناشر', 'twelve']);
   add(13, ['ثلاثةعشر', 'ثلاثعشر', 'ثلاثتعش', 'تلاتاشر', 'تلاتعش', 'تلتعشر', 'تلتعش', 'تلتاشر', 'ثلتعش', 'thirteen']);
   add(14, ['اربعةعشر', 'اربعتاشر', 'اربعتعش', 'اربعتاش', 'اربعطاش', 'fourteen']);
   add(15, ['خمسةعشر', 'خمستاشر', 'خمستعش', 'خمستاش', 'خمسطاش', 'fifteen']);
   add(16, ['ستةعشر', 'ستاشر', 'ستعش', 'ستطاش', 'sixteen']);
   add(17, ['سبعةعشر', 'سبعتاشر', 'سبعتعش', 'سبعتاش', 'سبعطاش', 'seventeen']);
-  add(18, ['ثمانيةعشر', 'تمانتاشر', 'تمانتعش', 'تمانتاش', 'تمانطاش', 'eighteen']);
+  add(18, ['ثمانيةعشر', 'تمانتاشر', 'تمنتاشر', 'تمانتعش', 'تمانتاش', 'تمانطاش', 'eighteen']);
   add(19, ['تسعةعشر', 'تسعتاشر', 'تسعتعش', 'تسعتاش', 'تسعطاش', 'nineteen']);
 
   add(20, ['عشرون', 'عشرين', 'عشرون', 'twenty']);
@@ -266,17 +266,18 @@
   }
 
   const PRODUCT_WORDS = new Set([
-    'رز','أرز','عيش','حليب','لبن','مويه','ماء','سكر','شاي','قهوة','بن','دقيق','طحين','زيت','خبز','قمح','بيض','جبن','جبنة','مكرونة','معكرونة','صلصة','عسل','تمر','لحم','دجاج','سمك','بطاطس','بطاطا','طماطم','بندورة','بصل','ثوم','ملح','زبدة','صابون','منظف','مسحوق','معلبات','مياه','عصير','سمن','عدس','فول','حبوب','تفاح','موز','برتقال','فواكه','خضار','بامية','فلفل','ليمون','زبادي','لبنة','زبيب','قشطة','مكسرات','شوكولاتة','بسكويت',
+    'رز','أرز','عيش','حليب','لبن','مويه','موية','ماي','ماء','سكر','شاي','قهوة','قهوه','بن','دقيق','طحين','زيت','خبز','قمح','بيض','جبن','جبنة','مكرونة','معكرونة','صلصة','عسل','تمر','لحم','دجاج','سمك','بطاطس','بطاطا','طماطم','بندورة','بصل','ثوم','ملح','زبدة','صابون','منظف','مسحوق','معلبات','مياه','عصير','سمن','عدس','فول','حمص','فاصوليا','لوبيا','حبوب','تفاح','موز','برتقال','فواكه','خضار','بامية','فلفل','ليمون','زبادي','لبنة','زبيب','قشطة','مكسرات','شوكولاتة','بسكويت','بقسماط','كعك','معمول','زعتر','زيتون','مخلل','طحينة','برغل','كسكس','كوسا','قرع','باذنجان','جزر','خيار','خس','سبانخ','نعناع','كزبرة','بقدونس','زنجبيل','هيل','قرفة','كركم','كمون','شعيرية','اندومي','نودلز','مربى','دبس','جبنة','لبن','لبن رائب','حليب بودرة','مياه غازية','مشروب','مناديل','حفاضات','شامبو','معجون','بطارية','قلم','دفتر','كراسة','كتاب','هاتف','شاحن','سلك','كابل','كيس','كرتون','صندوق','كرتونة','حبة','علبة','قطعة','كيلو','كرتونة',
     'كرتون','كرتونه','علبة','علب','حبة','حبات','قطعة','قطع','باكيت','كيلو','كجم','جرام','غرام','لتر','زجاجة','قنينة','كيس','صندوق','ربطة','حزمة','متر',
-    'rice','milk','sugar','tea','coffee','flour','oil','bread','egg','eggs','cheese','meat','chicken','fish','dates','soap','water','juice'
+    'جمبري','روبيان','قمرون','سردين','سجق','نقانق','لانشون','ذرة','فطر','مشروم','خيار','قثاء','جرجير','قرنبيط','زهرة','ملفوف','كرنب','فجل','شمندر','بنجر','كرفس','كراث','كوسا','باذنجان','بطيخ','شمام','عنب','رمان','خوخ','مانجو','فراولة','كمثرى','تين','جوز','لوز','فستق','كاجو','فول سوداني','لب دوار الشمس','قرطاسية','مناديل','ورق','منظف','صابون','شامبو','بلسم','مطهر','معقم','معجون اسنان','فرشاة','ممحاة','مسطرة','مقص','لعبة','ملابس','قميص','حذاء','حذاء رياضي','شنطة','حقيبة','بطاقة شحن','شريحة','كرت شحن',
+    'rice','milk','sugar','tea','coffee','flour','oil','bread','egg','eggs','cheese','meat','chicken','fish','dates','soap','water','juice','shrimp','prawn','sausage','mushroom','corn','paper','notebook','pen','shampoo','detergent'
   ].map(normalizeWord));
   const PRODUCT_UNITS = new Set(['كرتون','كرتونه','علبة','علب','حبة','حبات','قطعة','قطع','باكيت','كيلو','كجم','جرام','غرام','لتر','زجاجة','قنينة','كيس','صندوق','ربطة','حزمة','متر'].map(normalizeWord));
   const PRODUCT_CUES = new Set([
     'منتج','منتجات','المنتج','الصنف','صنف','أصناف','بضاعة','سلعة','سلع','اشتريت','اشتري','شريت','جبت','جلبت','بعت','بيع','اشترى','اخذت','أخذت','خذت','خذ','جيب','هات','مشتريات','طلبية','طلب','product','item','goods','buy','bought','sold'
   ].map(normalizeWord));
   const PRODUCT_NOUN_CUES = new Set(['منتج','منتجات','المنتج','الصنف','صنف','أصناف','بضاعة','سلعة','سلع','product','item','goods'].map(normalizeWord));
-  const PAY_WORDS = new Set(['سداد','سدد','سددت','سددلي','سدّدت','دفع','دفعت','دفعتله','استلم','استلمت','وصلني','رجع','رد','ادفع','إيداع','ايداع','تحويل','paid','pay','deposit','received','payment'].map(normalizeWord));
-  const DEBT_WORDS = new Set(['دين','دَين','آجل','اجل','على الحساب','سجل','سجّل','قيد','بعت','بيع','اشتريت','اكتب','مديون','debt','owe','credit','record','invoice'].map(normalizeWord));
+  const PAY_WORDS = new Set(['سداد','سدد','سددت','سددلي','سدّدت','تسديد','دفع','دفعت','دفعتله','دفعلي','استلم','استلمت','وصلني','رجع','رد','ردلي','ادفع','إيداع','ايداع','تحويل','خلص','خلصت','خلصلي','عطاني','عطتني','وفى','وفّى','paid','pay','deposit','received','payment'].map(normalizeWord));
+  const DEBT_WORDS = new Set(['دين','دَين','آجل','اجل','على الحساب','على الدفتر','سجل','سجّل','سجللي','قيد','قيده','بعت','بيع','شريت','شريتله','اشتريت','اشتري','اخذت','اكتب','مديون','سلف','كريدي','debt','owe','credit','record','invoice'].map(normalizeWord));
   const SCOPE_FILLERS = new Set([
     'يا','اي','لو','من','على','الى','لي','له','لها','هذا','هذه','هذي','ذي','دي','ده','هو','هي','عند','عندي','بالله','سمحت','اليوم','الان','الآن','الحين','دحين','توا','بكره','غدا','امس','نقدا','نقدي','كاش','بس','فقط','تمام','للعميل','العميل','للزبون','الزبون','زبون','عميل','مبلغ','سعر','السعر','مصروف','مصاريف','expense','expenses','please','now','cash','only','the','a','an','to','with','for','customer','client'
   ].map(normalizeWord));
@@ -293,7 +294,43 @@
       const hit = findPhrase(text, customer.name);
       if (hit) matches.push({ customer, hit });
     });
-    if (!matches.length) return { customer: null, hit: null, ambiguous: false };
+    if (!matches.length) {
+      const heard = tokenize(text), fuzzy = [];
+      const distance = (a, b, limit) => {
+        const x = Array.from(a), y = Array.from(b);
+        if (Math.abs(x.length - y.length) > limit) return limit + 1;
+        let prev = Array.from({ length: y.length + 1 }, (_, i) => i);
+        for (let i = 1; i <= x.length; i++) {
+          const row = [i]; let min = i;
+          for (let j = 1; j <= y.length; j++) {
+            row[j] = Math.min(row[j - 1] + 1, prev[j] + 1, prev[j - 1] + (x[i - 1] === y[j - 1] ? 0 : 1));
+            min = Math.min(min, row[j]);
+          }
+          if (min > limit) return limit + 1;
+          prev = row;
+        }
+        return prev[y.length];
+      };
+      (customers || []).filter(c => c && !c.archived && c.name).forEach(customer => {
+        const target = tokenize(customer.name).map(t => t.normalized);
+        if (!target.length) return;
+        const targetText = target.join('');
+        const maxDistance = targetText.length >= 8 ? 2 : (targetText.length >= 5 ? 1 : 0);
+        if (!maxDistance) return;
+        for (let start = 0; start < heard.length; start++) {
+          for (let count = Math.max(1, target.length - 1); count <= Math.min(heard.length - start, target.length + 1); count++) {
+            const end = start + count - 1, candidate = heard.slice(start, end + 1).map(t => t.normalized).join('');
+            const score = distance(targetText, candidate, maxDistance);
+            if (score > 0 && score <= maxDistance) fuzzy.push({ customer, score, hit: { start: heard[start].start, end: heard[end].end } });
+          }
+        }
+      });
+      if (!fuzzy.length) return { customer: null, hit: null, ambiguous: false };
+      fuzzy.sort((a, b) => a.score - b.score || (b.hit.end - b.hit.start) - (a.hit.end - a.hit.start));
+      const best = fuzzy[0];
+      const ambiguous = fuzzy.some(item => item.customer.id !== best.customer.id && item.score === best.score);
+      return ambiguous ? { customer: null, hit: null, ambiguous: true } : { customer: best.customer, hit: best.hit, ambiguous: false };
+    }
     matches.sort((a, b) => (b.hit.end - b.hit.start) - (a.hit.end - a.hit.start));
     const best = matches[0];
     const ambiguous = matches.some(item => item.customer.id !== best.customer.id &&
@@ -301,8 +338,9 @@
     return ambiguous ? { customer: null, hit: null, ambiguous: true } : { customer: best.customer, hit: best.hit, ambiguous: false };
   }
 
-  function productDetails(text, amountSpan, nameSpan) {
+  function productDetails(text, amountSpan, nameSpan, knownProducts) {
     const residual = [], words = tokenize(text);
+    const knownProductWords = new Set((knownProducts || []).flatMap(value => tokenize(value).map(t => baseWord(t.normalized))));
     let customCueIndex = -1, hasProductCue = false;
     const overlaps = (token, span) => !!(span && span.end > span.start && token.start < span.end && span.start < token.end);
     for (let i = 0; i < words.length; i++) {
@@ -310,7 +348,7 @@
       if (overlaps(token, amountSpan) || overlaps(token, nameSpan)) continue;
       if (PRODUCT_CUES.has(word)) { hasProductCue = true; if (PRODUCT_NOUN_CUES.has(word) && customCueIndex < 0) customCueIndex = i; continue; }
       if (token.digits || isCue(token) || isCurrency(token) || CURRENCY_QUALIFIERS.has(word) || PAY_WORDS.has(word) || DEBT_WORDS.has(word) || SCOPE_FILLERS.has(word) || wordValue(token.normalized) !== null) continue;
-      const known = PRODUCT_WORDS.has(word);
+      const known = PRODUCT_WORDS.has(word) || knownProductWords.has(word);
       residual.push({ token, index: i, known, unit: PRODUCT_UNITS.has(word) });
     }
     const unknown = residual.filter(item => !item.known);
@@ -328,7 +366,7 @@
     const match = findCustomer(text, opts.customers || []);
     const context = opts.contextCustomer && !opts.contextCustomer.archived ? opts.contextCustomer : null;
     const customer = match.customer || context;
-    const details = productDetails(text, { start: amount.start, end: amount.end }, match.hit);
+    const details = productDetails(text, { start: amount.start, end: amount.end }, match.hit, opts.knownProducts);
     const maxAmount = opts.maxAmount == null ? 1000000 : Number(opts.maxAmount);
     const validAmount = Number(amount.amt) > 0 && Number(amount.amt) <= maxAmount;
     const inScope = !match.ambiguous && validAmount && (!!opts.personal || !!customer) && details.valid && details.hasProduct;

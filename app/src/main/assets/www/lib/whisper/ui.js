@@ -32,6 +32,23 @@
   }
   function engine() { return window.whisperEngine || null; }
 
+  function whisperRuntimeAvailable() {
+    return !!window.crossOriginIsolated && typeof window.SharedArrayBuffer !== 'undefined';
+  }
+
+  function webViewWhisperUnsupported() {
+    return !!window.Daftari && !whisperRuntimeAvailable();
+  }
+
+  function whisperUnavailableMessage() {
+    if (webViewWhisperUnsupported()) return lang() === 'en'
+      ? 'Whisper is not supported inside Android WebView. HTTPS cannot enable the missing SharedArrayBuffer support. Turn Whisper off and use Vosk or the phone engine.'
+      : 'محرك Whisper غير مدعوم داخل WebView في تطبيق Android؛ HTTPS لا يحل نقص SharedArrayBuffer. أوقف Whisper واستخدم Vosk أو محرك الهاتف.';
+    return lang() === 'en'
+      ? 'Whisper requires a secure, cross-origin-isolated browser with SharedArrayBuffer. Use Vosk or the phone engine instead.'
+      : 'يتطلب Whisper متصفحًا آمنًا يدعم عزل Cross-Origin وSharedArrayBuffer. استخدم Vosk أو محرك الهاتف بدلًا منه.';
+  }
+
   function modelStatus() {
     var e = engine();
     if (!e || !e.hasModel) return { cls: '', txt: T('whNone', 'لم يُستورد نموذج بعد') };
@@ -47,7 +64,12 @@
 
   function cardHtml() {
     var st = modelStatus();
-    var on = enabled();
+    var supported = whisperRuntimeAvailable();
+    var on = enabled() && supported;
+    if (!supported) setEnabled(false);
+    var unavailableNote = !supported
+      ? '<div class="muted" role="note" style="font-size:12px;line-height:1.8;padding:0 2px 12px;color:var(--red)">' + whisperUnavailableMessage() + '</div>'
+      : '';
     return '<div class="lb">' + T('whisperT', 'Whisper دون إنترنت (GGML)') + '</div>' +
       '<div class="card" id="whisperSettingsCard" style="padding:2px 16px">' +
         '<div class="kv" style="cursor:default">' +
@@ -60,7 +82,7 @@
           '<span class="kic" aria-hidden="true" style="background:var(--navy-bg);color:var(--navy)">' + ic('wave', 20) + '</span>' +
           '<span class="k">' + T('whUse', 'استخدام Whisper للتسجيل') + '</span>' +
           '<span class="v"><span class="kvcm" id="whisperMode">' + (on ? T('on', 'مفعّل') : T('off', 'غير مفعّل')) + '</span>' +
-          '<div class="sw2 ' + (on ? 'on' : '') + '" id="whisperToggle" role="switch" tabindex="0" aria-checked="' + (on ? 'true' : 'false') + '" aria-label="' + T('whUse', 'استخدام Whisper للتسجيل') + '" onclick="toggleWhisperMode()"></div></span>' +
+          '<div class="sw2 ' + (on ? 'on' : '') + '" id="whisperToggle" role="switch" tabindex="0" aria-checked="' + (on ? 'true' : 'false') + '" aria-disabled="' + (!supported ? 'true' : 'false') + '" aria-label="' + T('whUse', 'استخدام Whisper للتسجيل') + '" onclick="toggleWhisperMode()"></div></span>' +
         '</div>' +
         '<div class="sep"></div>' +
         '<div class="row" style="padding:12px 2px 6px"><span class="k" style="color:var(--muted);font-size:13.5px;font-weight:600">' + T('whFile', 'ملف النموذج (GGML)') + '</span></div>' +
@@ -68,6 +90,7 @@
           '<button class="btn btn-soft" type="button" id="whisperImportBtn">' + ic('import', 17) + '<span>' + T('whImp', 'استيراد ggml-tiny.bin') + '</span></button>' +
           '<button class="btn btn-line" type="button" id="whisperRemoveBtn" style="color:var(--red);border-color:var(--red)">' + ic('trash', 17) + '<span>' + T('whDel', 'إزالة النموذج') + '</span></button>' +
         '</div>' +
+        unavailableNote +
         '<div class="muted" style="font-size:11.5px;line-height:1.9;padding:0 2px 12px">' + T('whHint', 'اختر نموذج Whisper بصيغة GGML مثل ggml-tiny.bin (8–500 م.ب). يبقى الملف على هذا الهاتف ولا يُرسل لأي جهة. لا تستخدم GGUF ولا نموذج Vosk هنا.') + '</div>' +
         '<input id="whisperModelFile" type="file" accept=".bin,application/octet-stream" style="display:none">' +
       '</div>';
@@ -95,7 +118,8 @@
   }
 
   function refresh() {
-    var st = modelStatus(), on = enabled();
+    var st = modelStatus(), supported = whisperRuntimeAvailable(), on = enabled() && supported;
+    if (!supported) setEnabled(false);
     var status = document.getElementById('whisperModelStatus');
     if (status) { status.className = 'chip ' + st.cls; status.textContent = st.txt; }
     var mode = document.getElementById('whisperMode');
@@ -104,6 +128,7 @@
     if (toggle) {
       toggle.classList.toggle('on', on);
       toggle.setAttribute('aria-checked', on ? 'true' : 'false');
+      toggle.setAttribute('aria-disabled', supported ? 'false' : 'true');
     }
     var icon = document.getElementById('whisperIcon');
     if (icon) icon.style.cssText = 'background:' + (on ? 'var(--green-bg)' : 'var(--line2)') + ';color:' + (on ? 'var(--green)' : 'var(--muted)');
@@ -175,6 +200,7 @@
   };
 
   window.toggleWhisperMode = function () {
+    if (!whisperRuntimeAvailable()) { setEnabled(false); refresh(); toast(whisperUnavailableMessage()); return; }
     if (!window.whisperEngine || !window.whisperEngine.hasModel) { toast(T('whNeed', 'استورد نموذج Whisper أولًا')); return; }
     if (!setEnabled(!enabled())) { toast(T('whFail', 'فشل الاستيراد: ') + 'localStorage'); return; }
     refresh();

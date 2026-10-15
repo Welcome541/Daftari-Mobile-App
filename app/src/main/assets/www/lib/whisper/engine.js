@@ -99,7 +99,10 @@
     if (wasm && typeof wasm.init === 'function') return wasm;
     if (runtimePromise) return runtimePromise;
     if (!window.crossOriginIsolated || typeof SharedArrayBuffer === 'undefined') {
-      throw new Error('يتطلب Whisper متصفحًا آمنًا مع عزل Cross-Origin. افتح التطبيق عبر HTTPS بعد تحديثه، أو استخدم محرك الهاتف.');
+      if (window.Daftari) {
+        throw new Error('Whisper غير مدعوم داخل Android WebView لأن SharedArrayBuffer غير متاح فيه؛ HTTPS لا يغيّر ذلك. أوقف Whisper واستخدم Vosk أو محرك الهاتف.');
+      }
+      throw new Error('يتطلب Whisper متصفحًا آمنًا يدعم عزل Cross-Origin وSharedArrayBuffer. استخدم Vosk أو محرك الهاتف بدلًا منه.');
     }
     runtimePromise = new Promise(function (resolve, reject) {
       var resolved = false;
