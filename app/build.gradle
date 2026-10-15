@@ -14,8 +14,8 @@ android {
         applicationId 'ai.arena.dafter.enhanced'
         minSdk 21
         targetSdk 34
-        versionCode 222
-        versionName '2.22-responsive-offline'
+        versionCode 223
+        versionName '2.23-models-ui'
     }
 
     compileOptions {

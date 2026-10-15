@@ -3,6 +3,7 @@
   --content-max: 1040px;
   --wide-max: 1180px;
   --dock-max: 780px;
+  --tabbar-content-height: 64px;
   --ui-gutter: 16px;
   --icon-size: 22px;
 }
@@ -15,7 +16,7 @@ html {
 }
 
 body {
-  min-width: 320px;
+  min-width: 0;
   min-height: 100vh;
   min-height: 100svh;
   overflow-x: hidden;
@@ -45,6 +46,11 @@ body[lang="en"] {
   width: 100%;
   min-width: 0;
   flex: 1 0 auto;
+  padding-bottom: 0;
+}
+
+body.tabbar-visible #app {
+  padding-bottom: calc(var(--tabbar-content-height) + env(safe-area-inset-bottom));
 }
 
 #app > .pad,
@@ -170,25 +176,38 @@ body[lang="en"] {
 }
 
 .kic {
-  width: 34px;
-  height: 34px;
-  flex: 0 0 34px;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border-radius: 12px;
 }
 
 .kv {
-  gap: 9px;
+  gap: 10px;
   flex-wrap: wrap;
+  min-height: 56px;
 }
 
 .kv .k {
   min-width: 0;
-  font-size: clamp(12px, 1.15vw, 14px);
+  font-size: clamp(12.5px, 1.15vw, 14px);
 }
 
 .kv .v {
-  max-width: 58%;
+  max-width: 62%;
   overflow-wrap: anywhere;
   font-size: clamp(13px, 1.25vw, 15px);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.kv .v select,
+.kv .v input,
+.kv .v .selctl {
+  max-width: 100%;
 }
 
 .chips {
@@ -204,29 +223,29 @@ body[lang="en"] {
   overflow-wrap: anywhere;
 }
 
-/* Keep every interface icon legible but prevent oversized inline SVGs. */
+/* Icons keep the size the markup asks for (ic(name,size)); only the
+   container sets a floor so nothing is rendered oversized or floating. */
 svg {
   max-width: 100%;
   vertical-align: middle;
 }
 
 svg.ic {
-  width: 22px !important;
-  height: 22px !important;
   flex: 0 0 auto;
+  max-width: 100%;
 }
 
 .hbtn svg.ic,
 .logo-ic svg.ic,
 .srow .sic2 svg.ic,
 .kic svg.ic {
-  width: 20px !important;
-  height: 20px !important;
+  width: var(--ic-row, 20px);
+  height: var(--ic-row, 20px);
 }
 
 #tabbar svg.ic {
-  width: 22px !important;
-  height: 22px !important;
+  width: var(--ic-tab, 22px);
+  height: var(--ic-tab, 22px);
 }
 
 .micwrap {
@@ -244,8 +263,8 @@ svg.ic {
 }
 
 .mic svg.ic {
-  width: 44px !important;
-  height: 44px !important;
+  width: 44px;
+  height: 44px;
 }
 
 .wave {
@@ -306,42 +325,52 @@ svg.ic {
 }
 
 #tabbar {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 40;
   width: 100%;
   max-width: var(--dock-max);
-  height: calc(68px + env(safe-area-inset-bottom));
-  margin-inline: auto;
-  padding-inline: clamp(2px, 1vw, 10px);
+  height: calc(var(--tabbar-content-height) + env(safe-area-inset-bottom));
+  margin: 0;
+  padding: 0 clamp(2px, 1vw, 10px) env(safe-area-inset-bottom);
+  transform: translateX(-50%);
+  will-change: auto;
 }
 
 #tabbar button {
   min-width: 0;
-  min-height: 64px;
-  gap: 3px;
-  padding: 2px 1px;
+  min-height: calc(var(--tabbar-content-height) - 4px);
+  gap: 2px;
+  padding: 1px;
   font-size: clamp(10px, 1vw, 12px);
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 #tabbar .tbind {
-  width: 44px;
-  height: 28px;
+  width: 42px;
+  height: 26px;
 }
 
 #tabbar .tabplus {
-  width: 50px;
-  height: 50px;
-  transform: translateY(-8px);
+  width: 48px;
+  height: 48px;
+  transform: translateY(-6px);
 }
 
 #tabbar .tabplus:active {
-  transform: translateY(-8px) scale(.94);
+  transform: translateY(-6px) scale(.94);
+}
+
+#actionrow:empty {
+  display: none;
 }
 
 #actionrow {
   width: 100%;
   max-width: var(--dock-max);
   margin-inline: auto;
-  bottom: calc(68px + env(safe-area-inset-bottom));
+  bottom: calc(var(--tabbar-content-height) + env(safe-area-inset-bottom));
   gap: 8px;
   padding: 6px clamp(8px, 1.5vw, 16px);
 }
@@ -362,9 +391,10 @@ svg.ic {
   flex: 0 0 auto;
 }
 
+/* Reserve the dock once via #app padding; keep a small tail for the floating add button. */
 #clist2,
 #txlist {
-  padding-bottom: calc(110px + env(safe-area-inset-bottom)) !important;
+  padding-bottom: 46px !important;
 }
 
 .fab2 {
@@ -389,8 +419,182 @@ svg.ic {
   height: 12px;
 }
 
+/* ================= design tokens the markup relies on ================= */
+:root {
+  --navy-bg: #e9eef6;
+  --ic-row: 20px;
+  --ic-tab: 22px;
+}
+
+body.dark {
+  --navy-bg: #17263f;
+}
+
+/* ================= classes the markup uses but had no rule ================= */
+.btn-soft {
+  background: var(--card2);
+  border: 1.4px solid var(--line);
+  color: var(--navy);
+}
+
+.btn-soft:active {
+  background: var(--line2);
+}
+
+body.dark .btn-soft {
+  color: var(--ink);
+}
+
+.sep {
+  height: 1px;
+  background: var(--line);
+  margin: 6px 2px;
+  border: 0;
+}
+
+/* rows already draw their own divider, so a .sep right after a row stays quiet */
+.kv + .sep {
+  height: 0;
+  margin: 0;
+  background: none;
+}
+
+.lb,
+label.lb {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--soft);
+  margin: 16px 2px 8px;
+  letter-spacing: .2px;
+}
+
+.lb:first-child {
+  margin-top: 8px;
+}
+
+#tabbar .tblb {
+  max-width: 100%;
+  line-height: 1.15;
+}
+
+body.dark .kic {
+  background: var(--line2);
+}
+
+/* ================= settings screen ================= */
+.hsp {
+  width: 42px;
+  flex: 0 0 42px;
+}
+
+#whisperMount {
+  display: block;
+}
+
+#whisperMount .card > .kv:last-child,
+#whisperMount .card > .row:last-child {
+  border-bottom: none;
+}
+
+.kv[role="button"]:focus-visible {
+  outline: 2.5px solid var(--navy);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+.sw2[role="switch"]:focus-visible {
+  outline: 2.5px solid var(--navy);
+  outline-offset: 3px;
+}
+
+.kv .v .kvcm {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 800;
+  color: var(--soft);
+  font-size: 13px;
+}
+
+.kv .v .kvHint {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.kv .v .chev {
+  font-size: 11px;
+  opacity: .85;
+}
+
+.badge-red {
+  background: var(--red);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 10.5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+}
+
+.btnrow {
+  display: flex;
+  gap: 8px;
+  margin: 2px 0 12px;
+  flex-wrap: wrap;
+}
+
+.btnrow .btn {
+  flex: 1 1 140px;
+  min-width: 0;
+  padding: 12px 10px;
+  font-size: 14px;
+  gap: 7px;
+}
+
+.dmsw {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  row-gap: 6px;
+}
+
+.dmswlbl {
+  font-weight: 800;
+  font-size: 12px;
+  min-width: 38px;
+  text-align: center;
+}
+
+.swplb {
+  white-space: nowrap;
+}
+
+.hbtn {
+  min-width: 42px;
+  min-height: 42px;
+}
+
+.autochip {
+  min-height: 30px;
+  padding: 4px 12px;
+}
+
+select.selctl {
+  max-width: 100%;
+  text-overflow: ellipsis;
+}
+
 @media (max-width: 380px) {
   :root { --ui-gutter: 12px; }
+  .hsp { width: 34px; flex: 0 0 34px; }
+  .kv .v { max-width: 58%; }
+  .btnrow .btn { flex: 1 1 100%; }
+  .dmswlbl { min-width: 0; }
+  .kv { gap: 8px; padding: 11px 2px; }
   .pad { padding-inline: 12px; }
   .hdr { gap: 7px; padding-inline: 10px; }
   .stats { gap: 8px; }
@@ -424,17 +628,290 @@ svg.ic {
 }
 
 @media (max-height: 520px) and (orientation: landscape) {
+  :root { --tabbar-content-height: 58px; }
   .sbar { display: none; }
   .hdr { padding-block: 4px; }
-  #tabbar { height: calc(58px + env(safe-area-inset-bottom)); }
-  #tabbar button { min-height: 54px; }
-  #actionrow { bottom: calc(58px + env(safe-area-inset-bottom)); }
+  #tabbar { height: calc(var(--tabbar-content-height) + env(safe-area-inset-bottom)); }
+  #tabbar button { min-height: calc(var(--tabbar-content-height) - 4px); }
+  #actionrow { bottom: calc(var(--tabbar-content-height) + env(safe-area-inset-bottom)); }
   .micwrap { padding-top: 8px; }
   .mic { width: 76px; height: 76px; }
-  .mic svg.ic { width: 38px !important; height: 38px !important; }
+  .mic svg.ic { width: 38px; height: 38px; }
   .wave { height: 24px; margin-block: 8px 2px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   #tabbar *, #actionrow *, .mic.live { animation: none !important; transition: none !important; }
+}
+
+/* ================= phone viewport hardening =================
+   Keep the layout inside narrow, tall, short and notched phone viewports. */
+html,
+body {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+}
+
+#phone {
+  width: 100%;
+  min-width: 0;
+  max-width: var(--wide-max);
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+#app {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* clip avoids creating an extra scroll container around the fixed tab bar. */
+@supports (overflow-x: clip) {
+  html,
+  body,
+  #phone {
+    overflow-x: clip;
+  }
+}
+
+body.tabbar-visible #app {
+  padding-bottom: var(--tabbar-content-height);
+}
+
+#tabbar {
+  height: var(--tabbar-content-height);
+  padding: 0 clamp(2px, 1vw, 10px);
+}
+
+#actionrow {
+  bottom: var(--tabbar-content-height);
+}
+
+#sheet {
+  max-height: 88vh;
+  padding-bottom: 16px;
+}
+
+@supports (height: 100dvh) {
+  #sheet {
+    max-height: 88dvh;
+  }
+}
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  body.tabbar-visible #app {
+    padding-bottom: calc(var(--tabbar-content-height) + env(safe-area-inset-bottom, 0px));
+  }
+
+  #tabbar {
+    height: calc(var(--tabbar-content-height) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  #actionrow {
+    bottom: calc(var(--tabbar-content-height) + env(safe-area-inset-bottom, 0px));
+  }
+
+  #sheet {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .sbar {
+    padding-top: calc(10px + env(safe-area-inset-top, 0px));
+  }
+}
+
+.stats,
+.grid2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.stats > *,
+.grid2 > *,
+.row > *,
+.hdr > *,
+.kv > *,
+.litem > *,
+.srow > * {
+  min-width: 0;
+}
+
+.kv .v,
+.kv .v > *,
+.litem .sp,
+.row .sp,
+.hdr .sp {
+  min-width: 0;
+  max-width: 100%;
+}
+
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+}
+
+input,
+select,
+textarea {
+  min-width: 0;
+}
+
+img,
+canvas,
+video {
+  max-width: 100%;
+}
+
+@media (max-width: 380px) {
+  :root {
+    --tabbar-content-height: 60px;
+  }
+
+  .pad {
+    padding-inline: clamp(10px, 3.3vw, 12px);
+  }
+
+  .hdr {
+    gap: 6px;
+    padding-inline: 8px;
+  }
+
+  .hdr > .hbtn:not(.accchip) {
+    width: 38px;
+    min-width: 38px;
+    height: 40px;
+    padding: 0;
+  }
+
+  .hdr .hsp {
+    width: 30px;
+    flex-basis: 30px;
+  }
+
+  .stats {
+    gap: 8px;
+  }
+
+  .stat {
+    padding: 10px 8px;
+  }
+
+  .stat .t {
+    font-size: clamp(10px, 3vw, 11px);
+  }
+
+  .stat .v {
+    font-size: clamp(14px, 4.6vw, 17px);
+  }
+
+  .stats[style*="grid-template-columns"] .amt {
+    font-size: clamp(11px, 3.6vw, 14px) !important;
+  }
+
+  .grid2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kv {
+    gap: 8px;
+  }
+
+  .kv .v {
+    max-width: 100%;
+  }
+
+  #tabbar {
+    padding-inline: 2px;
+  }
+
+  #tabbar button {
+    font-size: clamp(9px, 2.8vw, 10px);
+  }
+
+  #tabbar .tbind {
+    width: 34px;
+  }
+
+  #tabbar .tblb {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #actionrow {
+    gap: 6px;
+    padding-inline: 6px;
+  }
+
+  #actionrow .btn {
+    padding-inline: 6px;
+    font-size: clamp(11px, 3.5vw, 13px);
+  }
+}
+
+@media (max-width: 300px) {
+  .stats:not([style*="grid-template-columns"]) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stats[style*="grid-template-columns"] {
+    gap: 4px;
+  }
+
+  .stats[style*="grid-template-columns"] .amt {
+    font-size: 11px !important;
+  }
+
+  #tabbar .tbind {
+    width: 30px;
+  }
+
+  #tabbar .tabplus {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+/* Keep the phone-oriented shell centered on wide/landscape handsets. */
+@media (min-width: 720px) and (max-width: 900px) {
+  #phone,
+  #sheet {
+    max-width: 640px;
+  }
+
+  #tabbar,
+  #actionrow {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1099px) {
+  #phone,
+  #sheet {
+    max-width: 760px;
+  }
+
+  #tabbar,
+  #actionrow {
+    max-width: 760px;
+  }
 }

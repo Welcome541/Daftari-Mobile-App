@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f3f6fb">
+  <title>اختبار دفتري دون إنترنت</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f6fb;
+      --card: #fff;
+      --ink: #17243a;
+      --muted: #68758a;
+      --line: #e4e9f1;
+      --navy: #173866;
+      --navy-soft: #eaf0f8;
+      --green: #167653;
+      --green-soft: #e8f5ef;
+      --amber: #916214;
+      --amber-soft: #fff4db;
+      --red: #a43d48;
+      --red-soft: #fff0f1;
+      --shadow: 0 14px 36px rgba(28, 48, 79, .08);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      min-height: 100svh;
+      color: var(--ink);
+      background: radial-gradient(ellipse at 95% 0%, #e6edf7 0, transparent 38%), var(--bg);
+      -webkit-text-size-adjust: 100%;
+    }
+    body.dark {
+      color-scheme: dark;
+      --bg: #0e1521;
+      --card: #172131;
+      --ink: #edf2fa;
+      --muted: #a3b0c4;
+      --line: #2b3749;
+      --navy: #a9c9f3;
+      --navy-soft: #202f45;
+      --green: #74d3a6;
+      --green-soft: #17382e;
+      --amber: #f1cc79;
+      --amber-soft: #3d321d;
+      --red: #ff9da3;
+      --red-soft: #3d252b;
+      --shadow: 0 14px 36px rgba(0, 0, 0, .2);
+      background: radial-gradient(ellipse at 95% 0%, #1d2a3c 0, transparent 38%), var(--bg);
+    }
+    button, input, textarea { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+    .wrap { width: min(100%, 760px); margin: 0 auto; padding: 18px 16px calc(30px + env(safe-area-inset-bottom)); }
+    .topbar { display: flex; align-items: center; gap: 11px; margin-bottom: 17px; }
+    .brand-mark { width: 42px; height: 42px; display: grid; place-items: center; flex: 0 0 42px; border-radius: 14px; background: var(--navy); color: var(--card); font-size: 21px; font-weight: 900; }
+    .brand-name { font-size: 14px; font-weight: 850; }
+    .brand-sub { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+    .spacer { flex: 1; }
+    .icon-btn { min-width: 44px; min-height: 44px; border: 1px solid var(--line); border-radius: 13px; color: var(--ink); background: var(--card); cursor: pointer; }
+    .hero { position: relative; overflow: hidden; padding: 22px 20px; border-radius: 24px; color: #fff; background: linear-gradient(135deg, #16345e, #215889); box-shadow: var(--shadow); }
+    .hero::after { content: ""; position: absolute; left: -38px; bottom: -95px; width: 210px; height: 210px; border: 1px solid rgba(255,255,255,.12); border-radius: 50%; box-shadow: 0 0 0 28px rgba(255,255,255,.035), 0 0 0 58px rgba(255,255,255,.025); pointer-events: none; }
+    .eyebrow { color: #c9d9ec; font-size: 12px; font-weight: 750; letter-spacing: .2px; }
+    h1 { position: relative; z-index: 1; margin: 9px 0 8px; font-size: clamp(23px, 6vw, 31px); line-height: 1.3; }
+    .hero p { position: relative; z-index: 1; max-width: 570px; margin: 0; color: #e0eaf5; font-size: 14px; line-height: 1.85; }
+    .hero-actions { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
+    .btn { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 15px; border: 1px solid transparent; border-radius: 13px; color: var(--ink); background: var(--card); font-weight: 750; cursor: pointer; text-decoration: none; }
+    .btn.primary { color: #17345a; background: #fff; }
+    .btn.secondary { color: #fff; border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.1); }
+    .btn:active, .icon-btn:active { transform: scale(.98); }
+    button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid #e7b957; outline-offset: 2px; }
+    .status-pill { min-height: 29px; display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; color: #fff; background: rgba(0,0,0,.16); font-size: 12px; font-weight: 750; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #82e2aa; box-shadow: 0 0 0 3px rgba(130,226,170,.16); }
+    .status-pill.offline .dot { background: #ffd479; box-shadow: 0 0 0 3px rgba(255,212,121,.16); }
+    .notice { display: flex; gap: 10px; align-items: flex-start; margin: 14px 0; padding: 13px 14px; border: 1px solid #f1dfb7; border-radius: 15px; color: var(--amber); background: var(--amber-soft); font-size: 12px; line-height: 1.75; }
+    body.dark .notice { border-color: #5c4a25; }
+    .notice strong { display: block; margin-bottom: 1px; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 14px; }
+    .card { min-width: 0; padding: 17px; border: 1px solid var(--line); border-radius: 19px; background: var(--card); box-shadow: var(--shadow); }
+    .card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 13px; }
+    .card-icon { width: 37px; height: 37px; display: grid; place-items: center; flex: 0 0 37px; border-radius: 12px; color: var(--navy); background: var(--navy-soft); font-size: 17px; font-weight: 900; }
+    h2 { margin: 0; font-size: 16px; }
+    .card-hint { margin: 3px 0 0; color: var(--muted); font-size: 11.5px; line-height: 1.65; }
+    .checks { display: grid; gap: 2px; }
+    .check-row { display: flex; align-items: center; gap: 10px; min-height: 54px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+    .check-row:last-child { border-bottom: 0; }
+    .check-symbol { width: 30px; height: 30px; display: grid; place-items: center; flex: 0 0 30px; border-radius: 10px; color: var(--muted); background: var(--bg); font-size: 14px; font-weight: 850; }
+    .check-copy { min-width: 0; flex: 1; }
+    .check-title { display: block; font-size: 13px; font-weight: 750; }
+    .check-detail { display: block; margin-top: 2px; color: var(--muted); font-size: 10.5px; line-height: 1.55; overflow-wrap: anywhere; }
+    .badge { max-width: 44%; flex: 0 0 auto; padding: 5px 8px; border-radius: 999px; color: var(--muted); background: var(--bg); font-size: 10.5px; font-weight: 800; text-align: center; overflow-wrap: anywhere; }
+    .badge.good { color: var(--green); background: var(--green-soft); }
+    .badge.warn { color: var(--amber); background: var(--amber-soft); }
+    .badge.bad { color: var(--red); background: var(--red-soft); }
+    .split { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .actions .btn { flex: 1 1 140px; border-color: var(--line); background: var(--card); font-size: 13px; }
+    .actions .btn.accent { color: var(--navy); border-color: transparent; background: var(--navy-soft); }
+    .file-result { min-height: 42px; margin-top: 11px; padding: 10px 11px; border: 1px dashed var(--line); border-radius: 12px; color: var(--muted); font-size: 11.5px; line-height: 1.7; overflow-wrap: anywhere; }
+    .field-label { display: block; margin: 12px 0 6px; font-size: 12px; font-weight: 750; }
+    .field, textarea { width: 100%; min-width: 0; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: var(--bg); }
+    textarea { min-height: 82px; resize: vertical; line-height: 1.65; }
+    .small-note { margin: 8px 0 0; color: var(--muted); font-size: 10.5px; line-height: 1.7; }
+    .viewport-value { direction: ltr; unicode-bidi: isolate; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .footer { padding: 16px 8px 0; color: var(--muted); font-size: 11px; line-height: 1.8; text-align: center; }
+    .footer strong { color: var(--ink); }
+    .hidden-input { display: none; }
+    @media (min-width: 640px) {
+      .wrap { padding: 25px 22px 40px; }
+      .hero { padding: 26px 26px; }
+      .split { grid-template-columns: 1fr 1fr; }
+      .card { padding: 19px; }
+    }
+    @media (max-width: 380px) {
+      .wrap { padding-inline: 12px; }
+      .hero { padding: 18px 16px; border-radius: 20px; }
+      .hero p { font-size: 13px; }
+      .card { padding: 14px; }
+      .badge { max-width: 40%; font-size: 10px; }
+      .btn { padding-inline: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">د</div>
+      <div><span class="brand-name">دفتري · فحص محلي</span><span class="brand-sub">صفحة اختبار مستقلة للهاتف</span></div>
+      <span class="spacer"></span>
+      <button class="icon-btn" id="themeButton" type="button" aria-label="تبديل المظهر" title="تبديل المظهر">◐</button>
+    </header>
+
+    <section class="hero" aria-labelledby="pageTitle">
+      <span class="eyebrow">اختبار دون إنترنت</span>
+      <h1 id="pageTitle">جرّب بيئة الهاتف محليًا</h1>
+      <p>هذه الصفحة ملف واحد، لا تستخدم خطوطًا أو صورًا أو مكتبات من الإنترنت. افتحها بعد تنزيلها، ويمكنك تفعيل وضع الطيران ثم إعادة الفحص.</p>
+      <div class="hero-actions">
+        <button class="btn primary" id="refreshButton" type="button">↻ <span>إعادة الفحص</span></button>
+        <span class="status-pill" id="networkPill" aria-live="polite"><i class="dot" aria-hidden="true"></i><span id="networkPillText">جارٍ الفحص</span></span>
+      </div>
+    </section>
+
+    <aside class="notice" role="note">
+      <span aria-hidden="true">ⓘ</span>
+      <div><strong>حدود هذا الاختبار</strong>يفحص المتصفح والتخزين واختيار الملفات فقط. لا يشغّل محرك Vosk أو Whisper، ولا يرفع ملفاتك. حالة «متصل» تعني أن المتصفح يعلن وجود شبكة، ولا تثبت وحدها الوصول إلى الإنترنت.</div>
+    </aside>
+
+    <section class="grid" aria-label="نتائج الفحص">
+      <article class="card">
+        <div class="card-head">
+          <span class="card-icon" aria-hidden="true">✓</span>
+          <div><h2>قدرات المتصفح</h2><p class="card-hint">تتحدث النتائج عند فتح الصفحة أو الضغط على «إعادة الفحص».</p></div>
+        </div>
+        <div class="checks">
+          <div class="check-row"><span class="check-symbol" aria-hidden="true">◉</span><div class="check-copy"><span class="check-title">حالة الشبكة</span><span class="check-detail">قراءة navigator.onLine فقط؛ لا يُجرى اتصال تجريبي.</span></div><span class="badge" id="networkBadge">—</span></div>
+          <div class="check-row"><span class="check-symbol" aria-hidden="true">⌂</span><div class="check-copy"><span class="check-title">مصدر الصفحة</span><span class="check-detail" id="originDetail">—</span></div><span class="badge" id="originBadge">—</span></div>
+          <div class="check-row"><span class="check-symbol" aria-hidden="true">S</span><div class="check-copy"><span class="check-title">التخزين المحلي</span><span class="check-detail">محاولة كتابة وقراءة قيمة تجريبية ثم حذفها.</span></div><span class="badge" id="storageBadge">جارٍ</span></div>
+          <div class="check-row"><span class="check-symbol" aria-hidden="true">▤</span><div class="check-copy"><span class="check-title">IndexedDB</span><span class="check-detail">فتح قاعدة مؤقتة ثم حذفها؛ قد يمنعها المتصفح في بعض أوضاع الملفات.</span></div><span class="badge" id="idbBadge">جارٍ</span></div>
+          <div class="check-row"><span class="check-symbol" aria-hidden="true">W</span><div class="check-copy"><span class="check-title">WebAssembly</span><span class="check-detail">ميزة متصفح مطلوبة عادةً للمحركات المبنية على WASM.</span></div><span class="badge" id="wasmBadge">جارٍ</span></div>
+          <div class="check-row"><span class="check-symbol" aria-hidden="true">⇄</span><div class="check-copy"><span class="check-title">متطلبات Whisper المتقدمة</span><span class="check-detail" id="whisperDetail">SharedArrayBuffer والعزل سيظهران هنا.</span></div><span class="badge" id="whisperBadge">جارٍ</span></div>
+          <div class="check-row"><span class="check-symbol" aria-hidden="true">§</span><div class="check-copy"><span class="check-title">السياق الآمن</span><span class="check-detail">قد يتطلب المتصفح سياقًا آمنًا لطلب إذن الميكروفون.</span></div><span class="badge" id="secureBadge">جارٍ</span></div>
+          <div class="check-row"><span class="check-symbol" aria-hidden="true">M</span><div class="check-copy"><span class="check-title">إمكانية طلب الميكروفون</span><span class="check-detail">الفحص هنا لا يطلب الإذن؛ استخدم الزر أدناه إذا أردت تجربة الإذن.</span></div><span class="badge" id="micBadge">جارٍ</span></div>
+          <div class="check-row"><span class="check-symbol" aria-hidden="true">D</span><div class="check-copy"><span class="check-title">جسر تطبيق دفتري الأصلي</span><span class="check-detail">في المتصفح المستقل لن يتوفر جسر Android الخاص بالتطبيق.</span></div><span class="badge" id="bridgeBadge">جارٍ</span></div>
+          <div class="check-row"><span class="check-symbol" aria-hidden="true">▣</span><div class="check-copy"><span class="check-title">مقاس نافذة العرض</span><span class="check-detail viewport-value" id="viewportDetail">—</span></div><span class="badge" id="viewportBadge">—</span></div>
+        </div>
+      </article>
+
+      <div class="split">
+        <article class="card">
+          <div class="card-head">
+            <span class="card-icon" aria-hidden="true">▧</span>
+            <div><h2>اختيار ملف محلي</h2><p class="card-hint">اختر نموذجًا أو مشروعًا لعرض اسمه وحجمه فقط.</p></div>
+          </div>
+          <div class="actions"><button class="btn accent" id="chooseFileButton" type="button">اختيار ملف من الهاتف</button></div>
+          <input class="hidden-input" id="localFile" type="file" accept=".zip,.bin,.gguf,.html,.htm,.json,application/zip,application/octet-stream,text/html">
+          <div class="file-result" id="fileResult" aria-live="polite">لم يتم اختيار ملف. لن يُقرأ إلا أول 16 بايتًا للتعرّف على الترويسة.</div>
+          <p class="small-note">لا يُحمّل هذا الاختبار نموذجًا ولا ينسخ الملف؛ هو فحص لاختيار الملف وقراءة ترويسة صغيرة فقط.</p>
+          <div class="actions">
+            <button class="btn" id="micButton" type="button">اختبار إذن الميكروفون</button>
+          </div>
+          <p class="small-note" id="micResult" aria-live="polite">لن يُفتح الميكروفون إلا بعد ضغط الزر، وسيُوقف مباشرةً بعد نجاح الاختبار.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <span class="card-icon" aria-hidden="true">▣</span>
+            <div><h2>اختبار بقاء التخزين</h2><p class="card-hint">احفظ ملاحظة قصيرة، أعد فتح الصفحة، وتحقق إن بقيت.</p></div>
+          </div>
+          <label class="field-label" for="testNote">ملاحظة الاختبار</label>
+          <textarea id="testNote" maxlength="240" placeholder="مثال: فتحت الصفحة في وضع الطيران"></textarea>
+          <div class="actions">
+            <button class="btn accent" id="saveNoteButton" type="button">حفظ على هذا المتصفح</button>
+            <button class="btn" id="clearNoteButton" type="button">مسح</button>
+          </div>
+          <p class="small-note" id="noteResult" aria-live="polite">الملاحظة لا تغادر هذا المتصفح. قد يتعامل الهاتف مع تخزين ملفات file:// بشكل مختلف.</p>
+        </article>
+      </div>
+    </section>
+
+    <div class="actions" style="margin-top:14px">
+      <button class="btn" id="copyReportButton" type="button">نسخ ملخص الفحص</button>
+    </div>
+    <p class="footer"><strong>محلي بالكامل:</strong> لا توجد طلبات شبكة أو موارد خارجية في هذه الصفحة. اختيار ملف لا يعني استيراده إلى دفتري، واختبار الميكروفون لا يسجل أو يحفظ صوتًا.</p>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+      var NOTE_KEY = 'daftari-offline-phone-test-note-v1';
+      var THEME_KEY = 'daftari-offline-phone-test-theme-v1';
+      var latest = {};
+      var byId = function (id) { return document.getElementById(id); };
+      var setBadge = function (id, text, kind) {
+        var node = byId(id);
+        if (!node) return;
+        node.textContent = text;
+        node.className = 'badge' + (kind ? ' ' + kind : '');
+      };
+      function storageProbe() {
+        var key = 'daftari-offline-probe-' + Date.now();
+        try {
+          localStorage.setItem(key, 'ok');
+          return localStorage.getItem(key) === 'ok';
+        } catch (_) { return false; }
+        finally { try { localStorage.removeItem(key); } catch (_) {} }
+      }
+      function indexedDBProbe() {
+        return new Promise(function (resolve) {
+          try {
+            if (!window.indexedDB) return resolve(false);
+            var name = 'daftari-offline-probe-' + Date.now() + '-' + Math.random().toString(16).slice(2);
+            var req = indexedDB.open(name, 1);
+            var settled = false;
+            var timer = setTimeout(function () { finish(null); }, 4500);
+            var finish = function (ok) {
+              if (!settled) { settled = true; clearTimeout(timer); resolve(ok); }
+            };
+            req.onupgradeneeded = function () {};
+            req.onsuccess = function () {
+              try {
+                req.result.close();
+                var deletion = indexedDB.deleteDatabase(name);
+                deletion.onsuccess = function () { finish(true); };
+                deletion.onerror = function () { finish(true); };
+                deletion.onblocked = function () { finish(true); };
+              } catch (_) { finish(true); }
+            };
+            req.onerror = function () { finish(false); };
+            req.onblocked = function () { finish(false); };
+          } catch (_) { resolve(false); }
+        });
+      }
+      function applyTheme() {
+        var dark = false;
+        try { dark = localStorage.getItem(THEME_KEY) === 'dark'; } catch (_) {}
+        document.body.classList.toggle('dark', dark);
+      }
+      function testNoteLoad() {
+        try {
+          var value = localStorage.getItem(NOTE_KEY);
+          if (value !== null) {
+            byId('testNote').value = value;
+            byId('noteResult').textContent = 'وُجدت ملاحظة محفوظة من فتح سابق على هذا المتصفح.';
+          }
+        } catch (_) {
+          byId('noteResult').textContent = 'التخزين غير متاح لهذا الملف في هذا المتصفح؛ جرّب فتحه بمتصفح آخر.';
+        }
+      }
+      async function runChecks() {
+        var online = navigator.onLine === true;
+        var protocol = location.protocol || 'غير معروف';
+        var fileOrigin = protocol === 'file:';
+        var ls = storageProbe();
+        var wasm = typeof WebAssembly === 'object' && typeof WebAssembly.instantiate === 'function';
+        var sab = typeof SharedArrayBuffer === 'function';
+        var isolated = window.crossOriginIsolated === true;
+        var mic = !!(navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function');
+        var secure = window.isSecureContext === true;
+        var bridge = !!(window.Daftari && (typeof window.Daftari.pickVosk === 'function' || typeof window.Daftari.pickWhisper === 'function'));
+        var width = Math.round(window.innerWidth || document.documentElement.clientWidth || 0);
+        var height = Math.round(window.innerHeight || document.documentElement.clientHeight || 0);
+        var dpr = Number(window.devicePixelRatio || 1).toFixed(2);
+        latest = {online: online, protocol: protocol, localStorage: ls, wasm: wasm, sharedArrayBuffer: sab, crossOriginIsolated: isolated, secureContext: secure, microphoneApi: mic, nativeBridge: bridge, viewport: width + ' × ' + height + ' CSS px · DPR ' + dpr};
+
+        byId('networkPillText').textContent = online ? 'المتصفح يعلن وجود شبكة' : 'المتصفح يعلن دون اتصال';
+        byId('networkPill').classList.toggle('offline', !online);
+        setBadge('networkBadge', online ? 'شبكة معلنة' : 'دون اتصال', online ? 'good' : 'warn');
+        byId('originDetail').textContent = protocol + ' · ' + (fileOrigin ? 'ملف محلي' : 'صفحة مستضافة');
+        setBadge('originBadge', fileOrigin ? 'محلي' : 'ويب', fileOrigin ? 'good' : 'warn');
+        setBadge('storageBadge', ls ? 'يعمل' : 'محجوب', ls ? 'good' : 'bad');
+        setBadge('wasmBadge', wasm ? 'متاح' : 'غير متاح', wasm ? 'good' : 'bad');
+        byId('whisperDetail').textContent = 'SharedArrayBuffer: ' + (sab ? 'متاح' : 'غير متاح') + ' · crossOriginIsolated: ' + (isolated ? 'نعم' : 'لا') + '؛ توفرهما لا يعني أن النموذج جاهز.';
+        setBadge('whisperBadge', sab && isolated ? 'متاح مبدئيًا' : 'غير مكتمل', sab && isolated ? 'good' : 'warn');
+        setBadge('secureBadge', secure ? 'آمن' : 'غير آمن', secure ? 'good' : 'warn');
+        setBadge('micBadge', mic ? 'واجهة متاحة' : 'غير متاحة', mic ? 'good' : 'warn');
+        setBadge('bridgeBadge', bridge ? 'داخل التطبيق' : 'غير متاح هنا', bridge ? 'good' : 'warn');
+        byId('viewportDetail').textContent = latest.viewport;
+        setBadge('viewportBadge', width ? width + ' px' : '—', 'good');
+        setBadge('idbBadge', 'جارٍ', '');
+        var idb = await indexedDBProbe();
+        latest.indexedDB = idb;
+        setBadge('idbBadge', idb === true ? 'يعمل' : idb === false ? 'غير متاح' : 'لم يُحسم', idb === true ? 'good' : 'warn');
+      }
+      function formatBytes(n) {
+        if (!Number.isFinite(n)) return String(n) + ' بايت';
+        if (n < 1024) return n + ' بايت';
+        var units = ['ك.ب', 'م.ب', 'ج.ب'];
+        var value = n / 1024, unit = 0;
+        while (value >= 1024 && unit < units.length - 1) { value /= 1024; unit++; }
+        return value.toFixed(value >= 10 ? 1 : 2) + ' ' + units[unit];
+      }
+      function hex(bytes) {
+        return Array.from(bytes).map(function (b) { return b.toString(16).padStart(2, '0'); }).join(' ');
+      }
+      byId('refreshButton').addEventListener('click', runChecks);
+      window.addEventListener('online', runChecks);
+      window.addEventListener('offline', runChecks);
+      window.addEventListener('resize', function () {
+        var width = Math.round(window.innerWidth || 0), height = Math.round(window.innerHeight || 0);
+        byId('viewportDetail').textContent = width + ' × ' + height + ' CSS px · DPR ' + Number(window.devicePixelRatio || 1).toFixed(2);
+        setBadge('viewportBadge', width ? width + ' px' : '—', 'good');
+      });
+      byId('themeButton').addEventListener('click', function () {
+        var dark = !document.body.classList.contains('dark');
+        document.body.classList.toggle('dark', dark);
+        try { localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light'); } catch (_) {}
+      });
+      byId('chooseFileButton').addEventListener('click', function () { byId('localFile').click(); });
+      byId('localFile').addEventListener('change', async function (event) {
+        var file = event.target.files && event.target.files[0];
+        if (!file) return;
+        var ext = (file.name.split('.').pop() || '').toLowerCase();
+        var bytes = new Uint8Array(await file.slice(0, 16).arrayBuffer());
+        var zip = bytes.length >= 2 && bytes[0] === 0x50 && bytes[1] === 0x4b;
+        var hint = ext === 'zip' ? (zip ? 'ترويسة ZIP ‏(PK) ظاهرة؛ هذا لا يثبت سلامة النموذج.' : 'لم تظهر ترويسة ZIP المعتادة في أول بايتين.')
+          : ext === 'bin' || ext === 'gguf' ? 'تم التعرّف على امتداد ملف نموذج فقط؛ لا يتم التحقق من GGML أو تشغيله هنا.'
+          : ext === 'html' || ext === 'htm' ? 'تم اختيار صفحة HTML محلية؛ لا يتم تشغيلها أو استيرادها.'
+          : 'تم اختيار الملف؛ لا يتم فحص محتواه بالكامل.';
+        byId('fileResult').textContent = 'الاسم: ' + file.name + ' · الحجم: ' + formatBytes(file.size) + ' · النوع: ' + (file.type || 'غير محدد') + ' · أول البايتات: ' + (bytes.length ? hex(bytes) : 'فارغ') + ' — ' + hint;
+      });
+      byId('micButton').addEventListener('click', async function () {
+        var output = byId('micResult');
+        if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== 'function') {
+          output.textContent = 'تعذر الاختبار: واجهة الميكروفون غير متاحة في هذا السياق أو المتصفح.';
+          return;
+        }
+        output.textContent = 'بانتظار إذن الميكروفون…';
+        try {
+          var stream = await navigator.mediaDevices.getUserMedia({audio: true});
+          stream.getTracks().forEach(function (track) { track.stop(); });
+          output.textContent = 'نجح فتح الميكروفون، ثم أُوقفت المسارات مباشرةً. لم يُسجل أو يُحفظ صوت.';
+        } catch (error) {
+          output.textContent = 'لم ينجح فتح الميكروفون: ' + (error && error.name ? error.name : 'تم رفض الإذن أو تعذر الوصول إليه.');
+        }
+      });
+      byId('saveNoteButton').addEventListener('click', function () {
+        try {
+          localStorage.setItem(NOTE_KEY, byId('testNote').value);
+          byId('noteResult').textContent = 'حُفظت الملاحظة على هذا المتصفح. أعد فتح الصفحة للتحقق من بقائها.';
+        } catch (_) {
+          byId('noteResult').textContent = 'تعذر الحفظ: المتصفح يمنع التخزين المحلي لهذا الملف.';
+        }
+      });
+      byId('clearNoteButton').addEventListener('click', function () {
+        try { localStorage.removeItem(NOTE_KEY); } catch (_) {}
+        byId('testNote').value = '';
+        byId('noteResult').textContent = 'مُسحت ملاحظة الاختبار من هذا المتصفح.';
+      });
+      byId('copyReportButton').addEventListener('click', async function () {
+        var report = [
+          'ملخص اختبار دفتري دون إنترنت',
+          'حالة الشبكة حسب المتصفح: ' + (navigator.onLine ? 'متصل' : 'دون اتصال'),
+          'مصدر الصفحة: ' + location.protocol,
+          'LocalStorage: ' + (latest.localStorage ? 'متاح' : 'غير متاح'),
+          'IndexedDB: ' + (latest.indexedDB === true ? 'متاح' : latest.indexedDB === false ? 'غير متاح' : 'غير محسوم'),
+          'WebAssembly: ' + (latest.wasm ? 'متاح' : 'غير متاح'),
+          'SharedArrayBuffer: ' + (latest.sharedArrayBuffer ? 'متاح' : 'غير متاح'),
+          'crossOriginIsolated: ' + (latest.crossOriginIsolated ? 'نعم' : 'لا'),
+          'السياق الآمن: ' + (latest.secureContext ? 'نعم' : 'لا'),
+          'واجهة الميكروفون: ' + (latest.microphoneApi ? 'متاحة' : 'غير متاحة'),
+          'جسر Android: ' + (latest.nativeBridge ? 'متاح' : 'غير متاح في الصفحة المستقلة'),
+          'نافذة العرض: ' + (latest.viewport || 'غير متاح')
+        ].join('\n');
+        try {
+          await navigator.clipboard.writeText(report);
+          byId('copyReportButton').textContent = 'نُسخ الملخص ✓';
+        } catch (_) {
+          var area = document.createElement('textarea');
+          area.value = report; area.style.position = 'fixed'; area.style.opacity = '0';
+          document.body.appendChild(area); area.select();
+          var copied = false;
+          try { copied = document.execCommand('copy'); } catch (_) {}
+          area.remove();
+          byId('copyReportButton').textContent = copied ? 'نُسخ الملخص ✓' : 'تعذر النسخ؛ أعد الفحص';
+        }
+      });
+      applyTheme();
+      testNoteLoad();
+      runChecks();
+    })();
+  </script>
+</body>
+</html>
