@@ -61,8 +61,9 @@ public final class MainActivity extends Activity {
         super.onCreate(state);
         getWindow().setStatusBarColor(0xfff5f5f2); getWindow().setNavigationBarColor(0xfff5f5f2);
         debugLog=(getApplicationInfo().flags&android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE)!=0;
+        // getFilesDir() is private persistent app storage: model imports survive process/app/device restarts.
         importRoot=new File(getFilesDir(),"imports"); modelDir=new File(importRoot,"model-ar"); libDir=new File(importRoot,"lib"); projectDir=new File(importRoot,"proj");
-        importRoot.mkdirs(); modelDir.mkdirs(); libDir.mkdirs(); projectDir.mkdirs(); recoverWhisperImportBackups();
+        importRoot.mkdirs(); modelDir.mkdirs(); libDir.mkdirs(); projectDir.mkdirs(); recoverVoskImportBackups(); recoverWhisperImportBackups();
         webView=new WebView(this); WebSettings s=webView.getSettings();
         s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true); s.setDatabaseEnabled(true);
         s.setMediaPlaybackRequiresUserGesture(false); s.setAllowFileAccess(false); s.setAllowContentAccess(true);
@@ -203,7 +204,10 @@ public final class MainActivity extends Activity {
         int n=0;for(File f:all)if(f.isFile()&&f.getName().toLowerCase(Locale.ROOT).endsWith(".bin"))n++;
         return n;
     }
-    private boolean voskModelReady(){return new File(modelDir,"model.tar.gz").isFile();}
+    private boolean voskModelReady(){
+        File f=new File(modelDir,"model.tar.gz");if(!f.isFile()||f.length()<18)return false;
+        try(InputStream in=new FileInputStream(f)){return in.read()==0x1f&&in.read()==0x8b;}catch(IOException e){return false;}
+    }
     private void reportVoskState(){
         final boolean lib=voskLibReady(), model=voskModelReady();
         runJs("(function(){try{var l="+lib+",m="+model+",msg=window.voskImpMsg?voskImpMsg(l,m):'';if(msg)toastMsg(msg);if(!l||!m)return;"
@@ -328,9 +332,31 @@ public final class MainActivity extends Activity {
             stage.mkdirs();Set<String> names=new HashSet<>();byte[] b=new byte[65536];long total=0;int entries=0;
             try(ZipInputStream z=new ZipInputStream(new FileInputStream(tmp))){ZipEntry e;while((e=z.getNextEntry())!=null){if(++entries>MAX_ENTRIES)throw new IllegalArgumentException("ملف ZIP يحتوي عناصر كثيرة جدًا");String raw=e.getName().replace('\\','/');if(raw.startsWith("/")||raw.indexOf('\0')>=0)throw new SecurityException("مسار ZIP غير آمن");String rel=root!=null&&raw.startsWith(root+"/")?raw.substring(root.length()+1):raw;rel=normalize(rel);if(rel.isEmpty()||e.isDirectory()){z.closeEntry();continue;}if(rel.equals("..")||rel.startsWith("../")||rel.contains("/../"))throw new SecurityException("مسار ZIP غير آمن");File f=new File(stage,rel).getCanonicalFile();if(!f.getPath().startsWith(stage.getCanonicalPath()+File.separator))throw new SecurityException("مسار ZIP خارج المجلد");if(!names.add(rel))throw new IllegalArgumentException("ZIP يحتوي اسمًا مكررًا");File parent=f.getParentFile();if(parent!=null)parent.mkdirs();try(FileOutputStream out=new FileOutputStream(f)){int n;while((n=z.read(b))>0){total+=n;if(total>MAX_OUT)throw new IllegalArgumentException("الملف المفكوك يتجاوز الحد 1 GB");out.write(b,0,n);}}z.closeEntry();}}
             if(!project&&!new File(stage,"am/final.mdl").isFile())throw new IllegalArgumentException("ZIP ليس نموذج Vosk كاملًا؛ am/final.mdl غير موجود.");if(project&&!hasProjectPage(stage))throw new IllegalArgumentException("ZIP المشروع لا يحتوي صفحة HTML.");
-            if(!project){packed=new File(getFilesDir(),"packed-"+System.nanoTime());if(!packed.mkdirs())throw new IOException("تعذّر تجهيز مساحة نموذج Vosk");String tarRoot=root==null||root.isEmpty()?"vosk-model":root.substring(root.lastIndexOf('/')+1);writeTarGz(stage,new File(packed,"model.tar.gz"),tarRoot);deleteTree(stage);stage=packed;}
-            File backup=new File(getFilesDir(),"backup-"+System.nanoTime());boolean had=dest.exists();if(had&&!dest.renameTo(backup))throw new IllegalStateException("تعذّر حفظ النموذج السابق");if(!stage.renameTo(dest)){if(had)backup.renameTo(dest);throw new IllegalStateException("تعذّر تثبيت الملفات الجديدة");}if(had)deleteTree(backup);return names.size();
+            if(!project){packed=new File(getFilesDir(),"packed-"+System.nanoTime());if(!packed.mkdirs())throw new IOException("تعذّر تجهيز مساحة نموذج Vosk");String tarRoot=root==null||root.isEmpty()?"vosk-model":root.substring(root.lastIndexOf('/')+1);writeTarGz(stage,new File(packed,"model.tar.gz"),tarRoot);deleteTree(stage);stage=packed;installVoskModelArchive(new File(stage,"model.tar.gz"),dest);}
+            else{File backup=new File(getFilesDir(),"backup-"+System.nanoTime());boolean had=dest.exists();if(had&&!dest.renameTo(backup))throw new IllegalStateException("تعذّر حفظ المشروع السابق");if(!stage.renameTo(dest)){if(had)backup.renameTo(dest);throw new IllegalStateException("تعذّر تثبيت الملفات الجديدة");}if(had)deleteTree(backup);}
+            return names.size();
         }finally{deleteTree(stage);if(packed!=null)deleteTree(packed);tmp.delete();}
+    }
+    private void installVoskModelArchive(File source,File directory)throws IOException{
+        if(!source.isFile())throw new IOException("أرشيف نموذج Vosk غير موجود");
+        if(!directory.exists()&&!directory.mkdirs())throw new IOException("تعذّر إنشاء مساحة نموذج Vosk");
+        File target=new File(directory,"model.tar.gz"),backup=new File(directory,"model.tar.gz.backup-"+System.nanoTime());
+        boolean had=target.exists();
+        if(had&&!target.renameTo(backup))throw new IOException("تعذّر حفظ نسخة نموذج Vosk الحالية");
+        if(!source.renameTo(target)){
+            if(had)backup.renameTo(target);
+            throw new IOException("تعذّر تثبيت نموذج Vosk الجديد");
+        }
+        if(had)deleteTree(backup);
+    }
+    private void recoverVoskImportBackups(){
+        File[] files=modelDir.listFiles();if(files==null)return;
+        File target=new File(modelDir,"model.tar.gz");
+        for(File backup:files){
+            if(!backup.isFile()||!backup.getName().startsWith("model.tar.gz.backup-"))continue;
+            if(!target.exists()&&backup.renameTo(target))continue;
+            deleteTree(backup);
+        }
     }
     private void writeTarGz(File root,File archive,String tarRoot)throws Exception{
         ArrayList<File> files=new ArrayList<>();collectFiles(root,root,files);final String base=root.getAbsolutePath()+File.separator;Collections.sort(files,Comparator.comparing(f->f.getAbsolutePath().substring(base.length())));
@@ -399,7 +425,7 @@ public final class MainActivity extends Activity {
             File model=new File(modelDir,"model.tar.gz");String entry=MainActivity.this.projectEntry();
             StringBuilder b=new StringBuilder();
             b.append("{\"lib\":").append(voskLibReady())
-             .append(",\"model\":").append(model.isFile())
+             .append(",\"model\":").append(voskModelReady())
              .append(",\"modelBytes\":").append(model.isFile()?model.length():0)
              .append(",\"whisperModels\":").append(whisperModelCount())
              .append(",\"project\":").append(org.json.JSONObject.quote(entry==null?"":entry))
