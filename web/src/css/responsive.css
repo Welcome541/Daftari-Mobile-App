@@ -1,0 +1,467 @@
+/* ---------------------------------------------------------------------
+ * Part 1 - the sizing layer
+ * Every dimension that adapts to the device is expressed as
+ * calc(<base> * var(--s)) so the interface scale (--s) and the vertical
+ * rhythm (--density) can retune the whole app from a single setting.
+ * ------------------------------------------------------------------- */
+
+html {
+  zoom: 1 !important;
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow-x: hidden;
+  background: var(--bg);
+  font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+}
+body[lang="ar"] {
+  font-family: system-ui, "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+}
+body[lang="en"] {
+  font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+}
+#phone {
+  width: 100%;
+  max-width: var(--wide-max);
+  min-height: 100vh;
+  min-height: 100svh;
+  margin-inline: auto;
+  overflow-x: hidden;
+  box-shadow: none;
+}
+#app {
+  width: 100%;
+  min-width: 0;
+  flex: 1 0 auto;
+}
+#app > .pad,
+#app > .list,
+#app > .grid2 {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+.pad {
+  min-width: 0;
+  padding-inline: calc(clamp(12px, 3vw, 28px) * var(--s));
+}
+.hdr {
+  width: 100%;
+  max-width: var(--wide-max);
+  min-width: 0;
+  margin-inline: auto;
+  padding-inline: calc(clamp(12px, 2.6vw, 28px) * var(--s));
+}
+.hdr h1 {
+  min-width: 0;
+  font-size: calc(clamp(16px, 1.6vw, 20px) * var(--s));
+  line-height: 1.25;
+}
+.logo-ic {
+  width: calc(40px * var(--s));
+  height: calc(40px * var(--s));
+  flex: 0 0 auto;
+}
+.card,
+.litem,
+.srow,
+.stat,
+.inv,
+.kv,
+.search,
+.row {
+  min-width: 0;
+}
+.stat {
+  padding: calc(clamp(11px, 1.5vw, 18px) * var(--s));
+}
+.stat .t {
+  min-width: 0;
+  font-size: calc(clamp(11px, 1.1vw, 13px) * var(--s));
+  line-height: 1.35;
+}
+.stat .v {
+  min-width: 0;
+  font-size: calc(clamp(16px, 1.8vw, 23px) * var(--s));
+  line-height: 1.25;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.stat .v .num,
+.amt .num {
+  white-space: nowrap;
+}
+.btn {
+  min-width: 0;
+  min-height: calc(44px * var(--s));
+  padding-block: calc(10px * var(--s));
+  padding-inline: calc(clamp(12px, 1.6vw, 18px) * var(--s));
+  gap: calc(clamp(6px, 1vw, 10px) * var(--s));
+  font-size: calc(clamp(14px, 1.25vw, 16px) * var(--s));
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.hbtn {
+  min-width: calc(40px * var(--s));
+  width: calc(40px * var(--s));
+  height: calc(40px * var(--s));
+  flex: 0 0 auto;
+  padding: 0;
+}
+.inp,
+.search .inp,
+.search .inp input {
+  min-width: 0;
+  max-width: 100%;
+  font-size: calc(16px * var(--s));
+}
+.litem {
+  gap: calc(clamp(8px, 1.2vw, 12px) * var(--s));
+  padding: calc(clamp(10px, 1.3vw, 14px) * var(--s));
+}
+.litem > .sp,
+.litem .sp {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.amt {
+  max-width: 48%;
+  font-size: calc(clamp(13px, 1.2vw, 15px) * var(--s));
+  overflow-wrap: anywhere;
+  text-align: end;
+}
+.srow {
+  gap: calc(clamp(9px, 1.4vw, 14px) * var(--s));
+  padding: calc(clamp(11px, 1.5vw, 16px) * var(--s));
+}
+.srow .sic2 {
+  width: calc(40px * var(--s));
+  height: calc(40px * var(--s));
+  flex: 0 0 calc(40px * var(--s));
+}
+.kic {
+  width: calc(34px * var(--s));
+  height: calc(34px * var(--s));
+  flex: 0 0 calc(34px * var(--s));
+}
+.kv {
+  gap: calc(9px * var(--s));
+  flex-wrap: wrap;
+}
+.kv .k {
+  min-width: 0;
+  font-size: calc(clamp(12px, 1.15vw, 14px) * var(--s));
+}
+.kv .v {
+  max-width: 58%;
+  overflow-wrap: anywhere;
+  font-size: calc(clamp(13px, 1.25vw, 15px) * var(--s));
+}
+.chips {
+  max-width: 100%;
+}
+.chips button,
+.chip,
+.pchip,
+.seg button,
+.langsw button {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+svg {
+  max-width: 100%;
+  vertical-align: middle;
+}
+svg.ic {
+  width: calc(22px * var(--s)) !important;
+  height: calc(22px * var(--s)) !important;
+  flex: 0 0 auto;
+}
+.hbtn svg.ic,
+.logo-ic svg.ic,
+.srow .sic2 svg.ic,
+.kic svg.ic {
+  width: calc(20px * var(--s)) !important;
+  height: calc(20px * var(--s)) !important;
+}
+#tabbar svg.ic {
+  width: calc(22px * var(--s)) !important;
+  height: calc(22px * var(--s)) !important;
+}
+.micwrap {
+  width: 100%;
+  min-width: 0;
+  padding-block: calc(clamp(12px, 3vw, 22px) * var(--s)) calc(8px * var(--s));
+  padding-inline: calc(12px * var(--s));
+}
+.mic {
+  width: calc(clamp(88px, 12vw, 108px) * var(--s));
+  height: calc(clamp(88px, 12vw, 108px) * var(--s));
+  flex: 0 0 auto;
+}
+.mic svg.ic {
+  width: calc(44px * var(--s)) !important;
+  height: calc(44px * var(--s)) !important;
+}
+.wave {
+  max-width: 100%;
+  height: calc(34px * var(--s));
+  gap: calc(3px * var(--s));
+}
+.transcript {
+  max-width: 100%;
+  border-radius: 14px;
+  line-height: 1.55;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.kp {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(100%, calc(250px * var(--s)));
+  gap: calc(clamp(8px, 2vw, 14px) * var(--s));
+  margin-inline: auto;
+}
+.kp button {
+  width: 100%;
+  height: calc(clamp(56px, 9vw, 68px) * var(--s));
+  font-size: calc(clamp(20px, 4vw, 24px) * var(--s));
+}
+.okc {
+  width: calc(76px * var(--s));
+  height: calc(76px * var(--s));
+}
+#sheet {
+  width: 100%;
+  max-width: 760px;
+  max-height: 88vh;
+  max-height: 88svh;
+  padding-block: calc(10px * var(--s));
+  padding-inline: calc(clamp(14px, 3vw, 24px) * var(--s));
+  padding-bottom: calc(16px * var(--s) + env(safe-area-inset-bottom));
+  overflow-x: hidden;
+}
+#sheet table,
+#app table {
+  max-width: 100%;
+}
+#toast {
+  width: calc(100% - 24px * var(--s));
+  max-width: 460px;
+  bottom: calc(96px * var(--s) + env(safe-area-inset-bottom));
+  overflow-wrap: anywhere;
+}
+#tabbar {
+  width: 100%;
+  max-width: var(--dock-max);
+  height: var(--tabbar-h);
+  margin-inline: auto;
+  padding-inline: calc(clamp(2px, 1vw, 10px) * var(--s));
+}
+#tabbar button {
+  min-width: 0;
+  min-height: calc(64px * var(--s));
+  gap: calc(3px * var(--s));
+  padding-block: calc(2px * var(--s));
+  padding-inline: calc(1px * var(--s));
+  font-size: calc(clamp(10px, 1vw, 12px) * var(--s));
+  line-height: 1.2;
+}
+#tabbar .tbind {
+  width: calc(44px * var(--s));
+  height: calc(28px * var(--s));
+}
+#tabbar .tabplus {
+  width: calc(50px * var(--s));
+  height: calc(50px * var(--s));
+  transform: translateY(-8px);
+}
+#tabbar .tabplus:active {
+  transform: translateY(-8px) scale(.94);
+}
+#actionrow {
+  width: 100%;
+  max-width: var(--dock-max);
+  margin-inline: auto;
+  bottom: var(--tabbar-h);
+  gap: calc(8px * var(--s));
+  padding-block: calc(6px * var(--s));
+  padding-inline: calc(clamp(8px, 1.5vw, 16px) * var(--s));
+}
+#actionrow .btn {
+  min-width: 0;
+  min-height: calc(48px * var(--s));
+  height: calc(clamp(48px, 7vh, 58px) * var(--s));
+  padding-block: calc(8px * var(--s));
+  padding-inline: calc(10px * var(--s));
+  gap: calc(7px * var(--s));
+  font-size: calc(clamp(13px, 1.2vw, 16px) * var(--s));
+}
+#actionrow .btn svg {
+  width: calc(20px * var(--s));
+  height: calc(20px * var(--s));
+  flex: 0 0 auto;
+}
+#clist2,
+#txlist {
+  padding-bottom: calc(110px * var(--s) + env(safe-area-inset-bottom)) !important;
+}
+.fab2 {
+  width: calc(50px * var(--s));
+  height: calc(50px * var(--s));
+}
+#fabAdd {
+  inset-inline-end: calc(clamp(12px, 3vw, 24px) * var(--s));
+  bottom: calc(88px * var(--s) + env(safe-area-inset-bottom));
+  width: calc(50px * var(--s));
+  height: calc(50px * var(--s));
+}
+.sbar {
+  padding-block: calc(10px * var(--s)) calc(2px * var(--s));
+  padding-inline: calc(clamp(14px, 3vw, 22px) * var(--s));
+  font-size: calc(13px * var(--s));
+}
+.sbar svg {
+  width: auto;
+  height: 12px;
+}
+
+/* ---------------------------------------------------------------------
+ * Part 2 - the breakpoints
+ * The original breakpoints are preserved and expressed in the token form;
+ * the order runs from the narrowest to the widest so the narrowest rule
+ * always wins.
+ * ------------------------------------------------------------------- */
+
+/* both the original and the token layer apply here */
+
+@media (max-width:480px){.hdr .accchip .accn{display:none}}
+
+@media (max-width:480px){.hdr .accchip .accn{display:none}}
+
+/* both the original and the token layer apply here */
+
+@media (max-width:360px){
+ .accchip .accn{display:none}
+ .stat .v{font-size:calc(18px * var(--s))}
+ .pad{padding:0 calc(14px * var(--s))}
+ .hdr{padding:calc(8px * var(--s)) calc(12px * var(--s)) calc(6px * var(--s))}
+ .stat{padding:calc(12px * var(--s))}
+ .stat .v{font-size:calc(19px * var(--s))}
+ .btn{font-size:calc(15px * var(--s));padding:calc(13px * var(--s)) calc(14px * var(--s))}
+ #tabbar button{font-size:calc(10.5px * var(--s))}
+ .litem{padding:calc(11px * var(--s)) calc(12px * var(--s));gap:calc(10px * var(--s))}
+ .amt{font-size:calc(14.5px * var(--s))}
+ .inp{font-size:calc(14.5px * var(--s));padding:calc(12px * var(--s)) calc(13px * var(--s))}
+ .fab2{width:calc(52px * var(--s));height:calc(52px * var(--s))}
+}
+
+@media (max-width:360px){
+ .accchip .accn{display:none}
+ .stat .v{font-size:calc(18px * var(--s))}
+ .pad{padding:0 calc(14px * var(--s))}
+ .hdr{padding:calc(8px * var(--s)) calc(12px * var(--s)) calc(6px * var(--s))}
+ .stat{padding:calc(12px * var(--s))}
+ .stat .v{font-size:calc(19px * var(--s))}
+ .btn{font-size:calc(15px * var(--s));padding:calc(13px * var(--s)) calc(14px * var(--s))}
+ #tabbar button{font-size:calc(10.5px * var(--s))}
+ .litem{padding:calc(11px * var(--s)) calc(12px * var(--s));gap:calc(10px * var(--s))}
+ .amt{font-size:calc(14.5px * var(--s))}
+ .inp{font-size:calc(14.5px * var(--s));padding:calc(12px * var(--s)) calc(13px * var(--s))}
+ .fab2{width:calc(52px * var(--s));height:calc(52px * var(--s))}
+}
+
+/* both the original and the token layer apply here */
+
+@media (min-width:720px){
+ #phone{max-width:640px}
+ #sheet{max-width:640px}
+ .stat .v{font-size:calc(26px * var(--s))}
+ .litem{padding:calc(15px * var(--s)) calc(16px * var(--s))}
+ .list{gap:calc(13px * var(--s))}
+ .btn{font-size:calc(17px * var(--s))}
+ #tabbar{grid-template-columns:repeat(5,1fr)}
+ .fab2{width:calc(62px * var(--s));height:calc(62px * var(--s))}
+ .srow{padding:calc(17px * var(--s))}
+}
+
+@media (min-width:720px){
+ #phone{max-width:640px}
+ #sheet{max-width:640px}
+ .stat .v{font-size:calc(26px * var(--s))}
+ .litem{padding:calc(15px * var(--s)) calc(16px * var(--s))}
+ .list{gap:calc(13px * var(--s))}
+ .btn{font-size:calc(17px * var(--s))}
+ #tabbar{grid-template-columns:repeat(5,1fr)}
+ .fab2{width:calc(62px * var(--s));height:calc(62px * var(--s))}
+ .srow{padding:calc(17px * var(--s))}
+}
+
+/* both the original and the token layer apply here */
+
+@media (max-height:640px){.stat{padding:calc(11px * var(--s))}.stat .v{font-size:calc(19px * var(--s))}.hdr{padding:calc(6px * var(--s)) calc(14px * var(--s)) calc(4px * var(--s))}.pad.search{margin-top:calc(8px * var(--s))!important}}
+
+@media (max-height:640px){.stat{padding:calc(11px * var(--s))}.stat .v{font-size:calc(19px * var(--s))}.hdr{padding:calc(6px * var(--s)) calc(14px * var(--s)) calc(4px * var(--s))}.pad.search{margin-top:calc(8px * var(--s))!important}}
+
+/* both the original and the token layer apply here */
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+@media (max-width: 380px) {
+  .pad { padding-inline: calc(12px * var(--s)); }
+  .hdr { gap: calc(7px * var(--s)); padding-inline: calc(10px * var(--s)); }
+  .stats { gap: calc(8px * var(--s)); }
+  .stat { padding: calc(10px * var(--s)); }
+  .stat .v { font-size: calc(15px * var(--s)); }
+  .stat .t { font-size: calc(11px * var(--s)); }
+  .litem { padding: calc(9px * var(--s)); }
+  .amt { max-width: 45%; }
+  #actionrow { gap: calc(6px * var(--s)); padding-inline: calc(7px * var(--s)); }
+  #actionrow .btn { padding-inline: 6px; font-size: calc(12.5px * var(--s)); }
+}
+
+@media (min-width: 768px) {
+  body { background: #e7e3db; }
+  #phone {
+    min-height: 100vh;
+    box-shadow: 0 0 0 1px #d8d2c6, 0 12px 40px rgba(0, 0, 0, .1);
+  }
+  .sbar { display: none; }
+  .pad { padding-inline: calc(clamp(20px, 3vw, 36px) * var(--s)); }
+  .stats { gap: calc(clamp(14px, 2vw, 22px) * var(--s)); }
+  .mic { width: calc(108px * var(--s)); height: calc(108px * var(--s)); }
+  #tabbar { border-radius: 18px 18px 0 0; }
+}
+
+@media (min-width: 1100px) {
+  #app > .pad,
+  #app > .list,
+  #app > .grid2 { max-width: 1080px; }
+  .pad { padding-inline: calc(32px * var(--s)); }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .sbar { display: none; }
+  .hdr { padding-block: 4px; }
+  #tabbar { height: calc(58px * var(--s) + env(safe-area-inset-bottom)); }
+  #tabbar button { min-height: calc(54px * var(--s)); }
+  #actionrow { bottom: calc(58px * var(--s) + env(safe-area-inset-bottom)); }
+  .micwrap { padding-top: 8px; }
+  .mic { width: calc(76px * var(--s)); height: calc(76px * var(--s)); }
+  .mic svg.ic { width: calc(38px * var(--s)) !important; height: calc(38px * var(--s)) !important; }
+  .wave { height: calc(24px * var(--s)); margin-block: 8px 2px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #tabbar *, #actionrow *, .mic.live {
+    animation: none !important;
+    transition: none !important;
+  }
+}
