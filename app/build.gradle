@@ -14,8 +14,8 @@ android {
         applicationId 'ai.arena.dafter.enhanced'
         minSdk 21
         targetSdk 34
-        versionCode 225
-        versionName '2.23.2-vosk-auto-arabic'
+        versionCode 226
+        versionName '2.23.3-vosk-worker-url'
     }
 
     compileOptions {

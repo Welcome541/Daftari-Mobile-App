@@ -12738,8 +12738,9 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
     var mk=factory();
     if(!mk){lastError='محرك vosk-browser.js غير محمّل.';return Promise.reject(new Error(lastError))}
     var token=generation,timer=0;loading=true;lastError='';
-    var work=Promise.resolve().then(function(){return fetch('model-ar/model.tar.gz',{method:'HEAD'})})
-      .then(function(r){if(!r.ok)throw new Error('ملف نموذج Vosk غير موجود أو غير قابل للقراءة (HTTP '+r.status+').');return mk('model-ar/model.tar.gz')})
+    var modelUrl;try{modelUrl=new URL('model-ar/model.tar.gz',window.location.href).href}catch(e){loading=false;lastError='تعذّر تكوين رابط آمن لنموذج Vosk.';return Promise.reject(new Error(lastError))}
+    var work=Promise.resolve().then(function(){return fetch(modelUrl,{method:'HEAD'})})
+      .then(function(r){if(!r.ok)throw new Error('ملف نموذج Vosk غير موجود أو غير قابل للقراءة (HTTP '+r.status+').');return mk(modelUrl)})
       .then(function(m){if(!m)throw new Error('لم يُنشئ محرك Vosk نموذجًا صالحًا.');return m});
     var timeout=new Promise(function(resolve,reject){timer=setTimeout(function(){reject(new Error('انتهت مهلة تهيئة Vosk بعد 60 ثانية.'))},60000)});
     initPromise=Promise.race([work,timeout]).then(function(m){clearTimeout(timer);

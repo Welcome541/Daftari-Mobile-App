@@ -798,12 +798,13 @@
     function createModel(modelUrl, logLevel = 0) {
         return __awaiter(this, void 0, void 0, function* () {
             const model = new Model(modelUrl, logLevel);
-            return new Promise((resolve, reject) => model.on("load", (message) => {
-                if (message.result) {
-                    resolve(model);
-                }
-                reject();
-            }));
+            return new Promise((resolve, reject) => {
+                model.on("load", (message) => {
+                    if (message.result) resolve(model);
+                    else reject(new Error(message.error || "Vosk failed to load the model archive."));
+                });
+                model.on("error", (message) => reject(new Error(message && (message.error || message.message) || "Vosk worker failed while loading the model.")));
+            });
         });
     }
 
