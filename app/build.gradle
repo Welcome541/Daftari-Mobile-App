@@ -11,11 +11,11 @@ android {
     compileSdk 35
 
     defaultConfig {
-        applicationId 'ai.arena.dafter.enhanced'
+        applicationId 'ai.arena.dafter.next'
         minSdk 21
         targetSdk 34
-        versionCode 222
-        versionName '2.22-responsive-offline'
+        versionCode 223
+        versionName '2.23-daftari-next'
     }
 
     compileOptions {
@@ -35,7 +35,7 @@ android {
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (signingFile.exists()) signingConfig signingConfigs.release
             minifyEnabled false
         }
     }
