@@ -1,0 +1,90 @@
+name: Daftari Next release verification
+on:
+  push:
+    branches: [arena/7beb4250-daftari-mobile-app]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: daftari-next-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Install Android SDK
+        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: JavaScript and JVM checks
+        run: |
+          npm ci --no-audit --no-fund
+          npm test
+          ./tools/test-storage.sh
+      - name: Build and lint release
+        run: ./gradlew --no-daemon assembleRelease lintRelease
+      - name: Upload unsigned candidate and lint report (not a published release)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Daftari-Next-2.23-unsigned-verification
+          path: |
+            app/build/outputs/apk/release/*unsigned.apk
+            app/build/reports/lint-results-release.*
+          if-no-files-found: error
+      - name: Check signing configuration
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE" ] || [ -z "$STORE_PASSWORD" ] || [ -z "$KEY_ALIAS" ] || [ -z "$KEY_PASSWORD" ]; then
+            echo '::error::Production signing is not configured. Unsigned verification artifact is NOT an installable production release.'
+            exit 1
+          fi
+      - name: Sign and verify update compatibility
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          KEYFILE="$RUNNER_TEMP/daftari-signing.jks"
+          trap 'rm -f "$KEYFILE"' EXIT
+          printf '%s' "$KEYSTORE" | base64 --decode > "$KEYFILE"
+          chmod 600 "$KEYFILE"
+          mkdir -p release-output "$RUNNER_TEMP/previous-release"
+          SIGNER="$ANDROID_HOME/build-tools/35.0.0/apksigner"
+          "$SIGNER" sign --ks "$KEYFILE" --ks-key-alias "$ANDROID_KEY_ALIAS" \
+            --ks-pass env:ANDROID_KEYSTORE_PASSWORD --key-pass env:ANDROID_KEY_PASSWORD \
+            --out release-output/Daftari-Next-2.23.apk app/build/outputs/apk/release/app-release-unsigned.apk
+          "$SIGNER" verify --verbose --print-certs release-output/Daftari-Next-2.23.apk > release-output/signature-report.txt
+          if grep -qi 'CN=Android Debug' release-output/signature-report.txt; then
+            echo '::error::Debug certificate rejected for production publication.'; exit 1
+          fi
+          gh release download v2.22-offline --repo "$GITHUB_REPOSITORY" --pattern 'Dafter2-Offline-2.22.apk' --dir "$RUNNER_TEMP/previous-release"
+          "$SIGNER" verify --print-certs "$RUNNER_TEMP/previous-release/Dafter2-Offline-2.22.apk" > "$RUNNER_TEMP/previous-signature.txt"
+          OLD=$(grep '^Signer #1 certificate SHA-256 digest:' "$RUNNER_TEMP/previous-signature.txt")
+          NEW=$(grep '^Signer #1 certificate SHA-256 digest:' release-output/signature-report.txt)
+          if [ "$OLD" != "$NEW" ]; then
+            echo '::error::Certificate differs from v2.22. Refusing an incompatible update.'; exit 1
+          fi
+          (cd release-output && sha256sum Daftari-Next-2.23.apk > SHA256SUMS.txt)
+      - name: Upload verified signed release candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: Daftari-Next-2.23-signed
+          path: release-output/
+          if-no-files-found: error
