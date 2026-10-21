@@ -10,29 +10,43 @@ concurrency:
   cancel-in-progress: false
 jobs:
   verify-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 35
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: npm
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v4
       - name: Install Android SDK
-        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+        run: |
+          if [ ! -f "$ANDROID_HOME/platforms/android-35/android.jar" ] || [ ! -x "$ANDROID_HOME/build-tools/35.0.0/apksigner" ]; then
+            if ! "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-35' 'build-tools;35.0.0'; then
+              echo '::error::Android SDK 35 installation failed on ubuntu-24.04.'; exit 1
+            fi
+          fi
       - name: JavaScript and JVM checks
         run: |
           npm ci --no-audit --no-fund
           npm test
           ./tools/test-storage.sh
       - name: Build and lint release
-        run: ./gradlew --no-daemon assembleRelease lintRelease
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon assembleRelease lintRelease 2>&1 | tee "$RUNNER_TEMP/android-build.log" || {
+            python3 - <<'PYERROR'
+          import os
+          lines=open(os.environ['RUNNER_TEMP']+'/android-build.log').read().splitlines()[-65:]
+          message='\n'.join(lines).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+          print('::error::'+message)
+          PYERROR
+            exit 1
+          }
       - name: Upload unsigned candidate and lint report (not a published release)
         uses: actions/upload-artifact@v4
         with:
