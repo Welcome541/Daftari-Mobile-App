@@ -44,7 +44,7 @@ Workflow: `.github/workflows/android-release.yml`, on the Arena branch, Ubuntu 2
 5. Upload `Daftari-Next-2.23-signed` candidate; the keystore is deleted from the runner and never uploaded.
 6. Only after successful verification publish the signed APK/checksum/report as the final GitHub Release. The workflow itself does not silently publish unsigned or debug builds.
 
-GitHub Run 39527826805 successfully built and linted the pre-identity-change candidate, but stopped because production signing secrets were absent. A subsequent run must verify the standalone application ID; this document is not a claim that the signed APK has already been published.
+GitHub Run [39528672611](https://github.com/Welcome541/Daftari-Mobile-App/actions/runs/39528672611), for commit `6982f26`, successfully ran the JavaScript/JVM checks and built/linted the **standalone** APK. The unsigned artifact was uploaded. The run then stopped at the explicit signing gate because production signing secrets were absent. No signed APK or final release has been published. Earlier run 39527826805 verified the pre-identity-change candidate.
 
 ## Important fixes and remaining validation
 
