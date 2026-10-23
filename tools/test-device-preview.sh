@@ -25,7 +25,9 @@ set -o pipefail
 ./gradlew --no-daemon connectedDebugAndroidTest 2>&1 | tee device-evidence/instrumentation.txt || {
   python3 - <<'PY'
 from pathlib import Path
-text=Path('device-evidence/instrumentation.txt').read_text()[-6000:]
+text=Path('device-evidence/instrumentation.txt').read_text()[-4000:]
+for report in Path('app/build/outputs/androidTest-results').rglob('*.xml'):
+    text+='\n'+report.read_text()[:12000]
 print('::error::'+text.replace('%','%25').replace('\r','%0D').replace('\n','%0A'))
 PY
   exit 1

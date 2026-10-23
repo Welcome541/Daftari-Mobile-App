@@ -33,7 +33,9 @@ public class WebAppDeviceTest {
         AtomicReference<String> answer=new AtomicReference<>();
         scenario.onActivity(activity -> {
             WebView web=findWebView(activity.getWindow().getDecorView());
-            assertNotNull("WebView must exist",web);
+            // Storage recovery attaches WebView asynchronously after onCreate.
+            // Activity RESUMED alone does not mean that the WebView exists yet.
+            if(web==null){answer.set("false");done.countDown();return;}
             web.evaluateJavascript(script,value->{answer.set(value);done.countDown();});
         });
         assertTrue("WebView JS callback timed out",done.await(15,TimeUnit.SECONDS));

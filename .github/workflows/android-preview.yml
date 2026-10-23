@@ -2,7 +2,7 @@ name: Build and publish installable Next preview
 on:
   push:
     branches: [arena/7beb4250-daftari-mobile-app]
-    paths: [.github/workflows/android-preview.yml]
+    paths: ['.github/workflows/android-preview.yml', 'app/**', 'tests/**', 'tools/test-device-preview.sh', 'package*.json']
   workflow_dispatch:
 permissions:
   contents: read
