@@ -37,6 +37,27 @@ public class StorageSafetyTest {
                 Files.createSymbolicLink(dir.resolve("escape"), outside);
                 rejected(() -> SecurityUtils.resolveInside(dir.toFile(), "escape/model.bin"));
             } finally { Files.deleteIfExists(dir.resolve("escape")); Files.delete(outside); }
+            // Android's OS-owned data-directory alias is legitimate. Descendant
+            // symlinks must still be rejected by transaction cleanup.
+            Path realPrivate = Files.createDirectory(dir.resolve("real-private"));
+            Path alias = Files.createSymbolicLink(dir.resolve("private-alias"), realPrivate);
+            File privateRoot = alias.toFile().getCanonicalFile();
+            File imports = new File(privateRoot, "imports");
+            ai.arena.dafter.offline.storage.ImportTransaction transaction =
+                new ai.arena.dafter.offline.storage.ImportTransaction(imports, "model-ar");
+            transaction.recover(); checks++;
+            transaction.begin();
+            check(transaction.work.isDirectory());
+            transaction.recover();
+            check(!transaction.work.exists());
+            Path outsideCleanup = Files.createDirectory(dir.resolve("outside-cleanup"));
+            Path sentinel = Files.write(outsideCleanup.resolve("keep"), new byte[]{1});
+            Path planted = Files.createSymbolicLink(new File(imports, ".transactions/model-ar").toPath(), outsideCleanup);
+            try {
+                try { transaction.recover(); throw new AssertionError("Planted symlink accepted"); }
+                catch (IOException expected) { checks++; }
+                check(Files.exists(sentinel));
+            } finally { Files.delete(planted); }
             ImportValidator validator = new ImportValidator();
             check(validator.findVoskRoot(zip(dir, "arabic/am/final.mdl", "arabic/conf/model.conf")).equals("arabic"));
             check(validator.findVoskRoot(zip(dir, "am/final.mdl")).equals(""));

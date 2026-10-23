@@ -28,6 +28,12 @@ public class WebAppDeviceTest {
         }
         return null;
     }
+    private String nativeText(View view) {
+        if(view instanceof android.widget.TextView)return ((android.widget.TextView)view).getText().toString();
+        StringBuilder result=new StringBuilder();
+        if(view instanceof ViewGroup){ViewGroup group=(ViewGroup)view;for(int i=0;i<group.getChildCount();i++)result.append(nativeText(group.getChildAt(i))).append(" ");}
+        return result.toString();
+    }
     private String evaluate(ActivityScenario<MainActivity> scenario, String script) throws Exception {
         CountDownLatch done=new CountDownLatch(1);
         AtomicReference<String> answer=new AtomicReference<>();
@@ -35,7 +41,7 @@ public class WebAppDeviceTest {
             WebView web=findWebView(activity.getWindow().getDecorView());
             // Storage recovery attaches WebView asynchronously after onCreate.
             // Activity RESUMED alone does not mean that the WebView exists yet.
-            if(web==null){answer.set("false");done.countDown();return;}
+            if(web==null){answer.set(org.json.JSONObject.quote("native: "+nativeText(activity.getWindow().getDecorView())));done.countDown();return;}
             web.evaluateJavascript(script,value->{answer.set(value);done.countDown();});
         });
         assertTrue("WebView JS callback timed out",done.await(15,TimeUnit.SECONDS));

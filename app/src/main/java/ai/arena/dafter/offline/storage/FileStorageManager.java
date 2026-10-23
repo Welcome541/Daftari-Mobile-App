@@ -19,7 +19,10 @@ public final class FileStorageManager {
   /** Call on a worker: interrupted imports are recovered before exposing the app. */
   public FileStorageManager(Context context) throws IOException {
     this.context = context.getApplicationContext();
-    File imports = new File(context.getFilesDir(), "imports");
+    // Android can expose its trusted private directory through /data/user/0
+    // while the real directory is /data/data. Normalize that OS-owned root
+    // once; never normalize away symlinks planted inside imports itself.
+    File imports = new File(context.getFilesDir().getCanonicalFile(), "imports");
     models = new ModelManager(imports);
     projects = new ProjectManager(imports);
     models.recover();
