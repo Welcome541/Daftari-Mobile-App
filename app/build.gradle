@@ -14,8 +14,9 @@ android {
         applicationId 'ai.arena.dafter.next'
         minSdk 21
         targetSdk 34
-        versionCode 223
-        versionName '2.23-daftari-next'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        versionCode 224
+        versionName '2.24-daftari-next'
     }
 
     compileOptions {
@@ -35,7 +36,7 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix '.preview'
+            applicationIdSuffix '.trial20261023'
             versionNameSuffix '-preview'
         }
         release {
@@ -43,4 +44,9 @@ android {
             minifyEnabled false
         }
     }
+}
+
+dependencies {
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
 }

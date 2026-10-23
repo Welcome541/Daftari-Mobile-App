@@ -13,7 +13,7 @@ jobs:
   preview:
     if: github.ref == 'refs/heads/arena/7beb4250-daftari-mobile-app'
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 45
     permissions:
       contents: write
     steps:
@@ -48,16 +48,42 @@ jobs:
           PYERROR
             exit 1
           }
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Install, coexist, reinstall and exercise real Android WebView
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          api-level: 29
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          disable-animations: true
+          script: ./tools/test-device-preview.sh
+      - name: Upload device evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-device-test-evidence
+          path: |
+            device-evidence/
+            app/build/reports/androidTests/
+            app/build/outputs/androidTest-results/
+          if-no-files-found: warn
       - name: Verify signature, identity and checksum
         run: |
           set -euo pipefail
           mkdir -p preview-output
-          cp app/build/outputs/apk/debug/app-debug.apk preview-output/Daftari-Next-2.23-Preview.apk
-          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --min-sdk-version 21 --verbose --print-certs preview-output/Daftari-Next-2.23-Preview.apk > preview-output/signature-report.txt
-          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging preview-output/Daftari-Next-2.23-Preview.apk > preview-output/package-report.txt
-          grep -q "package: name='ai.arena.dafter.next.preview'" preview-output/package-report.txt
+          cp app/build/outputs/apk/debug/app-debug.apk preview-output/Daftari-Next-2.24-Preview.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --min-sdk-version 21 --verbose --print-certs preview-output/Daftari-Next-2.24-Preview.apk > preview-output/signature-report.txt
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging preview-output/Daftari-Next-2.24-Preview.apk > preview-output/package-report.txt
+          grep -q "package: name='ai.arena.dafter.next.trial20261023'" preview-output/package-report.txt
           grep -q "sdkVersion:'21'" preview-output/package-report.txt
-          (cd preview-output && sha256sum Daftari-Next-2.23-Preview.apk > SHA256SUMS.txt)
+          (cd preview-output && sha256sum Daftari-Next-2.24-Preview.apk > SHA256SUMS.txt)
           printf 'Commit: %s\nRun: %s\nSignature: Android debug (testing only)\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" > preview-output/build-info.txt
       - uses: actions/upload-artifact@v4
         with:
@@ -68,7 +94,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "next-2.23-preview-${GITHUB_RUN_ID}" \
+          gh release create "next-2.24-preview-${GITHUB_RUN_ID}" \
             --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --prerelease \
-            --title "Daftari Next 2.23 — نسخة تجريبية" \
+            --title "Daftari Next 2.24 — تجربة 2 — فحص التثبيت" \
             --notes-file docs/PREVIEW_RELEASE_NOTES.md preview-output/*
