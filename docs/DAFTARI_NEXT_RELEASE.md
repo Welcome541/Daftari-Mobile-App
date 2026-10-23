@@ -51,3 +51,14 @@ GitHub Run [39528672611](https://github.com/Welcome541/Daftari-Mobile-App/action
 PRF enrollment now persists its per-credential input and sends the same input via `evalByCredential`, requires user verification, and rejects unknown credentials and stale responses. Older fingerprint entries lacking PRF inputs need deletion/re-enrollment after PIN unlock. Local tests: **104/104**, including four new PRF protocol regressions. Actual platform authenticator/WebView support must still be tested on devices; PIN remains the fallback.
 
 A successful APK build/lint does not prove Android 5/14 runtime behavior, real speech models, microphone permissions, process death, biometric hardware support, or OCR language-data availability. Release notes must retain these limitations; the selected name does not imply zero bugs or a security certification.
+
+## Installable preview now published
+
+The owner subsequently requested an immediately installable APK for hands-on testing. A separate **debug-signed prerelease** was therefore authorized and published, without relaxing any production-signing gate:
+
+- Package: `ai.arena.dafter.next.preview`; label: «دفتري الجديد — تجريبي».
+- Source commit: `908ac77`; successful workflow run: `39882663141`.
+- [Download APK](https://github.com/Welcome541/Daftari-Mobile-App/releases/download/next-2.23-preview-39882663141/Daftari-Next-2.23-Preview.apk) (4,169,335 bytes).
+- [Prerelease/checksums/signature report](https://github.com/Welcome541/Daftari-Mobile-App/releases/tag/next-2.23-preview-39882663141).
+- Node/JVM tests, `assembleDebug lintDebug`, `apksigner verify --min-sdk-version 21`, and package-ID checks succeeded. Device execution remains for the user's testing; these checks do not certify all features on every Android/WebView version.
+- The production release remains unsigned/unpublished until the owner's key is configured. Preview debug keys may change between CI runs; export data before uninstalling/replacing any preview.

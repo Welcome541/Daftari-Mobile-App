@@ -62,3 +62,13 @@
 بموافقة المالك أصبحت النسخة تطبيقًا مستقلًا باسم **دفتري الجديد — Daftari Next** ومعرّف `ai.arena.dafter.next`، لأن مفتاح توقيع التطبيق السابق غير متوفر. التطبيق القديم وبياناته لا يُستبدلان.
 
 نجح البناء الحقيقي `assembleRelease lintRelease` واختبار JavaScript/JVM في [تشغيل GitHub Actions](https://github.com/Welcome541/Daftari-Mobile-App/actions/runs/39528672611). الاختبارات المحلية **104/104**. ملف البناء المتاح **غير موقّع وغير صالح للتثبيت كإصدار نهائي**؛ توقف النشر إلى حين إعداد مفتاح المالك الجديد. [تعليمات المفتاح وأسرار التوقيع](docs/DAFTARI_NEXT_RELEASE.md). لا تزال اختبارات الأجهزة والنماذج الفعلية مطلوبة.
+
+### APK تجريبي جاهز للتثبيت
+
+بناء الجهاز التجريبي نُشر بنجاح بعد الاختبارات و`assembleDebug lintDebug` والتحقق من التوقيع:
+
+- [تحميل Daftari-Next-2.23-Preview.apk](https://github.com/Welcome541/Daftari-Mobile-App/releases/download/next-2.23-preview-39882663141/Daftari-Next-2.23-Preview.apk)
+- [الإصدار التجريبي والتقارير وSHA-256](https://github.com/Welcome541/Daftari-Mobile-App/releases/tag/next-2.23-preview-39882663141)
+- [تشغيل البناء الناجح](https://github.com/Welcome541/Daftari-Mobile-App/actions/runs/39882663141)
+
+هذه نسخة **debug للتجربة** بمعرّف مستقل `ai.arena.dafter.next.preview`، وليست إصدار Next الإنتاجي. لا تحتاج أسرار التوقيع الخاصة بالإنتاج لتثبيتها. احتفظ بالتطبيق القديم وصدّر نسخة احتياطية قبل الاختبار. تعليمات التثبيت وقائمة التجربة وحدود النسخة في [PREVIEW_RELEASE_NOTES.md](docs/PREVIEW_RELEASE_NOTES.md).
