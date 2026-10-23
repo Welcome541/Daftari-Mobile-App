@@ -1,0 +1,74 @@
+name: Build and publish installable Next preview
+on:
+  push:
+    branches: [arena/7beb4250-daftari-mobile-app]
+    paths: [.github/workflows/android-preview.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: next-preview-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  preview:
+    if: github.ref == 'refs/heads/arena/7beb4250-daftari-mobile-app'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Ensure Android SDK
+        run: |
+          if [ ! -f "$ANDROID_HOME/platforms/android-35/android.jar" ] || [ ! -x "$ANDROID_HOME/build-tools/35.0.0/apksigner" ]; then
+            "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-35' 'build-tools;35.0.0'
+          fi
+      - name: Test JavaScript and JVM
+        run: |
+          npm ci --no-audit --no-fund
+          npm test
+          ./tools/test-storage.sh
+      - name: Build installable debug APK and lint
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon assembleDebug lintDebug 2>&1 | tee "$RUNNER_TEMP/preview-build.log" || {
+            python3 - <<'PYERROR'
+          import os
+          lines=open(os.environ['RUNNER_TEMP']+'/preview-build.log').read().splitlines()[-65:]
+          print('::error::'+'\n'.join(lines).replace('%','%25').replace('\r','%0D').replace('\n','%0A'))
+          PYERROR
+            exit 1
+          }
+      - name: Verify signature, identity and checksum
+        run: |
+          set -euo pipefail
+          mkdir -p preview-output
+          cp app/build/outputs/apk/debug/app-debug.apk preview-output/Daftari-Next-2.23-Preview.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --min-sdk-version 21 --verbose --print-certs preview-output/Daftari-Next-2.23-Preview.apk > preview-output/signature-report.txt
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging preview-output/Daftari-Next-2.23-Preview.apk > preview-output/package-report.txt
+          grep -q "package: name='ai.arena.dafter.next.preview'" preview-output/package-report.txt
+          grep -q "sdkVersion:'21'" preview-output/package-report.txt
+          (cd preview-output && sha256sum Daftari-Next-2.23-Preview.apk > SHA256SUMS.txt)
+          printf 'Commit: %s\nRun: %s\nSignature: Android debug (testing only)\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" > preview-output/build-info.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Daftari-Next-installable-preview
+          path: preview-output/
+          if-no-files-found: error
+      - name: Publish testing prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "next-2.23-preview-${GITHUB_RUN_ID}" \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --prerelease \
+            --title "Daftari Next 2.23 — نسخة تجريبية" \
+            --notes-file docs/PREVIEW_RELEASE_NOTES.md preview-output/*

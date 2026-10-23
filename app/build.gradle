@@ -34,6 +34,10 @@ android {
         }
     }
     buildTypes {
+        debug {
+            applicationIdSuffix '.preview'
+            versionNameSuffix '-preview'
+        }
         release {
             if (signingFile.exists()) signingConfig signingConfigs.release
             minifyEnabled false
