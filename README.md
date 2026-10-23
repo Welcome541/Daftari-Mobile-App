@@ -72,3 +72,9 @@
 - [تشغيل البناء الناجح](https://github.com/Welcome541/Daftari-Mobile-App/actions/runs/39882663141)
 
 هذه نسخة **debug للتجربة** بمعرّف مستقل `ai.arena.dafter.next.preview`، وليست إصدار Next الإنتاجي. لا تحتاج أسرار التوقيع الخاصة بالإنتاج لتثبيتها. احتفظ بالتطبيق القديم وصدّر نسخة احتياطية قبل الاختبار. تعليمات التثبيت وقائمة التجربة وحدود النسخة في [PREVIEW_RELEASE_NOTES.md](docs/PREVIEW_RELEASE_NOTES.md).
+
+### التصحيح 2.24 — تثبيت وفتح مختبران على Android
+
+**استخدم هذه النسخة بدل 2.23 التجريبية:** [Daftari-Next-2.24-Preview.apk](https://github.com/Welcome541/Daftari-Mobile-App/releases/download/next-2.24-preview-39887138411/Daftari-Next-2.24-Preview.apk).
+
+هوية منفصلة `ai.arena.dafter.next.trial20261023` واسم «دفتري الجديد — تجربة 2». أُصلح توقف بدء التشغيل الناتج عن مقارنة جذر Android ذي الرابط النظامي بالمسار الحقيقي. نجح تثبيت القديم والجديد معًا والحذف وإعادة التثبيت واختبار WebView/IndexedDB/الأرصدة/JSON backup/AES-GCM وإعادة فتح النشاط على محاكي Android 10 في [هذا التشغيل](https://github.com/Welcome541/Daftari-Mobile-App/actions/runs/39887138411). النسخة تظل debug للتجربة، وليست شهادة بخلو جميع وظائفها من الأخطاء أو نجاحها على جميع الأجهزة. [تفاصيل الاختبار](docs/PREVIEW_RELEASE_NOTES.md).
