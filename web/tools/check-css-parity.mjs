@@ -78,20 +78,43 @@ function collect(css, into) {
   });
 }
 
-const refPath = arg('ref', null);
-let original = '';
-if (refPath) {
-  original = await readFile(refPath, 'utf8');
-} else {
-  original = execFileSync('git', ['show', 'HEAD:app/src/main/assets/www/index.html'],
+/**
+ * Resolve the reference stylesheet.
+ *
+ * Order:
+ *   1. --ref <path>   an .html file (its <style> block is used) or a .css file
+ *   2. web/tools/legacy/legacy-2.22.css   the committed fixture — always works,
+ *      even after the monolithic index.html is gone from the working tree
+ *   3. git show main:app/src/main/assets/www/index.html   the pre-v3 monolith
+ */
+const LEGACY_FIXTURE = path.join(HERE, 'legacy', 'legacy-2.22.css');
+
+async function loadReferenceCss() {
+  const refPath = arg('ref', null);
+  if (refPath) {
+    const raw = await readFile(refPath, 'utf8');
+    if (refPath.endsWith('.css')) return raw;
+    const m = raw.match(/<style[^>]*>([\s\S]*?)<\/style>/);
+    if (!m) throw new Error('no <style> block found in ' + refPath);
+    return m[1];
+  }
+  try {
+    return await readFile(LEGACY_FIXTURE, 'utf8');
+  } catch { /* fall through to git */ }
+  const raw = execFileSync('git', ['show', 'main:app/src/main/assets/www/index.html'],
     { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  const m = raw.match(/<style[^>]*>([\s\S]*?)<\/style>/);
+  if (!m) throw new Error('no <style> block found in the reference');
+  return m[1];
 }
-const styleMatch = original.match(/<style[^>]*>([\s\S]*?)<\/style>/);
-if (!styleMatch) {
-  console.error('no <style> block found in the reference');
+
+let referenceCss;
+try {
+  referenceCss = await loadReferenceCss();
+} catch (err) {
+  console.error(String(err.message || err));
   process.exit(1);
 }
-const referenceCss = styleMatch[1];
 
 const dir = path.join(ROOT, 'web/src/css');
 const files = (await readdir(dir)).filter(f => f.endsWith('.css')).sort();
