@@ -4,7 +4,7 @@
   "version": "3.0.0",
   "build": 300,
   "channel": "stable",
-  "generatedAt": "2026-11-05T00:22:10.457Z",
+  "generatedAt": "2026-11-05T00:43:39.905Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -53,7 +53,7 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "7942837e961e2a51cf09801ff4caaadf453a9d811c130219d8d638272cd9aeae",
+      "sha256": "fd286dc6c412f0c20d8accf988824726444b83274dbf3cbad0122afd1f929a4d",
       "size": 6153
     },
     "js/00-icons.js": {
@@ -137,8 +137,8 @@
       "size": 5667
     },
     "js/32-screen-reports.js": {
-      "sha256": "c54cd3908ece67bdeabc263ebd854c2429e571d2732f8f74679ff9b3154c88c6",
-      "size": 4604
+      "sha256": "bc7de716c01f203f75efbc0a88909d320d0570fd384b1aff6e54a979541a9afb",
+      "size": 4606
     },
     "js/33-screen-settings.js": {
       "sha256": "9ec517ba057f60f8ba3377292ce97d80f1d560e27e76c8fb86ebc54a6175074a",

@@ -15,4 +15,5 @@ signing.local.properties
 # web toolchain
 web/node_modules/
 web/dist/
+web/scratch/
 dist/

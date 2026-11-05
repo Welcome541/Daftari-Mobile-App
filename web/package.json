@@ -13,14 +13,21 @@
     "check:bundle": "node tools/check-bundle.mjs",
     "check:update": "node tools/check-update.mjs",
     "check:java": "node tools/javacheck.mjs",
-    "check:all": "npm run check && npm run check:java"
+    "check:all": "npm run check && npm run check:java",
+    "map": "node tools/map-ui.mjs",
+    "maps": "node tools/map-ui.mjs && node tools/render-maps.mjs",
+    "check:icons": "node tools/check-icons.mjs"
   },
   "engines": {
     "node": ">=18"
   },
   "devDependencies": {
+    "@expo-google-fonts/cairo": "^0.4.2",
+    "@resvg/resvg-js": "^2.6.2",
     "java-parser": "^2.3.3",
     "jsdom": "^30.1.3",
+    "opentype.js": "^1.3.4",
+    "pdfkit": "^0.17.2",
     "postcss": "^8.5.6"
   }
 }
