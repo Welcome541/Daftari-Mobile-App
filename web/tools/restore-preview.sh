@@ -41,12 +41,17 @@ echo
 # The sandbox re-clones from origin/main, which leaves HEAD on the old
 # monolithic commit. The work is never lost - it is on the branch - but
 # the pointer has to be moved back. --mixed keeps every local file.
+#
+# The remote tip wins: after a re-clone the local branch still exists,
+# but it points at the ancient monolith, so resetting to it would undo
+# the restore. The local branch is only a last resort.
 echo "[1/4] restoring the branch pointer"
-if git rev-parse --verify "$BRANCH" >/dev/null 2>&1; then
-  git reset --mixed "$BRANCH"
+if git fetch origin "$BRANCH" 2>/dev/null; then
+  git reset --mixed FETCH_HEAD
+elif git rev-parse --verify "origin/$BRANCH" >/dev/null 2>&1; then
+  git reset --mixed "origin/$BRANCH"
 else
-  git fetch origin "$BRANCH" || true
-  git reset --mixed "FETCH_HEAD" 2>/dev/null || git reset --mixed "origin/$BRANCH"
+  git reset --mixed "$BRANCH"
 fi
 git log --oneline -1
 
