@@ -18,7 +18,13 @@ const S_home=()=>{
  +'<div class="pad search" style="margin-top:12px"><div class="inp card">'+ic('search',17)+'<input placeholder="'+t('searchTx')+'" value="'+esc(ui.tq)+'" oninput="ui.tq=this.value;debTx()"></div>'+
  '<button class="hbtn" style="height:46px;position:relative" onclick="openHomeFilter()" aria-label="'+t('filter')+'">'+ic('sliders',18)+hfBadge()+'</button>'+
  '</div>'
- +'<div class="pad" style="margin:12px 20px 4px;font-weight:800;font-size:16.5px;display:flex;align-items:center;gap:8px">'+t('lastOps')+' <span class="chip" style="background:#efece6;color:var(--soft)"><span class="num" id="txn">'+n+'</span></span></div>'
+ /* The section name is gone: the two quick actions - record a debt
+    and record a payment - stand where it used to be, and the count of
+    the operations stays at the other end of the row. */
+ +'<div class="pad homerow" style="margin:12px 20px 4px;display:flex;align-items:center;gap:8px">'
+ +lpBtn('debt','btn-red','receipt',t('newDebt'))+lpBtn('pay','btn-green','coins',t('pay'))
+ +'<span class="sp"></span>'
+ +'<span class="chip" style="background:#efece6;color:var(--soft)"><span class="num" id="txn">'+n+'</span></span></div>'
  +'<div class="pad list ops" id="txlist" style="padding-bottom:14px">'+feedHtml()+'</div>'
  /* The selection bar belongs to the list: it sits right under the
     last operation, and it carries the count of what is selected. */

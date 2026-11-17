@@ -460,8 +460,29 @@ async function main() {
     /\.orow-sel\{[^}]*border-radius:50%/.test(css));
   g('window.selExit()');
   await new Promise((r) => setTimeout(r, 120));
-  check('leaving the selection restores the action row',
-    (window.document.getElementById('actionrow').innerHTML || '').trim() !== '');
+  check('leaving the selection removes the bar',
+    !window.document.querySelector('#app .selbar'));
+  check('nothing floats over the content',
+    (window.document.getElementById('actionrow').innerHTML || '').trim() === '');
+
+  /* --- 15. the home action row ----------------------------------- */
+  console.log('\nhome actions');
+  window.go('home', {});
+  await new Promise((r) => setTimeout(r, 150));
+  const hrow = window.document.querySelector('#app .homerow');
+  check('the home row exists', !!hrow);
+  const hbtns = hrow ? [...hrow.querySelectorAll('button')] : [];
+  check('the home row carries the two quick actions',
+    hbtns.length === 2 && hbtns.every((b) => b.querySelector('svg.ic')),
+    'buttons=' + hbtns.length);
+  check('the home row hides the section name',
+    !!hrow && hrow.textContent.indexOf('آخر العمليات') === -1,
+    hrow ? hrow.textContent.slice(0, 40) : 'no row');
+  check('the home row keeps the count of the operations',
+    !!hrow && !!hrow.querySelector('#txn'));
+  check('the actions open the record flow',
+    hbtns.every((b) => /btnClick\(|goWiz\(/.test(b.getAttribute('onclick') || '')),
+    hbtns.map((b) => b.getAttribute('onclick')).join(' | '));
 
   /* --- 14. the frame scales with the interface scale --------------- */
   console.log('\nscaling');
