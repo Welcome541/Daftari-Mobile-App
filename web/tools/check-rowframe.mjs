@@ -437,14 +437,17 @@ async function main() {
   const key0 = g('txAll()[0].key');
   g('window.selLongPress("' + key0 + '")');
   await new Promise((r) => setTimeout(r, 150));
-  const bar = window.document.querySelector('#app .selbar');
+  const bar = window.document.querySelector('#app .selhead') || window.document.querySelector('#app .selbar');
   check('the selection bar appears with the list', !!bar);
-  check('the selection bar closes the feed',
-    !!bar && bar.parentElement.previousElementSibling
-      && bar.parentElement.previousElementSibling.id === 'txlist');
+  check('the selection bar replaces the title, before the feed',
+    !!bar && bar.parentElement.nextElementSibling
+      && bar.parentElement.nextElementSibling.id === 'txlist');
   const cnt = bar ? bar.querySelector('.selbar-n .num') : null;
   check('the selection bar carries the count of the selection',
     !!cnt && cnt.textContent.trim() === '1', cnt ? cnt.textContent : 'none');
+  const appHtml = window.document.getElementById('app').innerHTML || '';
+  check('the title is hidden while selecting', appHtml.indexOf('آخر العمليات') === -1);
+  check('the title chip is hidden while selecting', !window.document.getElementById('txn'));
   check('the count is not in the header',
     ((window.document.querySelector('#app .hdr') || {}).innerHTML || '').indexOf('تم تحديد') === -1,
     'count found in the header');
@@ -458,6 +461,10 @@ async function main() {
   check('the unpicked row wears an empty ring', !!empty && !empty.querySelector('svg'));
   check('the mark is drawn as a round disc',
     /\.orow-sel\{[^}]*border-radius:50%/.test(css));
+  check('the top bar has all action icons',
+    !!bar && bar.querySelectorAll('button').length === 5, bar ? String(bar.querySelectorAll('button').length)+' buttons' : 'no bar');
+  check('the top bar shows the delete icon', !!bar && !!bar.querySelector('button.btn-red'));
+  check('the top bar shows the share icon', !!bar && !!bar.querySelector('button[aria-label="مشاركة"]'));
   g('window.selExit()');
   await new Promise((r) => setTimeout(r, 120));
   check('leaving the selection restores the action row',

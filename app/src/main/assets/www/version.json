@@ -4,7 +4,7 @@
   "version": "3.0.0",
   "build": 300,
   "channel": "stable",
-  "generatedAt": "2026-11-17T23:02:47.558Z",
+  "generatedAt": "2026-11-17T23:10:45.970Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -13,8 +13,8 @@
       "size": 821
     },
     "css/components.css": {
-      "sha256": "0151b13a70c20d0073f53c97a419cb60a96b907049210ec4149c0e21e96e9cba",
-      "size": 21647
+      "sha256": "939639b2585daded98c20229d447c55e665575b83c30bfcd0d435becbf8696cd",
+      "size": 22624
     },
     "css/layout.css": {
       "sha256": "fbc49090963b4423c251a3a82d079fd05b703985bbb94de1db822ad8908a47e2",
@@ -53,7 +53,7 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "e5019c95cbf9ec1e10bd97ddf9a7adc752ba12ea84cd8547e89d8b7765fb0265",
+      "sha256": "4ac9f0c209380a28d7c4c2f289f3fdd0038158b2fca505e82a377da3be244fdb",
       "size": 6225
     },
     "js/00-icons.js": {
@@ -133,8 +133,8 @@
       "size": 2578
     },
     "js/30-screen-home.js": {
-      "sha256": "9b9bf3b7e89085c1d54482b0c52c9281f22e74578682ae902360981a22b17fc7",
-      "size": 3200
+      "sha256": "be5fb7e65fedc70ca57405bc5ee2f7e96f5a9e9a61a6a73752db633658f6d0dd",
+      "size": 4097
     },
     "js/31-screen-customers.js": {
       "sha256": "6d0f85a1b6a5b3ff80c79f54424a85f1a01de130175d7924f3371fb98c26706b",

@@ -194,6 +194,15 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
 .fpanel{margin:calc(10px * var(--s)) 0 calc(2px * var(--s));padding:calc(14px * var(--s))}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:calc(10px * var(--s))}
 .selbar{display:flex;align-items:center;gap:calc(10px * var(--s));background:var(--navy);color:#fff;border-radius:calc(16px * var(--s));padding:calc(10px * var(--s)) calc(14px * var(--s));margin-bottom:calc(12px * var(--s));animation:up2 .2s}
+.selhead{display:flex;align-items:center;gap:calc(8px * var(--s));background:var(--card);border:1px solid var(--line2);border-radius:calc(18px * var(--s));box-shadow:var(--sh);padding:calc(9px * var(--s)) calc(10px * var(--s));animation:selIn .2s ease both;overflow-x:auto;scrollbar-width:none}
+.selhead::-webkit-scrollbar{display:none}
+.selhead .selbar-n{font-weight:800;font-size:calc(14px * var(--s));color:var(--ink);white-space:nowrap;flex:none}
+.selhead .selbar-n .num{font-weight:900;font-size:calc(16px * var(--s));color:var(--navy)}
+.selhead .btn{height:calc(40px * var(--s));padding:0 calc(10px * var(--s));border-radius:calc(12px * var(--s));font-size:calc(12.5px * var(--s));font-weight:800;gap:calc(6px * var(--s));flex:none;white-space:nowrap}
+.selhead .btn svg{width:calc(16px * var(--s));height:calc(16px * var(--s))}
+.selhead .btn-soft{background:var(--card2);border:1px solid var(--line);color:var(--ink)}
+.selhead .btn-red{background:var(--red);color:#fff}
+
 .pined::after{content:'';position:absolute;top:calc(10px * var(--s));inset-inline-end:10px;width:calc(8px * var(--s));height:calc(8px * var(--s));border-radius:50%;background:#e8c76a}
 .padlock{display:flex;flex-direction:column;align-items:center;padding-top:6vh}
 .kp{display:grid;grid-template-columns:repeat(3,76px);gap:calc(14px * var(--s));justify-content:center;margin-top:calc(26px * var(--s))}
