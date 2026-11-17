@@ -35,15 +35,14 @@ function selDay(dk){
  render();
 }
 function dayCheckHtml(dk,dl,first){
+ const sel=ui.sel&&ui.sel.on;
+ if(!sel) return '<div class="daysep'+(first?' daysep-first':'')+'">'+dl+'</div>';
  const L=filteredTx();
  const keys=L.filter(x=>dayKey(x.ts)===dk).map(x=>x.key);
- const sel=ui.sel&&ui.sel.on;
- const n=keys.length, c=sel?keys.filter(k=>ui.sel.ids.includes(k)).length:0;
+ const n=keys.length, c=keys.filter(k=>ui.sel.ids.includes(k)).length;
  let cls='',inner='';
- if(sel){
-  if(c===n&&n>0){cls=' on';inner=ic('checkb',11)}
-  else if(c>0&&c<n){cls=' partial';inner=ic('minus',11)}
- }
+ if(c===n&&n>0){cls=' on';inner=ic('checkb',11)}
+ else if(c>0&&c<n){cls=' partial';inner=ic('minus',11)}
  return '<div class="daysep'+(first?' daysep-first':'')+'"><span>'+dl+'</span><button class="daycheck'+cls+'" onclick="selDay(\''+dk+'\')" aria-label="'+t('sel')+' · '+dl+'">'+inner+'</button></div>';
 }
 function feedHtml(){const L=filteredTx();

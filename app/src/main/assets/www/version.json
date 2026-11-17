@@ -4,7 +4,7 @@
   "version": "3.0.0",
   "build": 300,
   "channel": "stable",
-  "generatedAt": "2026-11-17T23:22:43.588Z",
+  "generatedAt": "2026-11-17T23:27:43.874Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -53,7 +53,7 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "976e52cc20185d716d2da17ca9af6aefd06c337ddc7c8e8f08b38474823970df",
+      "sha256": "436beac0d6c229e2421b045a9f1a2e464eecf81a79910414ef6112b0ac7cbe26",
       "size": 6225
     },
     "js/00-icons.js": {
@@ -125,8 +125,8 @@
       "size": 8498
     },
     "js/25-feed.js": {
-      "sha256": "6979a29828101cb077c2b03940580a4510ea4ad3c0cab5ee0b2a26f3eca45197",
-      "size": 5860
+      "sha256": "70cdd8f36573da55679dd1ef0a2e0816a741f861aa4a892906fac5b00332c287",
+      "size": 5922
     },
     "js/26-notifications.js": {
       "sha256": "e8c2f015fbac20fad7bc6faa60bdf17b6df592b9a6bfb21ee0adcbb7a26c0234",
