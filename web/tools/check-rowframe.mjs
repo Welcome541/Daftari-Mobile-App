@@ -251,7 +251,46 @@ async function main() {
   check('responsive.css still re-declares .litem (so the guard matters)',
     /\.litem\s*\{/.test(responsive));
 
-  /* --- 5. the frame scales with the interface scale --------------- */
+  /* --- 5. the money format ---------------------------------------- */
+  console.log('\nmoney format');
+  const fmt = g('fmt');
+  check('a whole amount prints without decimals', fmt(15000) === '150', fmt(15000));
+  check('a real fraction keeps its decimals', fmt(15050) === '150.50', fmt(15050));
+  check('a small fraction keeps its decimals', fmt(15005) === '150.05', fmt(15005));
+  check('a negative whole amount keeps its sign', fmt(-15000) === '\u2212150', fmt(-15000));
+  check('a negative fraction keeps its sign', fmt(-15050) === '\u2212150.50', fmt(-15050));
+  check('zero prints without decimals', fmt(0) === '0', fmt(0));
+
+  /* --- 6. the day separator stays compact ------------------------- */
+  console.log('\nfeed rhythm');
+  window.go('home', {});
+  await new Promise((r) => setTimeout(r, 120));
+  const feedHtml = window.document.getElementById('txlist');
+  const feed = feedHtml ? feedHtml.innerHTML : '';
+  const seps = [...window.document.querySelectorAll('.daysep')];
+  check('the feed groups its rows by day', seps.length >= 1, String(seps.length));
+  check('the separator is a compact caption, not a section',
+    /\.daysep\{[^}]*font-size:calc\(11\.5px/.test(css));
+  check('the separator pulls into the row gap',
+    /\.daysep\{[^}]*margin-block:calc\(var\(--row-gap\) \* -0\.66\)/.test(css));
+  check('the first separator is not pulled up', /\.daysep-first\{margin-block-start:0\}/.test(css));
+  check('the old roomy separator is gone', feed.indexOf('class="lb"') === -1);
+
+  /* --- 7. the shop identity is one group -------------------------- */
+  console.log('\nshop identity');
+  const hdr = (window.document.querySelector('.hdr') || {}).innerHTML || '';
+  const logoTile = window.document.querySelector('.hdr .logo-ic');
+  check('the header shows the store icon',
+    !!logoTile && !!logoTile.querySelector('svg.ic'),
+    logoTile ? logoTile.innerHTML.slice(0, 60) : 'no tile');
+  check('the shop name appears once in the header',
+    (hdr.split('بقالة الندى').length - 1) === 1, String(hdr.split('بقالة الندى').length - 1));
+  check('the header no longer repeats the account chip', hdr.indexOf('accchip') === -1);
+  check('the header still opens the account sheet', hdr.indexOf('openAccSheet()') > -1);
+  check('the store icon and the name sit in one group',
+    /class="sp"[^>]*display:flex/.test(hdr) && /logo-ic/.test(hdr));
+
+  /* --- 8. the frame scales with the interface scale --------------- */
   console.log('\nscaling');
   const Appearance = g('Appearance');
   Appearance.setScale(1.4);

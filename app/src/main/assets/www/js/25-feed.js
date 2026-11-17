@@ -26,7 +26,7 @@ function feedHtml(){const L=filteredTx();
  if(!L.length){const any=DD().invoices.length+DD().payments.length;
  if(any&&ui.tf.period==='today')return '<div class="muted" style="text-align:center;padding:24px 16px">'+t('noToday')+'<div style="margin-top:10px"><button class="btn btn-line" style="width:auto;padding:10px 18px;font-size:13.5px" onclick="ui.tf={kind:\'all\',period:\'all\'};ui.txLimit=60;refreshHome()">'+t('showAll')+'</button></div></div>';
  return '<div class="muted" style="text-align:center;padding:28px 16px">'+(any?t('noRes'):ic('mic',26)+'<div style="margin-top:10px;font-weight:700;line-height:1.7">'+t('emptyHome')+'</div>')+'</div>'}
- let out='',last='';L.forEach(x=>{const dl=dayLabel(x.ts);if(dl!==last){out+='<div class="lb" style="margin:2px 4px 2px;font-size:12px">'+dl+'</div>';last=dl}out+=txRow(x)});
+ let out='',last='',first=true;L.forEach(x=>{const dl=dayLabel(x.ts);if(dl!==last){out+='<div class="daysep'+(first?' daysep-first':'')+'">'+dl+'</div>';last=dl;first=false}out+=txRow(x)});
  if(window.__txFull>L.length)out+='<div style="text-align:center;margin-top:10px"><button class="btn btn-line" style="width:auto;padding:10px 22px;font-size:13px" onclick="ui.txLimit='+L.length+'+60;refreshHome()">'+ic('chevD',15)+' '+t('showMore')+' (<span class="num">'+(window.__txFull-L.length)+'</span>)</button></div>';
  return out}
 const privBtn=()=>'<button class="hbtn" onclick="sec.priv=!sec.priv;saveSec();render()" aria-label="'+t('hideAmt')+'">'+ic(sec.priv?'eyeoff':'eye',18)+'</button>';

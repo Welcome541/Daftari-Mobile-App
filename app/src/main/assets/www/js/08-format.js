@@ -9,7 +9,9 @@
  * ===================================================================== */
 const normAr=v=>{const AR='٠١٢٣٤٥٦٧٨٩';let t=String(v||'').replace(/[\u064B-\u0652\u0670]/g,'').replace(/[\u0623\u0625\u0622\u0671]/g,'\u0627');return t.split('').map(ch=>{const i=AR.indexOf(ch);return i>=0?String(i):ch}).join('').replace(/\s+/g,' ').trim()};
 const MU=()=>{try{const a=curAcc();return (a&&a.minorUnit)||2}catch(e){return 2}};
-const fmt=m=>{const mu=MU(),pw=Math.pow(10,mu);m=Math.round(Number(m)||0);const neg=m<0;m=Math.abs(m);const i=Math.floor(m/pw),f=String(m%pw).padStart(mu,'0');return (neg?'−':'')+i.toLocaleString('en-US')+(mu>0?'.'+f:'')};
+/* Whole amounts print without decimals ("150"); an amount that really
+   has a fraction keeps its two decimals ("150.50"). */
+const fmt=m=>{const mu=MU(),pw=Math.pow(10,mu);m=Math.round(Number(m)||0);const neg=m<0;m=Math.abs(m);const i=Math.floor(m/pw),f=String(m%pw).padStart(mu,'0');return (neg?'−':'')+i.toLocaleString('en-US')+(mu>0&&/[1-9]/.test(f)?'.'+f:'')};
 const Money={parse(v){const mu=MU(),pw=Math.pow(10,mu);let t=String(v==null?'':v).replace(/[٠-٩]/g,c=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(c))).replace(/[۰-۹]/g,c=>String('۰۱۲۳۴۵۶۷۸۹'.indexOf(c))).replace(/[،\s]/g,'').replace(/٫/g,'.').replace(/,(?=\d{3}(?!\d))/g,'').replace(/,/g,'.');const neg=/^-/.test(t);t=t.replace(/[-+]/g,'');if(!/^\d*(\.\d*)?$/.test(t))return 0;const pp=t.split('.');const fr=(pp[1]||'').slice(0,mu).padEnd(mu,'0');return (neg?-1:1)*((parseInt(pp[0]||'0',10)||0)*pw+parseInt(fr||'0',10))},fromNumber(x){return Math.round((Number(x)||0)*Math.pow(10,MU()))},dec(m){const mu=MU(),pw=Math.pow(10,mu);m=Math.round(Number(m)||0);const neg=m<0;m=Math.abs(m);return (neg?'-':'')+Math.floor(m/pw)+'.'+String(m%pw).padStart(mu,'0')}};
 const CUR=()=>curAcc().cur;
 const money=n=>'<span class="num">'+fmt(n)+'</span> '+CUR();

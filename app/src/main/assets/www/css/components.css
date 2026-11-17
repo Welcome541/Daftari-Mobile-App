@@ -88,6 +88,13 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
 .orow .orow-amt.green{color:var(--green)}
 .orow .orow-amt.gray{color:var(--muted)}
 .list.ops{gap:var(--row-gap)}
+
+/* Day separator in the transaction feed. It is a caption, not a
+   section: the negative margins pull it into the surrounding row gap
+   so it never eats a full row of space. The margins are a share of
+   --row-gap, so they stay proportional when the rhythm changes. */
+.daysep{font-size:calc(11.5px * var(--s));font-weight:800;color:var(--soft);line-height:1.2;margin-block:calc(var(--row-gap) * -0.66) calc(var(--row-gap) * -0.2);margin-inline:4px}
+.daysep-first{margin-block-start:0}
 .amt{font-weight:800;font-size:calc(15.5px * var(--s))}
 .amt.red{color:var(--red)}
 .amt.green{color:var(--green)}

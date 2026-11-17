@@ -4,7 +4,7 @@
   "version": "3.0.0",
   "build": 300,
   "channel": "stable",
-  "generatedAt": "2026-11-17T20:12:40.842Z",
+  "generatedAt": "2026-11-17T20:28:11.075Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -13,8 +13,8 @@
       "size": 821
     },
     "css/components.css": {
-      "sha256": "1c8c0443e0ddcb74b8aa817f890aea3ef050cfec47c6dbcde8682544513f8795",
-      "size": 17497
+      "sha256": "b6af1d4ed1134dca64dd5b23ebc0d7f551a4c84f7080c5210d90d2635153ecc4",
+      "size": 17986
     },
     "css/layout.css": {
       "sha256": "f15f2af2e49dc20194a0a0e421c1a5175421f2541dbe347700252ef3ba3f9042",
@@ -53,7 +53,7 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "123af96dd38870bc5633c603f48893d6d2d20c7d1b1b8a50810de265c581b90f",
+      "sha256": "f602884a860aace9c2ada0714f65284bd9db00159318af156c96b25090c9740a",
       "size": 6153
     },
     "js/00-icons.js": {
@@ -89,8 +89,8 @@
       "size": 6155
     },
     "js/08-format.js": {
-      "sha256": "41bb75b634a6e36a6421be05e01155145cc53a78ed5719648cdc4f7da0464778",
-      "size": 4388
+      "sha256": "b0afdb3ea0c8792936d9c91017febbf9a4a0c7a88e872b777ac8291c92accbb5",
+      "size": 4532
     },
     "js/09-feedback.js": {
       "sha256": "963d578a7cfac442501f17aaacfdbeb044bf46ae2e73f09ff327b3c288bddfed",
@@ -125,12 +125,12 @@
       "size": 8498
     },
     "js/25-feed.js": {
-      "sha256": "6faa788cffb589a4a49a28586675ebf1e72705f899827c455783ac0932ff89c4",
-      "size": 4675
+      "sha256": "46609466b58ca49091d6af36263193ba6e6a5fe0c54e50a974a796385672261d",
+      "size": 4690
     },
     "js/30-screen-home.js": {
-      "sha256": "548a357af70d71b620e358901c3b052a4a4678cd6a9ac998bc461bb74b4373be",
-      "size": 2539
+      "sha256": "827c5025e8110d957fe67037d28be174af3f912d71238181c6ebc64b135651c0",
+      "size": 3000
     },
     "js/31-screen-customers.js": {
       "sha256": "b042d3e8dd25a5ab8158c923b1a0219c522b7037dc9a4c83121cf081f155bac0",
