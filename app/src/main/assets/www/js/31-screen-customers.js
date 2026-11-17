@@ -20,7 +20,9 @@ const S_customers=()=>{
  +'<div class="pad search" style="margin-top:10px"><div class="inp card">'+ic('search',17)+'<input placeholder="'+t('searchC')+'" value="'+esc(ui.cq)+'" oninput="ui.cq=this.value;ui.cmax=60;debList()"></div>'+custMenuBtn()+'</div>'
  +fChips()
 
- +'<div class="pad list ops" id="clist2" style="margin-top:12px;padding-bottom:14px">'+custListBody()+'</div>';
+ +'<div class="pad list ops" id="clist2" style="margin-top:12px;padding-bottom:14px">'+custListBody()+'</div>'
+ /* the selection bar closes the list, right under the last customer */
+ +((ui.csel&&ui.csel.on)?'<div class="pad" style="padding-bottom:18px">'+custSelBar()+'</div>':'');
 };
 function archCount(){return DD().customers.filter(c=>c.archived).length}
 function archBtn(){const n=archCount();if(!n)return '';return '<button class="hbtn" style="height:42px;gap:6px" onclick="ui.arch=true;ui.archQ=\'\';render()" aria-label="'+t('archListT')+'">'+ic('archive',18)+'<span class="num" style="background:var(--amber);color:#fff;border-radius:999px;font-size:10.5px;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-weight:900">'+n+'</span></button>'}

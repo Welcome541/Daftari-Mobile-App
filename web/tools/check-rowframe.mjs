@@ -430,6 +430,39 @@ async function main() {
   check('the customers screen keeps no bell',
     !window.document.querySelector('#app .hdr .notif'));
 
+  /* --- 14. the selection bar -------------------------------------- */
+  console.log('\nselection');
+  window.go('home', {});
+  await new Promise((r) => setTimeout(r, 150));
+  const key0 = g('txAll()[0].key');
+  g('window.selLongPress("' + key0 + '")');
+  await new Promise((r) => setTimeout(r, 150));
+  const bar = window.document.querySelector('#app .selbar');
+  check('the selection bar appears with the list', !!bar);
+  check('the selection bar closes the feed',
+    !!bar && bar.parentElement.previousElementSibling
+      && bar.parentElement.previousElementSibling.id === 'txlist');
+  const cnt = bar ? bar.querySelector('.selbar-n .num') : null;
+  check('the selection bar carries the count of the selection',
+    !!cnt && cnt.textContent.trim() === '1', cnt ? cnt.textContent : 'none');
+  check('the count is not in the header',
+    ((window.document.querySelector('#app .hdr') || {}).innerHTML || '').indexOf('تم تحديد') === -1,
+    'count found in the header');
+  check('the floating action row is empty while selecting',
+    (window.document.getElementById('actionrow').innerHTML || '').trim() === '');
+  const mark = window.document.querySelector('.orow-sel.on');
+  check('the picked row wears the solid mark', !!mark);
+  check('the solid mark holds the bold check',
+    !!mark && !!mark.querySelector('svg path[stroke-width="3.2"]'));
+  const empty = [...window.document.querySelectorAll('.orow-sel')].find((m) => !m.classList.contains('on'));
+  check('the unpicked row wears an empty ring', !!empty && !empty.querySelector('svg'));
+  check('the mark is drawn as a round disc',
+    /\.orow-sel\{[^}]*border-radius:50%/.test(css));
+  g('window.selExit()');
+  await new Promise((r) => setTimeout(r, 120));
+  check('leaving the selection restores the action row',
+    (window.document.getElementById('actionrow').innerHTML || '').trim() !== '');
+
   /* --- 14. the frame scales with the interface scale --------------- */
   console.log('\nscaling');
   const Appearance = g('Appearance');

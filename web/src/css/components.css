@@ -73,7 +73,11 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
 .orow-pin::before{content:'';position:absolute;inset:0;background:var(--amber);clip-path:polygon(0 0,100% 0,100% 100%)}
 .orow-pin .ic{position:absolute;top:calc(8 * var(--u) * var(--s));inset-inline-start:calc(8 * var(--u) * var(--s));width:calc(13 * var(--u) * var(--s));height:calc(13 * var(--u) * var(--s));transform:rotate(45deg);transform-origin:center}
 .orow .av{flex:none;margin-inline-end:var(--row-gapx)}
-.orow .orow-sel{flex:none;margin-inline-end:var(--row-gapx)}
+/* The selection mark: an empty ring that turns into a solid disc
+   with a bold check when the row is picked. */
+.orow-sel{flex:none;margin-inline-end:var(--row-gapx);width:calc(26 * var(--u) * var(--s));height:calc(26 * var(--u) * var(--s));border-radius:50%;border:calc(2 * var(--u) * var(--s)) solid var(--line2);background:var(--card);display:flex;align-items:center;justify-content:center;color:#fff;transition:background .12s,border-color .12s,transform .12s,box-shadow .12s}
+.orow-sel.on{background:var(--navy);border-color:var(--navy);box-shadow:0 calc(2 * var(--u) * var(--s)) calc(6 * var(--u) * var(--s)) rgba(18,41,74,.32);transform:scale(1.06)}
+.orow-sel .ic{width:calc(15 * var(--u) * var(--s));height:calc(15 * var(--u) * var(--s))}
 .orow .orow-mid{flex:1 1 auto;min-width:0}
 .orow .orow-side{flex:0 0 var(--row-side-w);position:relative;display:flex;align-items:center;justify-content:flex-end;padding-inline-end:var(--row-side-p);min-width:0}
 .orow .orow-side::before{content:'';position:absolute;inset-inline-start:0;top:50%;transform:translateY(-50%);width:var(--row-div-w);height:var(--row-div-h);border-radius:999px;background:var(--line2)}
@@ -145,6 +149,17 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
 @keyframes rotB{to{transform:rotate(360deg)}}
 @keyframes up{from{transform:translate(-50%,40px);opacity:.4}to{transform:translate(-50%,0);opacity:1}}
 @keyframes fade{from{opacity:0}}
+/* The selection bar - a card that closes the list, with the count of
+   the selected items on its first line and the actions under it. */
+.selbar{background:var(--card);border:1px solid var(--line2);border-radius:calc(18px * var(--s));box-shadow:var(--sh);padding:calc(12px * var(--s));animation:selIn .2s ease both}
+.selbar-top{display:flex;align-items:center;gap:calc(10px * var(--s));margin-bottom:calc(10px * var(--s))}
+.selbar-n{font-weight:800;font-size:calc(15px * var(--s));color:var(--ink);white-space:nowrap}
+.selbar-n .num{font-weight:900;font-size:calc(17px * var(--s));color:var(--navy)}
+.selbar-acts{display:flex;gap:calc(8px * var(--s))}
+.selbar .btn{border-radius:calc(14px * var(--s));height:calc(46px * var(--s));font-size:calc(13.5px * var(--s));font-weight:800;gap:calc(6px * var(--s));min-width:0;padding:0 calc(10px * var(--s))}
+.selbar .btn svg{width:calc(18px * var(--s));height:calc(18px * var(--s))}
+@keyframes selIn{from{transform:translateY(10px);opacity:.2}to{transform:none;opacity:1}}
+
 .srow{display:flex;align-items:center;gap:calc(14px * var(--s));background:var(--card);border:1px solid var(--line2);border-radius:calc(16px * var(--s));padding:calc(15px * var(--s));margin-bottom:calc(10px * var(--s));width:100%;text-align:start;box-shadow:var(--sh)}
 .srow .sic2{width:calc(44px * var(--s));height:calc(44px * var(--s));border-radius:calc(14px * var(--s));background:#eef1f5;color:var(--navy);display:flex;align-items:center;justify-content:center;flex:none}
 .srow .t{font-weight:700;font-size:calc(15px * var(--s));display:block}

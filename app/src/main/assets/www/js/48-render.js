@@ -17,6 +17,10 @@ const S_trash=p=>{const list=(DD().trash||[]).slice().sort((a,b)=>b.ts-a.ts);
 const SCREENS={home:S_home,customers:S_customers,reports:S_reports,settings:S_settings,profile:S_profile,invoice:S_invoice,voice:S_voice,rec:S_rec,wiz:S_wiz,repb:S_repb,newcust:S_newcust,trash:S_trash,lock:()=>S_lock()};
 const TABS=['home','customers','reports','settings'];
 function render(){_IX=null;if(!db){document.getElementById('app').innerHTML='';return}
+ /* While items are selected the action bar lives inside the screen,
+    under the last row - so the scroll position must survive. */
+ const selMode=!!((ui.sel&&ui.sel.on)||(ui.csel&&ui.csel.on));
+ const sy=window.scrollY||0;
  applyLang();
  if(locked){document.getElementById('app').innerHTML=S_lock();document.getElementById('tabbar').style.display='none';document.getElementById('actionrow').innerHTML='';document.getElementById('fabAdd').classList.add('hide');return}
  const tp=curScr();const S=SCREENS[tp.s]||S_home;
@@ -26,7 +30,7 @@ function render(){_IX=null;if(!db){document.getElementById('app').innerHTML='';r
  const tbBtn=x=>'<button class="'+(tp.s===x?'on':'')+'" aria-current="'+(tp.s===x?'true':'false')+'" onclick="tab(\''+x+'\')"><span class="tbind">'+ic(x==='home'?'home':x==='customers'?'users':x==='reports'?'pie':'gear',24)+'</span><span class="tblb">'+t(x)+'</span></button>';
  tb.innerHTML=tbBtn('home')+tbBtn('customers')+'<button class="tabplus" aria-label="'+t('addC')+'" onclick="ui.nc={name:\'\',phone:\'\',edit:null};go(\'newcust\',{})">'+ic('plus',24)+'</button>'+tbBtn('reports')+tbBtn('settings');
  const ar=document.getElementById('actionrow');
- ar.innerHTML=isTab?((tp.s==='home'&&(ui.sel&&ui.sel.on))?selBarHtml():((tp.s==='customers'&&(ui.csel&&ui.csel.on))?custSelBar():(tp.s==='home'?lpBtn('debt','btn-red','receipt',t('newDebt'))+lpBtn('pay','btn-green','coins',t('pay')):''))):'';
+ ar.innerHTML=isTab?(selMode?'':(tp.s==='home'?lpBtn('debt','btn-red','receipt',t('newDebt'))+lpBtn('pay','btn-green','coins',t('pay')):'')):'';
  document.getElementById('fabAdd').classList.add('hide');
  if(!locked&&typeof drawCharts==='function'&&['reports','repb'].includes((curScr()||{}).s))requestAnimationFrame(()=>{try{if(!locked&&['reports','repb'].includes((curScr()||{}).s))drawCharts()}catch(e){}});
- window.scrollTo(0,0);}
+ window.scrollTo(0,selMode?sy:0);}

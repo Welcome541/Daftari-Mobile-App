@@ -36,7 +36,7 @@ function custRow(c,showPhone){
   ?'<span class="orow-amt green"><span class="num">'+fmt(-credit)+'</span><span class="cur">'+CUR()+'</span></span>'
   :'<span class="orow-amt gray"><span class="num">0.00</span><span class="cur">'+CUR()+'</span></span>';
  const sel=ui.csel&&ui.csel.on,isSel=sel&&ui.csel.ids.includes(c.id);
- const box=sel?'<span class="orow-sel" style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid '+(isSel?'var(--navy);background:var(--navy);color:#fff':'var(--line)')+'">'+(isSel?ic('check',13):'')+'</span>':'';
+ const box=sel?'<span class="orow-sel'+(isSel?' on':'')+'">'+(isSel?ic('checkb',15):'')+'</span>':'';
  const op=lastOpOf(c.id);
  const meta=op
   ?'<div class="orow-meta">'+ic(op.k==='pay'?'banknote':'receipt')+'<span class="tx">'+esc(op.label)+'</span><span class="sep">•</span>'+timeStr(op.ts)+'</div>'
@@ -70,14 +70,20 @@ function cselDelete(){if(!ui.csel||!ui.csel.ids.length){toastMsg(t('selEmpty'));
  save();try{if(navigator.vibrate)navigator.vibrate(45)}catch(e){}
  ui.csel={on:false,ids:[]};render();
  toastMsg(t('deletedN')(n)+' · '+t('trashT'),()=>{const tr2=DD().trash;pushed.forEach(e=>{const ix=tr2.indexOf(e);if(ix>=0)tr2.splice(ix,1);DD().customers.push(e.o)});save();render()});}
+/* The customers selection bar - the same card as the feed one, with
+   the count of the selected customers on its first line. */
 function custSelBar(){const one=ui.csel.ids.length===1;const c=one?cust(ui.csel.ids[0]):null;
  const B=(oc,icon,label,cls,al)=>'<button class="btn '+(cls||'btn-soft')+' selin" style="flex:1;min-width:0;font-size:12.5px;white-space:nowrap;gap:6px" onclick="'+oc+'"'+(al?' aria-label="'+al+'"':'')+'>'+ic(icon,17)+(label?'<span>'+label+'</span>':'')+'</button>';
- return B('cselExit()','x',t('cancel'),'btn-line')
+ return '<div class="selbar">'
+ +'<div class="selbar-top"><span class="selbar-n">'+t('selN')+' <span class="num">'+ui.csel.ids.length+'</span></span><span class="sp"></span>'
+ +'<button class="btn btn-line selin" style="flex:none;padding:0 14px;font-size:13.5px" onclick="cselExit()">'+ic('x',16)+t('cancel')+'</button></div>'
+ +'<div class="selbar-acts">'
  +(one?'':B('cselAll()','checkc',t('selAllS')))
  +(one?B('cselPin()','pin','',null,c&&c.pinned?t('unpinAct'):t('pinAct'))+B('cselEdit()','edit','',null,t('editL')):'')
  +B('cselShare()','share','',null,t('share'))
  +(one?B('cselStop()','archive','',null,t('stopC')):'')
- +B('cselDelete()','trash','','btn-red',t('del'))}
+ +B('cselDelete()','trash','','btn-red',t('del'))
+ +'</div></div>'}
 function cFCount(){const f=ui.f;return (f.sort&&f.sort!=='recent'?1:0)}
 /* The three-dot button opens the customers menu: pin a customer, or
    sort the list. It keeps the count badge when a sort is active. */
