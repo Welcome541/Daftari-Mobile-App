@@ -102,8 +102,9 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
    section: the negative margins pull it into the surrounding row gap
    so it never eats a full row of space. The margins are a share of
    --row-gap, so they stay proportional when the rhythm changes. */
-.daysep{font-size:calc(11.5px * var(--s));font-weight:800;color:var(--soft);line-height:1.2;margin-block:calc(var(--row-gap) * -0.66) calc(var(--row-gap) * -0.2);margin-inline:4px;display:flex;align-items:center;gap:calc(8px * var(--s));width:fit-content;margin-inline-start:auto}
+.daysep{font-size:calc(11.5px * var(--s));font-weight:800;color:var(--soft);line-height:1.2;margin-block:calc(var(--row-gap) * -0.66) calc(var(--row-gap) * -0.2);margin-inline:4px}
 .daysep-first{margin-block-start:0}
+.daysep:has(.daycheck){display:flex;align-items:center;gap:calc(8px * var(--s));width:fit-content;margin-left:auto}
 .daycheck{width:calc(20px * var(--s));height:calc(20px * var(--s));border-radius:50%;border:1.5px solid var(--line2);background:var(--card);display:flex;align-items:center;justify-content:center;flex:none;color:#fff;transition:background .15s,border-color .15s,transform .15s,box-shadow .15s;cursor:pointer}
 .daycheck:active{transform:scale(.92)}
 .daycheck.on{background:var(--navy);border-color:var(--navy);box-shadow:0 1px 4px rgba(18,41,74,.25)}
