@@ -8,6 +8,10 @@
  * Load order is defined by web/build.mjs (filename prefix = order).
  * ===================================================================== */
 const accInit=()=>{const n=(curAcc()&&curAcc().name||'').trim();return n?n.charAt(0).toUpperCase():'د'};
+/* Compact account switcher: icon + name + arrow in one button. The
+   home screen uses the wider .accid group and the customers screen
+   shows the name large, so this stays as the shell helper that
+   other screens and add-ons can drop into a header. */
 function accChip(){const a=curAcc();return '<button class="hbtn accchip" aria-label="'+t('switchAcc')+'" style="gap:8px" onclick="openAccSheet()">'+(a.type==='grocery'?ic('store',18):ic('user',18))+'<span class="accn" style="font-weight:800;font-size:14px">'+esc(a.name)+'</span>'+ic('chevD',15)+'</button>'}
 function headerBar(title,sub,backFn,menuFn,extra){
  return '<div class="hdr">'+(backFn?'<button class="hbtn" aria-label="'+t('back')+'" onclick="'+backFn+'">'+ic('back',20)+'</button>':'<span style="width:10px"></span>')+

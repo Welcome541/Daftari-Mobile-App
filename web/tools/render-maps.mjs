@@ -77,10 +77,16 @@ const FONTS = {
 const DEJAVU = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf';
 
 let opentypeReg, opentypeBold, opentypeBlack;
+/** opentype.js wants a plain ArrayBuffer - a node Buffer is a
+ *  Uint8Array view and DataView refuses it. */
+function fontBuffer(file) {
+  const b = readFileSync(file);
+  return b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength);
+}
 function loadFonts() {
-  opentypeReg = opentype.parse(readFileSync(FONTS.regular));
-  opentypeBold = opentype.parse(readFileSync(FONTS.bold));
-  opentypeBlack = opentype.parse(readFileSync(FONTS.black));
+  opentypeReg = opentype.parse(fontBuffer(FONTS.regular));
+  opentypeBold = opentype.parse(fontBuffer(FONTS.bold));
+  opentypeBlack = opentype.parse(fontBuffer(FONTS.black));
 }
 
 /** width of a string in a given weight - Arabic is measured unshaped,

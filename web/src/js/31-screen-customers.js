@@ -8,10 +8,14 @@
  * Load order is defined by web/build.mjs (filename prefix = order).
  * ===================================================================== */
 const S_customers=()=>{
- if(isP())return '<div class="hdr"><button class="hbtn" style="visibility:hidden">.</button><div class="sp" style="text-align:center"><h1>'+t('customers')+'</h1></div>'+accChip()+'</div><div class="pad"><div class="card" style="padding:30px 22px;text-align:center"><span class="av" style="width:70px;height:70px;margin:0 auto;background:var(--green-bg);color:var(--green)">'+ic('user',30)+'</span><div style="font-weight:800;margin-top:12px;font-size:17px">'+t('personal')+'</div><div class="muted" style="margin-top:8px;line-height:1.8">'+t('personalMsg')+'</div>'+lpBtn('debt','btn-red','mic',t('recDebt')).slice(0,-10)+' style="margin-top:16px"></button></div></div>';
+ if(isP())return '<div class="hdr"><div class="sp" style="text-align:start"><h1 class="bighdr">'+esc(curAcc().name)+'</h1></div>'+notifBtn()+'</div><div class="pad"><div class="card" style="padding:30px 22px;text-align:center"><span class="av" style="width:70px;height:70px;margin:0 auto;background:var(--green-bg);color:var(--green)">'+ic('user',30)+'</span><div style="font-weight:800;margin-top:12px;font-size:17px">'+t('personal')+'</div><div class="muted" style="margin-top:8px;line-height:1.8">'+t('personalMsg')+'</div>'+lpBtn('debt','btn-red','mic',t('recDebt')).slice(0,-10)+' style="margin-top:16px"></button></div></div>';
  if(ui.arch)return headerBar(t('archListT'),null,'ui.arch=false;render()')+'<div class="pad list ops" id="clist2" style="margin-top:12px;padding-bottom:14px">'+archListBody()+'</div>';
- return '<div class="hdr"><button class="hbtn" style="visibility:hidden">.</button><div class="sp" style="text-align:center"><h1>'+t('customers')+'</h1></div><div style="width:42px"></div></div>'
- +'<div class="pad" style="margin-top:4px;display:flex;align-items:center;gap:8px">'+accChip()+archBtn()+'<span class="sp"></span><button class="btn btn-soft" style="width:auto;padding:9px 13px;font-size:13px;font-weight:800" onclick="ui.nc={name:\'\',phone:\'\',limit:\'\',photo:null,edit:null,forceDup:false};go(\'newcust\',{})">'+t('addCustBtn')+'</button></div>'
+ /* The shop icon is gone from this screen. In its place, on the
+    leading edge, the customer name stands very large; the centred
+    screen title is gone with it, and the bell takes the opposite
+    corner. */
+ return '<div class="hdr"><div class="sp" style="text-align:start"><h1 class="bighdr">'+esc(curAcc().name)+'</h1></div>'+notifBtn()+'</div>'
+ +'<div class="pad" style="margin-top:2px;display:flex;align-items:center;gap:8px">'+archBtn()+'<span class="sp"></span><button class="btn btn-soft" style="width:auto;padding:9px 13px;font-size:13px;font-weight:800" onclick="ui.nc={name:\'\',phone:\'\',limit:\'\',photo:null,edit:null,forceDup:false};go(\'newcust\',{})">'+t('addCustBtn')+'</button></div>'
  +'<div class="pad search" style="margin-top:10px"><div class="inp card">'+ic('search',17)+'<input placeholder="'+t('searchC')+'" value="'+esc(ui.cq)+'" oninput="ui.cq=this.value;ui.cmax=60;debList()"></div>'+custFilterBtn()+'</div>'
  +fChips()
 

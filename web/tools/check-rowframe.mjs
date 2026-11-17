@@ -293,13 +293,94 @@ async function main() {
   check('the store icon is inside the group', !!(group && group.querySelector('.logo-ic')));
   check('the shop name is inside the group', !!(group && group.querySelector('h1')));
   check('the switch arrow is inside the group', !!(group && group.querySelector('.accchev')));
-  check('nothing is stranded on the trailing edge',
-    !!group && group.parentElement.querySelectorAll(':scope > *').length === 1,
-    group ? String(group.parentElement.querySelectorAll(':scope > *').length) : 'no group');
+  /* the header holds two things only: the shop identity on the
+     leading edge and the notification bell on the trailing one */
+  const hdrEl = group && group.parentElement;
+  const hdrKids = hdrEl ? [...hdrEl.children] : [];
+  check('the header holds the identity group and the bell only',
+    hdrKids.length === 2 && hdrKids[0] === group, String(hdrKids.length));
   check('the group is reachable from the keyboard',
     !!group && group.getAttribute('tabindex') === '0' && group.getAttribute('role') === 'button');
 
-  /* --- 8. the frame scales with the interface scale --------------- */
+  /* --- 8. the notification bell ------------------------------------ */
+  console.log('\nnotification bell');
+  const bell = window.document.querySelector('.hdr .notif');
+  check('the header carries the notification bell', !!bell);
+  check('the bell sits on the trailing edge (upper left)',
+    !!bell && bell.parentElement.lastElementChild === bell);
+  check('the bell is a round navy button',
+    !!bell && /\.notif\{[^}]*border-radius:50%/.test(css) && /\.notif\{[^}]*background:var\(--navy\)/.test(css));
+  check('the bell holds the filled bell glyph',
+    !!bell && !!bell.querySelector('svg.ic') && !!bell.querySelector('svg path[fill="currentColor"]'));
+  check('the bell opens the alerts sheet',
+    !!bell && (bell.getAttribute('onclick') || '').indexOf('openNotifSheet()') > -1);
+  check('the bell carries an accessible name',
+    !!bell && !!(bell.getAttribute('aria-label') || '').trim());
+  const dueCount = g('notifCount()');
+  const badge = bell ? bell.querySelector('.notif-badge .num') : null;
+  check('the badge counts the customers who owe money',
+    dueCount > 0 && !!badge && badge.textContent.trim() === String(dueCount),
+    'due=' + dueCount + ' badge=' + (badge ? badge.textContent : 'none'));
+  check('the badge is red',
+    /\.notif-badge\{[^}]*background:var\(--red\)/.test(css));
+
+  /* --- 9. the customers screen carries the big name --------------- */
+  console.log('\ncustomers header');
+  window.go('customers', {});
+  await new Promise((r) => setTimeout(r, 120));
+  const chdr = window.document.querySelector('#app .hdr') || window.document.querySelector('.hdr');
+  const chdrHtml = chdr ? chdr.innerHTML : '';
+  check('the customers header has no store icon',
+    !!chdr && !chdr.querySelector('.accchip') && !chdr.querySelector('.logo-ic'),
+    chdrHtml.slice(0, 90));
+  check('the customers header has no centred screen title',
+    !!chdr && chdrHtml.indexOf('العملاء') === -1,
+    chdrHtml.slice(0, 90));
+  const bigName = chdr ? chdr.querySelector('h1.bighdr') : null;
+  check('the customer name stands very large',
+    !!bigName && /\.hdr h1\.bighdr\{[^}]*font-size:calc\(30px/.test(css),
+    bigName ? bigName.textContent : 'no big title');
+  check('the big title holds the customer name',
+    !!bigName && bigName.textContent.trim() === 'بقالة الندى',
+    bigName ? bigName.textContent : 'none');
+  check('the big title sits on the leading edge',
+    !!bigName && bigName.parentElement.classList.contains('sp'));
+  check('the customers screen carries the bell',
+    !!chdr && !!chdr.querySelector('.notif'));
+
+  /* --- 10. the filter is a three-dot icon ------------------------ */
+  console.log('\ncustomers filter');
+  const fb = window.document.getElementById('cfbtn');
+  check('the filter button exists', !!fb);
+  const dots = fb ? fb.querySelectorAll('svg circle') : [];
+  check('the filter is the three-dot icon',
+    dots.length === 3 && [...dots].every(c => c.getAttribute('fill') === 'currentColor'),
+    'dots=' + dots.length);
+  check('the filter button shows no text',
+    !!fb && fb.textContent.trim() === '', fb ? fb.textContent.trim() : 'none');
+  check('the filter button keeps an accessible name',
+    !!fb && !!(fb.getAttribute('aria-label') || '').trim());
+  check('the filter still opens the filter sheet',
+    !!fb && (fb.getAttribute('onclick') || '').indexOf('openCustFilter()') > -1);
+  check('the filter button is a square icon button',
+    !!fb && /width:46px/.test(fb.getAttribute('style') || ''),
+    fb ? fb.getAttribute('style') : 'none');
+  check('the filter badge has a positioned parent',
+    !!fb && /position:relative/.test(fb.getAttribute('style') || ''),
+    fb ? fb.getAttribute('style') : 'none');
+
+  /* --- 11. the bell rides on every main screen ------------------- */
+  console.log('\nmain screens');
+  for (const screen of ['home', 'customers', 'reports', 'settings']) {
+    window.go(screen, {});
+    await new Promise((r) => setTimeout(r, 120));
+    const h = window.document.querySelector('#app .hdr');
+    const b = h ? h.querySelector('.notif') : null;
+    check('the ' + screen + ' screen carries the bell in the trailing corner',
+      !!b && b.parentElement.lastElementChild === b);
+  }
+
+  /* --- 12. the frame scales with the interface scale --------------- */
   console.log('\nscaling');
   const Appearance = g('Appearance');
   Appearance.setScale(1.4);

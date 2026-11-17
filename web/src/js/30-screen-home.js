@@ -15,7 +15,7 @@ const S_home=()=>{
     tile, the shop name and the switch arrow sit together, and the
     whole group opens the account sheet. Nothing is left stranded on
     the trailing edge. */
- :'<div class="hdr"><div class="accid" role="button" tabindex="0" onclick="openAccSheet()" onkeydown="if(event.key===\'Enter\')openAccSheet()"><div class="logo-ic">'+ic(curAcc().type==='grocery'?'store':'user',22)+'</div><h1 style="font-size:21px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(curAcc().name)+'</h1><span class="accchev">'+ic('chevD',15)+'</span></div></div>';
+ :'<div class="hdr"><div class="accid" role="button" tabindex="0" onclick="openAccSheet()" onkeydown="if(event.key===\'Enter\')openAccSheet()"><div class="logo-ic">'+ic(curAcc().type==='grocery'?'store':'user',22)+'</div><h1 style="font-size:21px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(curAcc().name)+'</h1><span class="accchev">'+ic('chevD',15)+'</span></div>'+notifBtn()+'</div>';
  return hdr
  +'<div style="height:6px"></div>'+statsCards()
  +'<div class="pad search" style="margin-top:12px"><div class="inp card">'+ic('search',17)+'<input placeholder="'+t('searchTx')+'" value="'+esc(ui.tq)+'" oninput="ui.tq=this.value;debTx()"></div>'+

@@ -14,7 +14,7 @@ const S_settings=()=>{const cur=curAcc();const st=sec.enabled?'var(--green)':'va
   '<button class="btn btn-line" style="min-width:0;padding:8px 14px;font-size:13px" onclick="openAccSheet()">'+ic('gear',16)+t('switchAcc')+'</button></div></div>';
  const sec0=(title,body)=>'<div class="lb">'+title+'</div>'+body;
  const kv=(bg,col,icon,label,right,click)=>'<div class="kv"'+(click?' style="cursor:pointer" onclick="'+click+'"':'')+'><span class="kic" style="width:34px;height:34px;border-radius:10px;background:'+bg+';color:'+col+';display:flex;align-items:center;justify-content:center">'+ic(icon,17)+'</span><span class="k" style="margin-inline-start:8px">'+label+'</span><span class="v">'+right+'</span></div>';
- return '<div class="hdr"><button class="hbtn" style="visibility:hidden">.</button><div class="sp" style="text-align:center"><h1>'+t('settings')+'</h1></div><div style="width:42px"></div></div>'+
+ return '<div class="hdr"><span style="width:42px"></span><div class="sp" style="text-align:center"><h1>'+t('settings')+'</h1></div>'+notifBtn()+'</div>'+
  '<div class="pad">'+
  sec0(t('account'),accRow)+
  sec0(t('prefs'),'<div class="card" style="padding:6px 16px">'+

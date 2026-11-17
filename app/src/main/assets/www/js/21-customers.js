@@ -79,7 +79,9 @@ function custSelBar(){const one=ui.csel.ids.length===1;const c=one?cust(ui.csel.
  +B('cselDelete()','trash','','btn-red',t('del'))}
 function cFCount(){const f=ui.f;return (f.sort&&f.sort!=='recent'?1:0)}
 function custFilterBtn(){const n=cFCount();
- return '<button class="hbtn" id="cfbtn" style="height:46px;gap:7px;font-weight:700" onclick="openCustFilter()">'+ic('sliders',17)+t('filter')+(n?'<span class="num" style="background:var(--red);color:#fff;border-radius:999px;min-width:19px;height:19px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;padding:0 5px">'+n+'</span>':'')+'</button>'}
+ /* The filter is a three-dot icon button - the same mark the rest of
+    the app uses for "more" - and it keeps its count on a badge. */
+ return '<button class="hbtn" id="cfbtn" style="height:46px;width:46px;padding:0;justify-content:center;position:relative" aria-label="'+esc(t('filter'))+'" onclick="openCustFilter()">'+ic('dots',19)+(n?'<span class="notif-badge"><span class="num">'+n+'</span></span>':'')+'</button>'}
 function refreshCFilterBtn(){const b=document.getElementById('cfbtn');if(b)b.outerHTML=custFilterBtn()}
 function fChips(){const f=ui.f,out=[];
  if(f.status==='owed')out.push(['owed',t('owedF')]);if(f.status==='none')out.push(['none',t('noDebtF')]);

@@ -21,4 +21,8 @@ function repBody(){const rp=ui.rp=ui.rp||{mode:'week',day:'',month:'',from:'',to
  +(r.invs.length+r.pays.length?'<div class="pad list" style="padding-bottom:6px">'+[...r.invs.map(i=>({ts:i.ts,nm:repNm(i.cust),amt:i.amount,k:'debt',note:i.note})),...r.pays.map(pp=>({ts:pp.ts,nm:repNm(pp.cust),amt:pp.amount,k:'pay',note:''}))].sort((x,y)=>y.ts-x.ts).slice(0,12).map(x=>'<div class="card litem" style="margin-bottom:8px"><div class="sp"><b>'+esc(x.nm)+'</b><div class="muted" style="font-size:11.5px;margin-top:2px">'+(x.k==='debt'?ic('receipt',12):ic('banknote',12))+' '+esc(x.note||'')+' · '+dateStr(x.ts)+'</div></div><span class="amt '+(x.k==='debt'?'red':'green')+'"><span class="num">'+fmt(x.amt)+'</span> '+CUR()+'</span></div>').join('')+'</div>'
  :'<div class="muted" style="text-align:center;padding:18px 0">'+t('repEmpty')+'</div>')
  +'<div class="pad" style="display:flex;gap:10px;padding-top:4px;padding-bottom:18px"><button class="btn btn-line" style="flex:1" onclick="printRep()">'+ic('printer',17)+t('repPrint')+'</button><button class="btn btn-navy" style="flex:1.3" onclick="exportRepXlsx()">'+ic('excel',17)+' '+t('repXlsx')+'</button></div></div>'}
-const S_reports=()=>headerBar(t('repB'))+repBody();
+/* The bell sits in the trailing corner; a matching spacer on the
+   leading edge keeps the title centred. */
+const S_reports=()=>'<div class="hdr"><span style="width:42px"></span>'
++'<div class="sp" style="text-align:center"><h1>'+t('repB')+'</h1></div>'
++notifBtn()+'</div>'+repBody();

@@ -95,6 +95,18 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
    --row-gap, so they stay proportional when the rhythm changes. */
 .daysep{font-size:calc(11.5px * var(--s));font-weight:800;color:var(--soft);line-height:1.2;margin-block:calc(var(--row-gap) * -0.66) calc(var(--row-gap) * -0.2);margin-inline:4px}
 .daysep-first{margin-block-start:0}
+
+/* --- the attention bell ---------------------------------------------
+ * A round navy button with a white bell and a red count badge that
+ * overlaps its upper-leading corner.
+ * ------------------------------------------------------------------- */
+.notif{position:relative;width:calc(42px * var(--s));height:calc(42px * var(--s));border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:var(--sh);transition:transform .08s}
+.notif:active{transform:scale(.93)}
+.notif svg.ic{width:calc(21px * var(--s));height:calc(21px * var(--s))}
+.notif-badge{position:absolute;inset-block-start:calc(-4px * var(--s));inset-inline-start:calc(-4px * var(--s));min-width:calc(20px * var(--s));height:calc(20px * var(--s));border-radius:999px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;padding:0 calc(5px * var(--s));border:2px solid var(--bg);box-shadow:0 1px 3px rgba(167,25,73,.35)}
+.notif-badge .num{font-size:calc(10.5px * var(--s));font-weight:900;line-height:1}
+/* A screen title that carries the screen on its own. */
+.hdr h1.bighdr{font-size:calc(30px * var(--s));font-weight:800;line-height:1.12;letter-spacing:-.3px;color:var(--ink)}
 .amt{font-weight:800;font-size:calc(15.5px * var(--s))}
 .amt.red{color:var(--red)}
 .amt.green{color:var(--green)}
