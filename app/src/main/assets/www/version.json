@@ -4,7 +4,7 @@
   "version": "3.0.0",
   "build": 300,
   "channel": "stable",
-  "generatedAt": "2026-11-17T21:09:37.086Z",
+  "generatedAt": "2026-11-17T21:16:00.424Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -13,7 +13,7 @@
       "size": 821
     },
     "css/components.css": {
-      "sha256": "2413003442cafa83ace00e0ba0545fc5758c62548cb07d261b81ecfce12b7865",
+      "sha256": "b2d7d63dc5bdc3c1aac51690352dd4478f6c30ef08f325a8fdbb09e17318478e",
       "size": 19941
     },
     "css/layout.css": {
@@ -53,7 +53,7 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "f145f531cda0922890cc01397f34b558ebf945dea2cbb0c7ae11680c913df44e",
+      "sha256": "795ff592aaec659ddb6e21bef9e2656b655b9b3e0a491fd86416bb7fc1ff2352",
       "size": 6225
     },
     "js/00-icons.js": {
@@ -109,7 +109,7 @@
       "size": 3024
     },
     "js/21-customers.js": {
-      "sha256": "8decb368ad57f9b91378788b2a28844bbac37739dc02bead6ef4173744acafcb",
+      "sha256": "756685d500de63f088eb807a5deaee96636cefa8ab1a19c7e4ce4922883461a7",
       "size": 13565
     },
     "js/22-tx.js": {
