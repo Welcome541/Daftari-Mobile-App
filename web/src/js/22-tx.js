@@ -20,7 +20,7 @@ function txRow(x){const c=x.cust?cust(x.cust):null;if(!c&&!isP())return '';const
  const edt=x.inv&&invEdited(x.inv)?'<span class="chip" style="background:var(--amber-bg);color:var(--amber)">'+ic('edit',11)+' '+t('edited')+'</span>':'';
  return '<div class="card litem orow'+(isSel?' sel':'')+'" '+(sel?'onclick="selToggle(\''+x.key+'\')"':'onclick="txOpen(\''+x.kind+'\',\''+(x.inv||'')+'\',\''+(c?c.id:'')+'\')" onpointerdown="txDownP(event,\''+x.key+'\')" onpointerup="txUpC()" onpointerleave="txUpC()" ontouchstart="txDownT(event,\''+x.key+'\')" ontouchend="txUpC()" ontouchmove="txMoveC(event)" oncontextmenu="return false" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')this.click()"')+'>'+box+av+
  '<div class="orow-mid"><div class="orow-name"><span>'+esc(nm)+'</span>'+late+'</div>'+
- '<div class="orow-meta">'+edt+(x.kind==='debt'?ic('receipt'):ic('banknote'))+'<span class="tx">'+esc(x.note||'')+'</span><span class="sep">•</span>'+timeStr(x.ts)+'</div></div>'+
+ '<div class="orow-meta">'+edt+'<span class="tx">'+esc(x.note||'')+'</span><span class="orow-time">'+timeStr(x.ts)+'</span>'+'</div></div>'+
  '<div class="orow-side"><span class="orow-amt '+(x.kind==='debt'?'red':'green')+'"><span class="num">'+fmt(x.amt)+'</span><span class="cur">'+CUR()+'</span></span></div></div>'}
 window.selToggle=k=>{if(!ui.sel||!ui.sel.on)return;if(Date.now()-lxFired<900&&k===lxKey)return;const a=ui.sel.ids;const i=a.indexOf(k);if(i>=0)a.splice(i,1);else a.push(k);render()};
 window.selExit=()=>{ui.sel={on:false,ids:[]};render()};

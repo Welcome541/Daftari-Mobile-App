@@ -86,10 +86,11 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
 .orow .orow-name .chip{flex:none;font-size:calc(10.5px * var(--s));padding:calc(2px * var(--s)) calc(8px * var(--s))}
 .orow .orow-meta{display:flex;align-items:center;gap:calc(10 * var(--u) * var(--s));margin-top:calc(4 * var(--u) * var(--s));font-size:var(--row-meta);line-height:1.3;color:var(--muted);min-width:0;overflow:hidden}
 .orow .orow-meta > *{flex:none}
-.orow .orow-meta .tx{flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.orow .orow-meta .tx{flex:1 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .orow .orow-meta .ic{width:var(--row-ic);height:var(--row-ic)}
 .orow .orow-meta .sep{opacity:.5}
 .orow .orow-meta .chip{font-size:calc(10.5px * var(--s));padding:calc(2px * var(--s)) calc(8px * var(--s))}
+.orow .orow-time{flex:none;white-space:nowrap;font-weight:600;color:var(--muted);min-width:calc(62 * var(--u) * var(--s));text-align:end}
 .orow .orow-amt{display:flex;align-items:baseline;gap:calc(6 * var(--u) * var(--s));font-weight:800;font-size:var(--row-amt);line-height:1;white-space:nowrap}
 .orow .orow-amt .num{font-size:var(--row-amt)}
 .orow .orow-amt .cur{font-size:var(--row-cur);font-weight:700}
