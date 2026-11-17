@@ -149,12 +149,6 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
 @keyframes rotB{to{transform:rotate(360deg)}}
 @keyframes up{from{transform:translate(-50%,40px);opacity:.4}to{transform:translate(-50%,0);opacity:1}}
 @keyframes fade{from{opacity:0}}
-/* The home action row: the two quick actions stand where the section
-   name used to be, compact enough for one line. */
-.homerow .btn{width:auto;padding:calc(8px * var(--s)) calc(12px * var(--s));font-size:calc(13px * var(--s));font-weight:800;border-radius:calc(13px * var(--s));gap:calc(6px * var(--s));box-shadow:none}
-.homerow .btn svg{width:calc(17px * var(--s));height:calc(17px * var(--s))}
-.homerow .chip{font-weight:800;font-size:calc(12.5px * var(--s))}
-
 /* The selection bar - a card that closes the list, with the count of
    the selected items on its first line and the actions under it. */
 .selbar{background:var(--card);border:1px solid var(--line2);border-radius:calc(18px * var(--s));box-shadow:var(--sh);padding:calc(12px * var(--s));animation:selIn .2s ease both}

@@ -29,11 +29,8 @@ function render(){_IX=null;if(!db){document.getElementById('app').innerHTML='';r
  const tb=document.getElementById('tabbar');tb.style.display=isTab?'grid':'none';
  const tbBtn=x=>'<button class="'+(tp.s===x?'on':'')+'" aria-current="'+(tp.s===x?'true':'false')+'" onclick="tab(\''+x+'\')"><span class="tbind">'+ic(x==='home'?'home':x==='customers'?'users':x==='reports'?'pie':'gear',24)+'</span><span class="tblb">'+t(x)+'</span></button>';
  tb.innerHTML=tbBtn('home')+tbBtn('customers')+'<button class="tabplus" aria-label="'+t('addC')+'" onclick="ui.nc={name:\'\',phone:\'\',edit:null};go(\'newcust\',{})">'+ic('plus',24)+'</button>'+tbBtn('reports')+tbBtn('settings');
- /* The floating action row is empty: the home actions live in the
-    row under the search box, and the selection bar lives under the
-    list. Nothing floats over the content any more. */
  const ar=document.getElementById('actionrow');
- ar.innerHTML='';
+ ar.innerHTML=isTab?(selMode?'':(tp.s==='home'?lpBtn('debt','btn-red','receipt',t('newDebt'))+lpBtn('pay','btn-green','coins',t('pay')):'')):'';
  document.getElementById('fabAdd').classList.add('hide');
  if(!locked&&typeof drawCharts==='function'&&['reports','repb'].includes((curScr()||{}).s))requestAnimationFrame(()=>{try{if(!locked&&['reports','repb'].includes((curScr()||{}).s))drawCharts()}catch(e){}});
  window.scrollTo(0,selMode?sy:0);}
