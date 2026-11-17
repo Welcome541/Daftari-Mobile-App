@@ -18,14 +18,17 @@ const S_home=()=>{
  +'<div class="pad search" style="margin-top:12px"><div class="inp card">'+ic('search',17)+'<input placeholder="'+t('searchTx')+'" value="'+esc(ui.tq)+'" oninput="ui.tq=this.value;debTx()"></div>'+
  '<button class="hbtn" style="height:46px;position:relative" onclick="openHomeFilter()" aria-label="'+t('filter')+'">'+ic('sliders',18)+hfBadge()+'</button>'+
  '</div>'
- +'<div class="pad" style="margin:12px 20px 4px;font-weight:800;font-size:16.5px;display:flex;align-items:center;gap:8px">'+t('lastOps')+' <span class="chip" style="background:#efece6;color:var(--soft)"><span class="num" id="txn">'+n+'</span></span></div>'
- +'<div class="pad list ops" id="txlist" style="padding-bottom:14px">'+feedHtml()+'</div>'
- /* The selection bar belongs to the list: it sits right under the
-    last operation, and it carries the count of what is selected. */
- +(selMode?'<div class="pad" style="padding-bottom:18px">'+selBarHtml()+'</div>':'');
+ /* In normal mode show the "آخر العمليات" title with the count;
+    while selecting, hide the title and show the selection icons in its
+    place - the count moves into the bar itself. */
+ +(selMode
+   ?'<div class="pad" style="margin:12px 20px 4px">'+selHeadHtml()+'</div>'
+   :'<div class="pad" style="margin:12px 20px 4px;font-weight:800;font-size:16.5px;display:flex;align-items:center;gap:8px">'+t('lastOps')+' <span class="chip" style="background:#efece6;color:var(--soft)"><span class="num" id="txn">'+n+'</span></span></div>')
+ +'<div class="pad list ops" id="txlist" style="padding-bottom:14px">'+feedHtml()+'</div>';
 };
-/* The selection bar - a card that closes the list, with the count of
-   the selected items on its first line and the actions under it. */
+/* The list-closing bar - kept for the customers screen (it sits
+   under the customers list). The home screen now uses the title-slot
+   header instead while selecting. */
 function selBarHtml(){return '<div class="selbar">'
  +'<div class="selbar-top"><span class="selbar-n">'+t('selN')+' <span class="num">'+ui.sel.ids.length+'</span></span><span class="sp"></span>'
  +'<button class="btn btn-line selin" style="flex:none;padding:0 14px;font-size:13.5px" onclick="selExit()">'+ic('x',16)+t('cancel')+'</button></div>'
@@ -35,3 +38,15 @@ function selBarHtml(){return '<div class="selbar">'
  +'<button class="btn btn-soft selin" style="flex:.9" onclick="selXlsx()" aria-label="'+t('repXlsx')+'">'+ic('excel',18)+'</button>'
  +'<button class="btn btn-red selin" style="flex:.9" onclick="selDelete()" aria-label="'+t('del')+'">'+ic('trash',18)+'</button>'
  +'</div></div>'}
+/* Title-slot selection header: it replaces the "آخر العمليات" row
+   while items are picked, so the icons appear exactly where the name
+   used to be. The count stays inside the bar. */
+function selHeadHtml(){return '<div class="selhead">'
+ +'<span class="selbar-n">'+t('selN')+' <span class="num">'+ui.sel.ids.length+'</span></span>'
+ +'<span class="sp"></span>'
+ +'<button class="btn btn-soft selin" onclick="selAllVisible()" aria-label="'+t('selAllS')+'">'+ic('checkc',16)+'</button>'
+ +'<button class="btn btn-soft selin" onclick="selShare()" aria-label="'+t('share')+'">'+ic('share',16)+'</button>'
+ +'<button class="btn btn-soft selin" onclick="selXlsx()" aria-label="'+t('repXlsx')+'">'+ic('excel',16)+'</button>'
+ +'<button class="btn btn-red selin" onclick="selDelete()" aria-label="'+t('del')+'">'+ic('trash',16)+'</button>'
+ +'<button class="btn btn-line selin" onclick="selExit()" aria-label="'+t('cancel')+'">'+ic('x',16)+'</button>'
+ +'</div>'}

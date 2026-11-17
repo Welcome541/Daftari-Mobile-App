@@ -437,14 +437,21 @@ async function main() {
   const key0 = g('txAll()[0].key');
   g('window.selLongPress("' + key0 + '")');
   await new Promise((r) => setTimeout(r, 150));
-  const bar = window.document.querySelector('#app .selbar');
+  /* The home screen replaces the "آخر العمليات" title with a
+     single-row header that carries the count and the icons; it sits
+     right before the list instead of closing it. */
+  const bar = window.document.querySelector('#app .selhead') || window.document.querySelector('#app .selbar');
   check('the selection bar appears with the list', !!bar);
-  check('the selection bar closes the feed',
-    !!bar && bar.parentElement.previousElementSibling
-      && bar.parentElement.previousElementSibling.id === 'txlist');
+  check('the selection bar replaces the title, before the feed',
+    !!bar && bar.parentElement.nextElementSibling
+      && bar.parentElement.nextElementSibling.id === 'txlist');
   const cnt = bar ? bar.querySelector('.selbar-n .num') : null;
   check('the selection bar carries the count of the selection',
     !!cnt && cnt.textContent.trim() === '1', cnt ? cnt.textContent : 'none');
+  /* The old title and its chip must disappear while selecting */
+  const appHtml = window.document.getElementById('app').innerHTML || '';
+  check('the title is hidden while selecting', appHtml.indexOf('آخر العمليات') === -1, appHtml.slice(0,120));
+  check('the old chip is hidden while selecting', !window.document.getElementById('txn'));
   check('the count is not in the header',
     ((window.document.querySelector('#app .hdr') || {}).innerHTML || '').indexOf('تم تحديد') === -1,
     'count found in the header');
