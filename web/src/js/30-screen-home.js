@@ -11,11 +11,11 @@ const S_home=()=>{
  filteredTx();const n=window.__txFull;
  const selMode=ui.sel&&ui.sel.on;
  const hdr=selMode?'<div class="hdr"><button class="hbtn" style="visibility:hidden">.</button><div class="sp" style="text-align:center"><h1 style="font-size:17px"><span class="num">'+ui.sel.ids.length+'</span> '+t('selN')+'</h1></div><div style="width:42px"></div></div>'
- /* The shop identity is one group: the store icon tile and the shop
-    name sit together on the leading edge. The trailing edge keeps a
-    single compact control that opens the account sheet - the shop
-    name is not repeated there. */
- :'<div class="hdr"><div class="sp" style="display:flex;align-items:center;gap:calc(8px * var(--s));min-width:0"><div class="logo-ic">'+ic(curAcc().type==='grocery'?'store':'user',22)+'</div><h1 style="font-size:21px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(curAcc().name)+'</h1></div><button class="hbtn" aria-label="'+t('switchAcc')+'" onclick="openAccSheet()">'+ic('chevD',15)+'</button></div>';
+ /* The shop identity is one group on the leading edge: the store icon
+    tile, the shop name and the switch arrow sit together, and the
+    whole group opens the account sheet. Nothing is left stranded on
+    the trailing edge. */
+ :'<div class="hdr"><div class="accid" role="button" tabindex="0" onclick="openAccSheet()" onkeydown="if(event.key===\'Enter\')openAccSheet()"><div class="logo-ic">'+ic(curAcc().type==='grocery'?'store':'user',22)+'</div><h1 style="font-size:21px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(curAcc().name)+'</h1><span class="accchev">'+ic('chevD',15)+'</span></div></div>';
  return hdr
  +'<div style="height:6px"></div>'+statsCards()
  +'<div class="pad search" style="margin-top:12px"><div class="inp card">'+ic('search',17)+'<input placeholder="'+t('searchTx')+'" value="'+esc(ui.tq)+'" oninput="ui.tq=this.value;debTx()"></div>'+

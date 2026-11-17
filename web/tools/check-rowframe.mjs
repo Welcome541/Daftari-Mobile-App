@@ -287,8 +287,17 @@ async function main() {
     (hdr.split('بقالة الندى').length - 1) === 1, String(hdr.split('بقالة الندى').length - 1));
   check('the header no longer repeats the account chip', hdr.indexOf('accchip') === -1);
   check('the header still opens the account sheet', hdr.indexOf('openAccSheet()') > -1);
-  check('the store icon and the name sit in one group',
-    /class="sp"[^>]*display:flex/.test(hdr) && /logo-ic/.test(hdr));
+  /* one group on the leading edge: icon, name and arrow together */
+  const group = window.document.querySelector('.hdr .accid');
+  check('the header has one identity group', !!group);
+  check('the store icon is inside the group', !!(group && group.querySelector('.logo-ic')));
+  check('the shop name is inside the group', !!(group && group.querySelector('h1')));
+  check('the switch arrow is inside the group', !!(group && group.querySelector('.accchev')));
+  check('nothing is stranded on the trailing edge',
+    !!group && group.parentElement.querySelectorAll(':scope > *').length === 1,
+    group ? String(group.parentElement.querySelectorAll(':scope > *').length) : 'no group');
+  check('the group is reachable from the keyboard',
+    !!group && group.getAttribute('tabindex') === '0' && group.getAttribute('role') === 'button');
 
   /* --- 8. the frame scales with the interface scale --------------- */
   console.log('\nscaling');

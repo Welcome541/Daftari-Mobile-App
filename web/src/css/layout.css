@@ -8,6 +8,13 @@ body[lang="en"]{font-family:'Inter',system-ui,sans-serif}
 .hdr h1{font-size:calc(19px * var(--s));font-weight:800}
 .hdr .sub{font-size:calc(11.5px * var(--s));color:var(--muted)}
 .logo-ic{width:calc(42px * var(--s));height:calc(42px * var(--s));border-radius:calc(13px * var(--s));background:var(--navy);color:#e8c76a;display:flex;align-items:center;justify-content:center}
+/* Shop identity: store icon + name + switch arrow, one group on the
+   leading edge. The group itself opens the account sheet. */
+.accid{display:flex;align-items:center;gap:calc(8px * var(--s));flex:1 1 auto;min-width:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.accid .logo-ic{flex:none}
+.accid h1{min-width:0}
+.accchev{display:flex;align-items:center;justify-content:center;width:calc(26px * var(--s));height:calc(26px * var(--s));border-radius:calc(8px * var(--s));color:var(--soft);flex:none;transition:transform .12s}
+.accid:active .accchev{transform:scale(.9)}
 #tabbar{position:sticky;bottom:0;background:var(--navy2);display:grid;grid-template-columns:repeat(5,1fr);height:calc(80px + env(safe-area-inset-bottom));padding:0 4px env(safe-area-inset-bottom);box-shadow:0 -1px 0 rgba(255,255,255,.07),0 -12px 28px rgba(9,17,34,.28);z-index:40}
 #tabbar button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(6px * var(--s));color:#8ea1bd;font-size:calc(11.5px * var(--s));font-weight:700;border:none;background:none;min-height:80px;transition:color .18s}
 #tabbar .tbind{position:relative;width:calc(56px * var(--s));height:calc(32px * var(--s));border-radius:calc(16px * var(--s));display:flex;align-items:center;justify-content:center;transition:transform .12s}
