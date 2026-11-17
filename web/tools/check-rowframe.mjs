@@ -221,9 +221,10 @@ async function main() {
     const m = rows[i].querySelector('.orow-meta');
     return m ? m.textContent.replace(/\s+/g, ' ').trim() : '';
   };
-  check('row 1 meta reads فاتورة · 5:33 ص', metaOf(0).indexOf('فاتورة') === 0 && metaOf(0).indexOf('5:33') > 0, metaOf(0));
-  check('row 2 meta reads a cash payment · 1:40 ص', metaOf(1).indexOf('سداد نقدًا') === 0 && metaOf(1).indexOf('1:40') > 0, metaOf(1));
-  check('row 3 meta reads فاتورة · 10:22 م', metaOf(2).indexOf('فاتورة') === 0 && metaOf(2).indexOf('10:22') > 0, metaOf(2));
+  check('row 1 meta reads فاتورة', metaOf(0).indexOf('فاتورة') === 0, metaOf(0));
+  check('row 2 meta reads a cash payment', metaOf(1).indexOf('سداد نقدًا') === 0, metaOf(1));
+  check('row 3 meta reads فاتورة', metaOf(2).indexOf('فاتورة') === 0, metaOf(2));
+  check('the customer rows no longer show the time', metaOf(0).indexOf('ص') === -1 && metaOf(0).indexOf('م') === -1 || metaOf(0).indexOf(':') === -1, metaOf(0));
 
   /* --- 4. the frame classes are on the row ----------------------- */
   console.log('\nframe');

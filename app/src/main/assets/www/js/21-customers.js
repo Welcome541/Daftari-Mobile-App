@@ -39,8 +39,8 @@ function custRow(c,showPhone){
  const box=sel?'<span class="orow-sel'+(isSel?' on':'')+'">'+(isSel?ic('checkb',15):'')+'</span>':'';
  const op=lastOpOf(c.id);
  const meta=op
-  ?'<div class="orow-meta">'+ic(op.k==='pay'?'banknote':'receipt')+'<span class="tx">'+esc(op.label)+'</span><span class="sep">•</span>'+timeStr(op.ts)+'</div>'
-  :'<div class="orow-meta">'+ic('clock')+'<span class="tx">'+esc(t('noOps'))+'</span></div>';
+  ?'<div class="orow-meta"><span class="tx">'+esc(op.label)+'</span></div>'
+  :'<div class="orow-meta"><span class="tx">'+esc(t('noOps'))+'</span></div>';
  return '<div class="card litem orow'+(isSel?' sel':'')+'" '+(sel?'onclick="cselToggle(\''+c.id+'\')"':'onclick="clOpen(\''+c.id+'\')" onpointerdown="clDownP(event,\''+c.id+'\')" onpointerup="clUpC()" onpointerleave="clUpC()" ontouchstart="clDownT(event,\''+c.id+'\')" ontouchend="clUpC()" ontouchmove="clMoveC(event)" oncontextmenu="return false"')+' role="button" tabindex="0">'+box+
  avat(c.name,'var(--row-av)')+'<div class="orow-mid"><div class="orow-name"><span>'+esc(c.name)+'</span></div>'+meta+'</div>'
  +(c.pinned?'<span class="orow-pin" aria-label="'+esc(t('pinned'))+'">'+ic('pinf',13)+'</span>':'')+
