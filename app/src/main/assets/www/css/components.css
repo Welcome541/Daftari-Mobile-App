@@ -66,7 +66,12 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
  * rule and the amount, so the rule always lands at the same offset
  * from the inline-end edge no matter how long the amount is.
  * ------------------------------------------------------------------- */
-.litem.orow{display:flex;align-items:center;gap:0;min-height:var(--row-h);padding-block:var(--row-pady);padding-inline:var(--row-padx) 0;border-radius:var(--row-r)}
+.litem.orow{display:flex;align-items:center;gap:0;min-height:var(--row-h);padding-block:var(--row-pady);padding-inline:var(--row-padx) 0;border-radius:var(--row-r);overflow:hidden;position:relative}
+/* A pinned customer wears a gold corner with a white pushpin - the
+   corner follows the card radius, so the ribbon is clipped by it. */
+.orow-pin{position:absolute;inset-block-start:0;inset-inline-start:0;width:calc(52 * var(--u) * var(--s));height:calc(52 * var(--u) * var(--s));color:#fff;pointer-events:none}
+.orow-pin::before{content:'';position:absolute;inset:0;background:var(--amber);clip-path:polygon(0 0,100% 0,100% 100%)}
+.orow-pin .ic{position:absolute;top:calc(8 * var(--u) * var(--s));inset-inline-start:calc(8 * var(--u) * var(--s));width:calc(18 * var(--u) * var(--s));height:calc(18 * var(--u) * var(--s));transform:rotate(45deg);transform-origin:center}
 .orow .av{flex:none;margin-inline-end:var(--row-gapx)}
 .orow .orow-sel{flex:none;margin-inline-end:var(--row-gapx)}
 .orow .orow-mid{flex:1 1 auto;min-width:0}

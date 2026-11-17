@@ -333,20 +333,31 @@ async function main() {
   check('the customers header has no store icon',
     !!chdr && !chdr.querySelector('.accchip') && !chdr.querySelector('.logo-ic'),
     chdrHtml.slice(0, 90));
-  check('the customers header has no centred screen title',
-    !!chdr && chdrHtml.indexOf('العملاء') === -1,
+  check('the customers header has no shop name',
+    !!chdr && chdrHtml.indexOf('بقالة الندى') === -1,
+    chdrHtml.slice(0, 90));
+  check('the customers screen has no notification bell',
+    !!chdr && !chdr.querySelector('.notif'),
     chdrHtml.slice(0, 90));
   const bigName = chdr ? chdr.querySelector('h1.bighdr') : null;
-  check('the customer name stands very large',
+  check('the screen title stands very large',
     !!bigName && /\.hdr h1\.bighdr\{[^}]*font-size:calc\(30px/.test(css),
     bigName ? bigName.textContent : 'no big title');
-  check('the big title holds the customer name',
-    !!bigName && bigName.textContent.trim() === 'بقالة الندى',
+  check('the big title reads العملاء',
+    !!bigName && bigName.textContent.trim() === 'العملاء',
     bigName ? bigName.textContent : 'none');
   check('the big title sits on the leading edge',
     !!bigName && bigName.parentElement.classList.contains('sp'));
-  check('the customers screen carries the bell',
-    !!chdr && !!chdr.querySelector('.notif'));
+  check('the big title is not centred',
+    !!bigName && (bigName.parentElement.getAttribute('style') || '').indexOf('text-align:start') > -1,
+    bigName ? bigName.parentElement.getAttribute('style') : 'none');
+  const addBtn = chdr ? [...chdr.querySelectorAll('button')].find(b => (b.textContent || '').indexOf('إضافة عميل') > -1) : null;
+  check('the add-customer button sits in the header',
+    !!addBtn, addBtn ? addBtn.textContent : 'no add button');
+  check('the add-customer button takes the trailing corner',
+    !!addBtn && addBtn.parentElement.lastElementChild === addBtn);
+  check('the add-customer button opens the new customer screen',
+    !!addBtn && (addBtn.getAttribute('onclick') || '').indexOf("go('newcust'") > -1);
 
   /* --- 10. the filter is a three-dot icon ------------------------ */
   console.log('\ncustomers filter');
@@ -360,8 +371,10 @@ async function main() {
     !!fb && fb.textContent.trim() === '', fb ? fb.textContent.trim() : 'none');
   check('the filter button keeps an accessible name',
     !!fb && !!(fb.getAttribute('aria-label') || '').trim());
-  check('the filter still opens the filter sheet',
-    !!fb && (fb.getAttribute('onclick') || '').indexOf('openCustFilter()') > -1);
+  check('the three dots open the customers menu',
+    !!fb && (fb.getAttribute('onclick') || '').indexOf('openCustListMenu()') > -1);
+  check('the three dots carry an accessible name',
+    !!fb && !!(fb.getAttribute('aria-label') || '').trim());
   check('the filter button is a square icon button',
     !!fb && /width:46px/.test(fb.getAttribute('style') || ''),
     fb ? fb.getAttribute('style') : 'none');
@@ -369,9 +382,42 @@ async function main() {
     !!fb && /position:relative/.test(fb.getAttribute('style') || ''),
     fb ? fb.getAttribute('style') : 'none');
 
-  /* --- 11. the bell rides on every main screen ------------------- */
+  /* --- 11. the customers menu ------------------------------------- */
+  console.log('\ncustomers menu');
+  g('openCustListMenu()');
+  await new Promise((r) => setTimeout(r, 120));
+  const menu = window.document.getElementById('sheet').textContent || '';
+  check('the menu offers pinning a customer', menu.indexOf('تثبيت عميل') > -1, menu.slice(0, 80));
+  check('the menu offers sorting', menu.indexOf('ترتيب بحسب') > -1, menu.slice(0, 80));
+  g('openCustPinSheet()');
+  await new Promise((r) => setTimeout(r, 120));
+  const pinSheet = window.document.getElementById('sheet').textContent || '';
+  check('the pin picker lists the customers',
+    pinSheet.indexOf('محمد العلي') > -1, pinSheet.slice(0, 80));
+
+  /* --- 12. a pinned customer wears the gold corner -------------- */
+  console.log('\npinned customer');
+  g('pinToggle(\'' + g('DD().customers[0].id') + '\')');
+  await new Promise((r) => setTimeout(r, 150));
+  window.go('customers', {});
+  await new Promise((r) => setTimeout(r, 150));
+  const ribbon = window.document.querySelector('.orow .orow-pin');
+  check('the pinned customer shows the corner ribbon',
+    !!ribbon, ribbon ? ribbon.outerHTML.slice(0, 80) : 'no ribbon');
+  check('the ribbon is a gold corner',
+    !!ribbon && /\.orow-pin::before\{[^}]*background:var\(--amber\)/.test(css)
+      && /\.orow-pin::before\{[^}]*clip-path:polygon/.test(css));
+  check('the ribbon carries the filled pushpin',
+    !!ribbon && !!ribbon.querySelector('svg path[fill="currentColor"]'));
+  check('the ribbon is clipped by the card radius',
+    /\.litem\.orow\{[^}]*overflow:hidden/.test(css));
+  const pinned = g('DD().customers[0].pinned');
+  check('the pin state is stored', pinned === true, String(pinned));
+  g('pinToggle(\'' + g('DD().customers[0].id') + '\')');
+
+  /* --- 13. the bell rides on the main screens -------------------- */
   console.log('\nmain screens');
-  for (const screen of ['home', 'customers', 'reports', 'settings']) {
+  for (const screen of ['home', 'reports', 'settings']) {
     window.go(screen, {});
     await new Promise((r) => setTimeout(r, 120));
     const h = window.document.querySelector('#app .hdr');
@@ -379,8 +425,12 @@ async function main() {
     check('the ' + screen + ' screen carries the bell in the trailing corner',
       !!b && b.parentElement.lastElementChild === b);
   }
+  window.go('customers', {});
+  await new Promise((r) => setTimeout(r, 120));
+  check('the customers screen keeps no bell',
+    !window.document.querySelector('#app .hdr .notif'));
 
-  /* --- 12. the frame scales with the interface scale --------------- */
+  /* --- 14. the frame scales with the interface scale --------------- */
   console.log('\nscaling');
   const Appearance = g('Appearance');
   Appearance.setScale(1.4);

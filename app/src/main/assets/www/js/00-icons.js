@@ -51,7 +51,7 @@ pdf:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><poly
 up:'<path d="M12 19V5"/><polyline points="5 12 12 5 19 12"/>',
 globe:'<circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18Z"/>',
 hist:'<path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><polyline points="12 7 12 12 15 14"/>',
-pin:'<path d="M12 17v5"/><path d="M9 3h6l1 7 3 2H5l3-2Z"/>',
+pin:'<path d="M12 17v5"/><path d="M9 3h6l1 7 3 2H5l3-2Z"/>',pinf:'<path fill="currentColor" stroke="none" d="M16 9V4h1a1 1 0 0 0 0-2H7a1 1 0 0 0 0 2h1v5a3 3 0 0 1-3 3v2h5.97v7l1 1 1-1v-7H19v-2a3 3 0 0 1-3-3Z"/>',
 store:'<path d="M4 10 5.5 4h13L20 10"/><path d="M4 10a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0"/><path d="M5 12v8h14v-8"/><path d="M9 20v-5h6v5"/>',
 wa:'<path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.7-1.2A9 9 0 1 0 12 3Z"/><path d="M9 9.5c0 4 5.5 6.5 6.5 6l.5-1.5-2-1-1 .7c-1-.5-1.7-1.2-2.2-2.2l.7-1-1-2Z"/>',
 sms:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>',

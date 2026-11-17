@@ -4,7 +4,7 @@
   "version": "3.0.0",
   "build": 300,
   "channel": "stable",
-  "generatedAt": "2026-11-17T20:52:21.224Z",
+  "generatedAt": "2026-11-17T21:09:37.086Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -13,8 +13,8 @@
       "size": 821
     },
     "css/components.css": {
-      "sha256": "e68935ebda1d921b1cedad3d3a8002df4e85d5f615671578048984c05515ef74",
-      "size": 19234
+      "sha256": "2413003442cafa83ace00e0ba0545fc5758c62548cb07d261b81ecfce12b7865",
+      "size": 19941
     },
     "css/layout.css": {
       "sha256": "fbc49090963b4423c251a3a82d079fd05b703985bbb94de1db822ad8908a47e2",
@@ -53,16 +53,16 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "0eb1f66769627fb86c145cc1577099d8e7810621bf952a9fd2f1467fae2224d1",
+      "sha256": "f145f531cda0922890cc01397f34b558ebf945dea2cbb0c7ae11680c913df44e",
       "size": 6225
     },
     "js/00-icons.js": {
-      "sha256": "8a60cc7caaab5ec57f45fcbb609ffcf86d6cca7c719db6b9b7ad56530c7233fd",
-      "size": 9057
+      "sha256": "d6656f1dd3d5f1305faf13c9584190dfe2d83988dac7a7ca01a17ea3e34bfac6",
+      "size": 9209
     },
     "js/01-i18n.js": {
-      "sha256": "c0951c43779ee0cd7753b13d119731830077a25a4445a97b91d14186be279094",
-      "size": 35867
+      "sha256": "a30759ea7b52254c100e2ed0ed849e696bd0f43729b40841031a1a8916987f04",
+      "size": 36195
     },
     "js/02-security.js": {
       "sha256": "1ac82c7a47712c118ef116d751114058f9805c022b97eed111c50c9d6657c71b",
@@ -109,8 +109,8 @@
       "size": 3024
     },
     "js/21-customers.js": {
-      "sha256": "d0b704c4a67410017cf88e46d2548033d9f0e8d0abbc39d44fae87c8814495bb",
-      "size": 11426
+      "sha256": "8decb368ad57f9b91378788b2a28844bbac37739dc02bead6ef4173744acafcb",
+      "size": 13565
     },
     "js/22-tx.js": {
       "sha256": "33372fb76ac002640f5020f56b875f8334460323449650136331b1d66113dfe7",
@@ -137,8 +137,8 @@
       "size": 2979
     },
     "js/31-screen-customers.js": {
-      "sha256": "39e9b4651c98cc0220c70535a65a7a14b6a9ff0efed791a6b5b99d752fb32d75",
-      "size": 5903
+      "sha256": "e9cb381ba4a212b7facdbbba21e53b1e6a628cd43970ea5a7368b92124d34cf1",
+      "size": 5841
     },
     "js/32-screen-reports.js": {
       "sha256": "2416b7982fa37a1cbf9fc869c361f7b96194dcb8ca14782da7427eea15ee396d",

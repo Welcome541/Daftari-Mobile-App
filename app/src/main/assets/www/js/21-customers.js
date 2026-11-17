@@ -42,7 +42,8 @@ function custRow(c,showPhone){
   ?'<div class="orow-meta">'+ic(op.k==='pay'?'banknote':'receipt')+'<span class="tx">'+esc(op.label)+'</span><span class="sep">•</span>'+timeStr(op.ts)+'</div>'
   :'<div class="orow-meta">'+ic('clock')+'<span class="tx">'+esc(t('noOps'))+'</span></div>';
  return '<div class="card litem orow'+(isSel?' sel':'')+'" '+(sel?'onclick="cselToggle(\''+c.id+'\')"':'onclick="clOpen(\''+c.id+'\')" onpointerdown="clDownP(event,\''+c.id+'\')" onpointerup="clUpC()" onpointerleave="clUpC()" ontouchstart="clDownT(event,\''+c.id+'\')" ontouchend="clUpC()" ontouchmove="clMoveC(event)" oncontextmenu="return false"')+' role="button" tabindex="0">'+box+
- avat(c.name,'var(--row-av)')+'<div class="orow-mid"><div class="orow-name"><span>'+esc(c.name)+'</span>'+(c.pinned?ic('pin',13).replace('class="ic"','class="ic" style="color:#c9a06c;flex:none"'):'')+'</div>'+meta+'</div>'+
+ avat(c.name,'var(--row-av)')+'<div class="orow-mid"><div class="orow-name"><span>'+esc(c.name)+'</span></div>'+meta+'</div>'
+ +(c.pinned?'<span class="orow-pin" aria-label="'+esc(t('pinned'))+'">'+ic('pinf',18)+'</span>':'')+
  '<div class="orow-side">'+amt+'</div></div>';
 }
 let clKey='';
@@ -78,11 +79,11 @@ function custSelBar(){const one=ui.csel.ids.length===1;const c=one?cust(ui.csel.
  +(one?B('cselStop()','archive','',null,t('stopC')):'')
  +B('cselDelete()','trash','','btn-red',t('del'))}
 function cFCount(){const f=ui.f;return (f.sort&&f.sort!=='recent'?1:0)}
-function custFilterBtn(){const n=cFCount();
- /* The filter is a three-dot icon button - the same mark the rest of
-    the app uses for "more" - and it keeps its count on a badge. */
- return '<button class="hbtn" id="cfbtn" style="height:46px;width:46px;padding:0;justify-content:center;position:relative" aria-label="'+esc(t('filter'))+'" onclick="openCustFilter()">'+ic('dots',19)+(n?'<span class="notif-badge"><span class="num">'+n+'</span></span>':'')+'</button>'}
-function refreshCFilterBtn(){const b=document.getElementById('cfbtn');if(b)b.outerHTML=custFilterBtn()}
+/* The three-dot button opens the customers menu: pin a customer, or
+   sort the list. It keeps the count badge when a sort is active. */
+function custMenuBtn(){const n=cFCount();
+ return '<button class="hbtn" id="cfbtn" style="height:46px;width:46px;padding:0;justify-content:center;position:relative" aria-label="'+esc(t('custMenu'))+'" onclick="openCustListMenu()">'+ic('dots',19)+(n?'<span class="notif-badge"><span class="num">'+n+'</span></span>':'')+'</button>'}
+function refreshCustMenuBtn(){const b=document.getElementById('cfbtn');if(b)b.outerHTML=custMenuBtn()}
 function fChips(){const f=ui.f,out=[];
  if(f.status==='owed')out.push(['owed',t('owedF')]);if(f.status==='none')out.push(['none',t('noDebtF')]);
  if(!out.length)return '';
@@ -92,14 +93,36 @@ function setQuick(k){ui.f.status=k;ui.cmax=60;render()}
 function openCustNavMenu(){openSheet('<div class="row" style="margin-bottom:12px"><h3 style="margin:0">'+t('menu')+'</h3><span class="sp"></span><button class="hbtn" onclick="closeSheet()">'+ic('x',17)+'</button></div>'
 +'<button class="srow" onclick="closeSheet();ui.arch=true;ui.archQ=\'\';render()"><span class="sic2">'+ic('archive',19)+'</span><span class="sp" style="text-align:start"><span class="t">'+t('archListT')+'</span></span>'+ic('fwd',17)+'</button>'
 +'<button class="srow" onclick="closeSheet();openPaper()"><span class="sic2">'+ic('cam',19)+'</span><span class="sp" style="text-align:start"><span class="t">'+t('paperGo')+'</span></span>'+ic('fwd',17)+'</button>')}
-function openCustFilter(){renderCustSheet();document.getElementById('sheetWrap').classList.add('open')}
+/* The customers menu - what the three-dot button opens. */
+function openCustListMenu(){
+ openSheet('<div class="row" style="margin-bottom:12px"><h3 style="margin:0">'+t('custMenu')+'</h3><span class="sp"></span>'
+ +'<button class="hbtn" onclick="closeSheet()" aria-label="'+esc(t('close'))+'">'+ic('x',17)+'</button></div>'
+ +'<button class="srow" onclick="closeSheet();openCustPinSheet()"><span class="sic2" style="background:var(--amber-bg);color:var(--amber)">'+ic('pin',19)+'</span>'
+ +'<span class="sp" style="text-align:start"><span class="t">'+t('pinCust')+'</span><span class="d">'+t('pinPickHint')+'</span></span>'+ic('fwd',17)+'</button>'
+ +'<button class="srow" onclick="closeSheet();openCustSort()"><span class="sic2">'+ic('sliders',19)+'</span>'
+ +'<span class="sp" style="text-align:start"><span class="t">'+t('sortBy')+'</span></span>'+ic('fwd',17)+'</button>');
+}
+/* Pick a customer to pin - the pinned one wears the gold corner. */
+function openCustPinSheet(){
+ const cs=DD().customers.filter(c=>!c.archived).sort((a,b)=>String(a.name).localeCompare(String(b.name),'ar'));
+ openSheet('<div class="row" style="margin-bottom:12px"><h3 style="margin:0">'+t('pinCust')+'</h3><span class="sp"></span>'
+ +'<button class="hbtn" onclick="closeSheet()" aria-label="'+esc(t('close'))+'">'+ic('x',17)+'</button></div>'
+ +'<div class="muted" style="font-size:12.5px;margin-bottom:12px;line-height:1.8">'+t('pinPickHint')+'</div>'
+ +(cs.length?cs.map(c=>'<button class="srow" onclick="pinToggle(\''+c.id+'\')">'+avat(c.name,44)
+   +'<span class="sp" style="text-align:start"><span class="t">'+esc(c.name)+'</span>'
+   +'<span class="d">'+esc(c.pinned?t('pinned'):t('pinU'))+'</span></span>'
+   +(c.pinned?'<span class="sic2" style="background:var(--amber-bg);color:var(--amber)">'+ic('pin',19)+'</span>':ic('fwd',17))+'</button>').join('')
+  :'<div class="muted" style="text-align:center;padding:26px 0">'+esc(t('noCustomers'))+'</div>'));
+}
+function pinToggle(id){const c=cust(id);if(!c)return;c.pinned=!c.pinned;save();render();closeSheet();toastMsg((c.pinned?t('pinAct'):t('unpinAct'))+' ✓')}
+function openCustSort(){renderCustSheet();document.getElementById('sheetWrap').classList.add('open')}
 function custCounts(){const cs=DD().customers.filter(c=>!c.archived);const cnt={all:cs.length,open:0,part:0,paid:0};
  cs.forEach(c=>{const o=custOpen(c.id),p=custPaid(c.id);if(o>0){cnt.open++;if(p>0)cnt.part++}else if(custPurch(c.id)>0)cnt.paid++});return cnt}
 function renderCustSheet(){const f=ui.f;const cs=DD().customers.filter(c=>!c.archived);
  const segs=(cur,items,fn)=>'<div class="seg">'+items.map(k=>'<button class="'+(cur===k[0]?'on':'')+'" onclick="'+fn+'(\''+k[0]+'\')">'+k[1]+'</button>').join('')+'</div>';
  const chip=(on,k,lb)=>'<button class="chip" style="border:1px solid var(--line);'+(on?'background:var(--navy);color:#fff;font-weight:700':'background:var(--card)')+';padding:8px 12px" onclick="toggleFLim(\''+k+'\')">'+lb+'</button>';
  const n=filteredCustomers(true).length;
- document.getElementById('sheet').innerHTML='<div class="grab"></div><div class="row" style="margin-bottom:12px"><h3 style="margin:0">'+t('filter')+'</h3><span class="sp"></span><button class="hbtn" onclick="closeSheet()">'+ic('x',17)+'</button></div>'
+ document.getElementById('sheet').innerHTML='<div class="grab"></div><div class="row" style="margin-bottom:12px"><h3 style="margin:0">'+t('sortBy')+'</h3><span class="sp"></span><button class="hbtn" onclick="closeSheet()" aria-label="'+esc(t('close'))+'">'+ic('x',17)+'</button></div>'
 
 
  +'<div class="lb" style="margin:0 0 7px">'+t('sort')+'</div>'+segs(f.sort,[['recent',t('sRecent')],['debt',t('sDebt')],['low',t('sortLowF')],['name',t('sortNameF')]],'setCSo')
@@ -107,4 +130,4 @@ function renderCustSheet(){const f=ui.f;const cs=DD().customers.filter(c=>!c.arc
 function setCSt(k){ui.f.status=k;ui.cmax=60;render();renderCustSheet()}
 function toggleFLim(k){ui.f[k]=!ui.f[k];ui.cmax=60;render();renderCustSheet()}
 function setCSo(k){ui.f.sort=k;ui.cmax=60;render();renderCustSheet()}
-window.refreshList=keep=>{if(!keep){render();return}const el=document.getElementById('clist2');if(el)el.innerHTML=custListBody();refreshCFilterBtn()};
+window.refreshList=keep=>{if(!keep){render();return}const el=document.getElementById('clist2');if(el)el.innerHTML=custListBody();refreshCustMenuBtn()};
