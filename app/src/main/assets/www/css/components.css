@@ -51,6 +51,43 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
 .list{display:flex;flex-direction:column;gap:calc(11px * var(--s))}
 .litem{display:flex;align-items:center;gap:calc(12px * var(--s));padding:calc(13px * var(--s)) calc(14px * var(--s));cursor:pointer;user-select:none;-webkit-user-select:none;transition:transform .08s, box-shadow .12s}
 .litem.sel{box-shadow:0 0 0 2px var(--navy)}
+
+/* ---------------------------------------------------------------------
+ * Operation row frame
+ * ---------------------------------------------------------------------
+ * Sized from the reference canvas - see the "Operation row frame"
+ * block in tokens.css for the measured values.
+ *
+ * The row is one flex line:
+ *
+ *   [selection box] [avatar] [name + meta] [side column]
+ *
+ * The side column is a fixed 300u-wide band that holds the vertical
+ * rule and the amount, so the rule always lands at the same offset
+ * from the inline-end edge no matter how long the amount is.
+ * ------------------------------------------------------------------- */
+.litem.orow{display:flex;align-items:center;gap:0;min-height:var(--row-h);padding-block:var(--row-pady);padding-inline:var(--row-padx) 0;border-radius:var(--row-r)}
+.orow .av{flex:none;margin-inline-end:var(--row-gapx)}
+.orow .orow-sel{flex:none;margin-inline-end:var(--row-gapx)}
+.orow .orow-mid{flex:1 1 auto;min-width:0}
+.orow .orow-side{flex:0 0 var(--row-side-w);position:relative;display:flex;align-items:center;justify-content:flex-end;padding-inline-end:var(--row-side-p);min-width:0}
+.orow .orow-side::before{content:'';position:absolute;inset-inline-start:0;top:50%;transform:translateY(-50%);width:var(--row-div-w);height:var(--row-div-h);border-radius:999px;background:var(--line2)}
+.orow .orow-name{display:flex;align-items:center;gap:calc(8 * var(--u) * var(--s));font-weight:800;font-size:var(--row-name);line-height:1.15;color:var(--ink);min-width:0}
+.orow .orow-name > span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.orow .orow-name .chip{flex:none;font-size:calc(10.5px * var(--s));padding:calc(2px * var(--s)) calc(8px * var(--s))}
+.orow .orow-meta{display:flex;align-items:center;gap:calc(10 * var(--u) * var(--s));margin-top:calc(4 * var(--u) * var(--s));font-size:var(--row-meta);line-height:1.3;color:var(--muted);min-width:0;overflow:hidden}
+.orow .orow-meta > *{flex:none}
+.orow .orow-meta .tx{flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.orow .orow-meta .ic{width:var(--row-ic);height:var(--row-ic)}
+.orow .orow-meta .sep{opacity:.5}
+.orow .orow-meta .chip{font-size:calc(10.5px * var(--s));padding:calc(2px * var(--s)) calc(8px * var(--s))}
+.orow .orow-amt{display:flex;align-items:baseline;gap:calc(6 * var(--u) * var(--s));font-weight:800;font-size:var(--row-amt);line-height:1;white-space:nowrap}
+.orow .orow-amt .num{font-size:var(--row-amt)}
+.orow .orow-amt .cur{font-size:var(--row-cur);font-weight:700}
+.orow .orow-amt.red{color:var(--red)}
+.orow .orow-amt.green{color:var(--green)}
+.orow .orow-amt.gray{color:var(--muted)}
+.list.ops{gap:var(--row-gap)}
 .amt{font-weight:800;font-size:calc(15.5px * var(--s))}
 .amt.red{color:var(--red)}
 .amt.green{color:var(--green)}

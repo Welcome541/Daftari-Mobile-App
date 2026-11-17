@@ -7,7 +7,7 @@
   "scripts": {
     "build": "node build.mjs",
     "pack": "node tools/pack-update.mjs",
-    "check": "node tools/check-css.mjs && node tools/check-css-parity.mjs && node tools/check-bundle.mjs && node tools/check-update.mjs",
+    "check": "node tools/check-css.mjs && node tools/check-css-parity.mjs && node tools/check-bundle.mjs && node tools/check-update.mjs && node tools/check-rowframe.mjs",
     "check:css": "node tools/check-css.mjs",
     "check:parity": "node tools/check-css-parity.mjs",
     "check:bundle": "node tools/check-bundle.mjs",
@@ -16,7 +16,8 @@
     "check:all": "npm run check && npm run check:java",
     "map": "node tools/map-ui.mjs",
     "maps": "node tools/map-ui.mjs && node tools/render-maps.mjs",
-    "check:icons": "node tools/check-icons.mjs"
+    "check:icons": "node tools/check-icons.mjs",
+    "check:frame": "node tools/check-rowframe.mjs"
   },
   "engines": {
     "node": ">=18"

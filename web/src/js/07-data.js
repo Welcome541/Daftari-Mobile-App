@@ -11,10 +11,13 @@ const curAcc=()=>db.accounts.find(a=>a.id===db.active)||db.accounts[0];
 const DD=()=>db.data[db.active];
 const cust=id=>DD().customers.find(c=>c.id===id);
 let _IX=null;
-function ix(){if(_IX)return _IX;const paidByInv={},open={},paid={},last={};
+function ix(){if(_IX)return _IX;const paidByInv={},open={},paid={},last={},bought={};
  DD().payments.forEach(p=>{if(p.arch)return;paid[p.cust]=(paid[p.cust]||0)+p.amount;last[p.cust]=Math.max(last[p.cust]||0,p.ts);(p.alloc||[]).forEach(a=>{paidByInv[a.inv]=(paidByInv[a.inv]||0)+a.amt})});
- DD().invoices.forEach(i=>{if(i.arch)return;open[i.cust]=(open[i.cust]||0)+Math.max(0,i.amount-(paidByInv[i.id]||0));last[i.cust]=Math.max(last[i.cust]||0,i.ts)});
- _IX={paidByInv,open,paid,last};return _IX}
+ DD().invoices.forEach(i=>{if(i.arch)return;bought[i.cust]=(bought[i.cust]||0)+i.amount;open[i.cust]=(open[i.cust]||0)+Math.max(0,i.amount-(paidByInv[i.id]||0));last[i.cust]=Math.max(last[i.cust]||0,i.ts)});
+ /* Credit: what a customer paid beyond what they bought - we owe it
+    back, so it is shown in green and never as a plain zero. */
+ const credit={};for(const c in paid){const cr=(paid[c]||0)-(bought[c]||0);if(cr>0)credit[c]=cr}
+ _IX={paidByInv,open,paid,last,bought,credit};return _IX}
 const _LL={};
 function libLoad(src){if(_LL[src])return _LL[src];_LL[src]=new Promise((res,rej)=>{const G={'lib/xlsx.full.min.js':()=>window.XLSX,'lib/tesseract.min.js':()=>window.Tesseract,'lib/vosk-browser.js':()=>(window.Vosk||window.createModel),'lib/qrcode.js':()=>window.QRCode,'lib/jsQR.js':()=>window.jsQR,'lib/chart.umd.js':()=>window.Chart};const g=G[src];if(g&&g()){res();return}const sc=document.createElement('script');sc.src=src;sc.onload=res;sc.onerror=()=>{(g&&g())?res():rej(new Error('lib:'+src))};document.head.appendChild(sc)});return _LL[src]}
 window.busy=on=>{let o=document.getElementById('busyOv');if(on&&!o){o=document.createElement('div');o.id='busyOv';o.style.cssText='position:fixed;inset:0;z-index:99;display:flex;align-items:center;justify-content:center;background:rgba(10,20,35,.35)';o.innerHTML='<span style="width:36px;height:36px;border:4px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:rotB .8s linear infinite;display:inline-block"></span>';document.body.appendChild(o)}else if(!on&&o){o.remove()}};
@@ -36,6 +39,7 @@ const invRem=i=>Math.max(0,i.amount-invPaid(i.id));
 const invStatus=i=>{const p=invPaid(i.id);return p<=0?'open':(p>=i.amount?'paid':'part')};
 const custInvoices=id=>DD().invoices.filter(i=>i.cust===id).sort((a,b)=>b.ts-a.ts);
 const custOpen=id=>ix().open[id]||0; // signed: negative = credit for customer
+const custCredit=id=>ix().credit[id]||0; // paid beyond the purchases - we owe it back
 const openTotal=()=>DD().customers.reduce((s,c)=>s+Math.max(0,custOpen(c.id)),0);
 const custPaid=id=>ix().paid[id]||0;
 const custPurch=id=>custInvoices(id).reduce((s,i)=>s+i.amount,0);

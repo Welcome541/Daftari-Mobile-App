@@ -10,16 +10,51 @@
 function seed(){
  return {meta:{schemaVersion:2},lang:((navigator.language||'').slice(0,2).toLowerCase()==='ar'?'ar':'en'),active:'a1',accounts:[{id:'a1',name:'بقالة الندى',type:'grocery',cur:'ر.س',minorUnit:2}],data:{a1:{customers:[],invoices:[],payments:[],seq:500}}};
 }
+/* Demo ledger - the three rows of the reference design lead the customer
+   list, with the exact balances, kinds and clock times of the drawing:
+     محمد العلي   فاتورة 200   اليوم 05:33
+     سارة أحمد   سداد نقدًا 300 (دائن 150)  أمس 01:40
+     نور الهادي   فاتورة 80   قبل يومين 22:22
+   The remaining customers carry older activity, so the list reads
+   newest-first exactly like the reference. */
 function demoFixtures(){
  const c=(id,nm,ph,since,pin)=>({id,name:nm,phone:ph,since,archived:false,pinned:!!pin});
- const cs=[c('c1','أبو خالد','050 456 7291','2023',true),c('c2','محمد العتيبي','055 210 8843','2024'),c('c3','سارة أحمد','053 246 8101','2024'),c('c4','نور الهاجري','056 135 7924','2025'),c('c5','حسن القحطاني','054 987 6543','2024')];
- const now=Date.now();
+ const cs=[c('c1','محمد العلي','050 456 7291','2024'),c('c2','سارة أحمد','053 246 8101','2024'),c('c3','نور الهادي','056 135 7924','2025'),
+  c('c4','أبو خالد','050 912 3344','2023'),c('c5','حسن القحطاني','054 987 6543','2024'),c('c6','محمد العتيبي','055 210 8843','2024')];
+ const at=(day,h,m)=>{const d=new Date();d.setDate(d.getDate()-day);d.setHours(h,m,0,0);return d.getTime()};
  const iv=(id,code,cu,ts,amount,note)=>({id,code,cust:cu,ts,amount,note});
- const is=[iv('i1','A489','c1',now-50*MIN,70,'رز · زيت · حليب'),iv('i2','A488','c1',now-26*H,320,'سكر · شاي · دقيق'),iv('i3','A487','c1',now-3*D,500,'أرز · سمن · معجون طماطم'),iv('i4','A486','c1',now-30*D,460,'زيت · مكرونة · عدس'),iv('i5','A490','c2',now-45*MIN,200,'مواد تموينية'),iv('i6','A485','c3',now-4*H,150,'خضروات وفواكه'),iv('i7','A482','c5',now-2*D-3*H,300,'رز · زيت · حليب'),iv('i8','A475','c5',now-2*D,150,'خبز · عصائر')];
+ const is=[iv('i1','A500','c1',at(0,5,33),200,'مواد تموينية'),
+  iv('i2','A499','c2',at(1,0,30),150,'خضروات وفواكه'),
+  iv('i3','A498','c3',at(2,22,22),80,'خبز وحليب'),
+  iv('i4','A497','c4',at(3,9,15),320,'رز وزيت'),
+  iv('i5','A496','c5',at(4,17,5),460,'دقيق وسكر'),
+  iv('i6','A495','c6',at(5,12,45),150,'عصائر وأجبان')];
  const py=(id,cu,ts,amount,method,alloc)=>({id,cust:cu,ts,amount,method,alloc});
- const ps=[py('p1','c1',now-20*MIN,30,'cash',[{inv:'i1',amt:30}]),py('p2','c1',now-3*D+2*H,500,'cash',[{inv:'i3',amt:500}]),py('p3','c1',now-29*D,460,'cash',[{inv:'i4',amt:460}]),py('p4','c3',now-1*H,150,'transfer',[{inv:'i6',amt:150}]),py('p5','c5',now-1*D,50,'cash',[{inv:'i8',amt:50}])];
+ const ps=[py('p1','c2',at(1,1,40),300,'cash',[{inv:'i2',amt:150}]),
+  py('p2','c4',at(3,10,0),120,'cash',[{inv:'i4',amt:120}]),
+  py('p3','c5',at(4,18,0),460,'transfer',[{inv:'i5',amt:460}])];
  is.forEach(i=>i.amount*=100);ps.forEach(pp=>{pp.amount*=100;pp.alloc.forEach(a=>a.amt*=100)});
- return {meta:{schemaVersion:2},lang:((navigator.language||'').slice(0,2).toLowerCase()==='ar'?'ar':'en'),active:'a1',accounts:[{id:'a1',name:'بقالة الندى',type:'grocery',cur:'ر.س',minorUnit:2}],data:{a1:{customers:cs,invoices:is,payments:ps,seq:491}}};
+ return {meta:{schemaVersion:2},lang:((navigator.language||'').slice(0,2).toLowerCase()==='ar'?'ar':'en'),active:'a1',accounts:[{id:'a1',name:'بقالة الندى',type:'grocery',cur:'ر.س',minorUnit:2}],data:{a1:{customers:cs,invoices:is,payments:ps,seq:501}}};
+}
+/* Replace the ledger with the demo one (or with an empty one). The
+   language choice is kept - only the data changes. */
+function applyDemo(){
+ const lang=db&&db.lang;
+ db=migrate(demoFixtures());
+ if(lang)db.lang=lang;
+ save();closeSheet();stack=[{s:'home'}];render();toastMsg(t('demoLoaded'));
+}
+function clearDemo(){
+ const lang=db&&db.lang;
+ db=migrate(null);
+ if(lang)db.lang=lang;
+ save();closeSheet();stack=[{s:'home'}];render();toastMsg(t('demoCleared'));
+}
+function openDemoSheet(){
+ openSheet('<div class="grab"></div><div class="row" style="margin-bottom:12px"><h3 style="margin:0">'+t('demoT')+'</h3><span class="sp"></span><button class="hbtn" onclick="closeSheet()">'+ic('x',17)+'</button></div>'
+ +'<div class="muted" style="font-size:13px;line-height:1.9">'+esc(t('demoD'))+'</div>'
+ +'<button class="btn btn-navy" style="margin-top:14px" onclick="applyDemo()">'+ic('zap',17)+t('demoLoad')+'</button>'
+ +'<button class="btn btn-line-red" style="margin-top:10px" onclick="clearDemo()">'+ic('trash',17)+t('demoClear')+'</button>');
 }
 const MIGRATIONS=[{to:2,run(x){for(const aid in x.data){const d=x.data[aid];(d.invoices||[]).forEach(i=>{i.amount=Math.round((Number(i.amount)||0)*100);(i.edits||[]).forEach(e=>{e.from=Math.round((Number(e.from)||0)*100);e.to=Math.round((Number(e.to)||0)*100)})});(d.payments||[]).forEach(pp=>{pp.amount=Math.round((Number(pp.amount)||0)*100);(pp.alloc||[]).forEach(a=>a.amt=Math.round((Number(a.amt)||0)*100))});(d.customers||[]).forEach(c=>{if(c.limit)c.limit=Math.round(Number(c.limit)*100)})}(x.accounts||[]).forEach(a=>a.minorUnit=a.minorUnit||2);return x}}];
 function migrate(x){

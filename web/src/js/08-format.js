@@ -20,9 +20,14 @@ const rel=ts=>{const df=Date.now()-ts;if(df<90e3)return t('justNow');if(df<H)ret
 const initials=n=>{const w=n.trim().split(/\s+/);return w.length>1?w[0][0]+'. '+w[w.length-1][0]:n.slice(0,2)};
 const AVC=['#1d4ed8','#0e6b47','#5b21b6','#9f1239','#8a5a12','#0f6472','#a71949','#4b5563'];
 const avColor=n=>{let h=7;for(let k=0;k<n.length;k++)h=(h*31+n.charCodeAt(k))>>>0;const a=AVC[h%AVC.length];let b=AVC[(h>>>4)%AVC.length];if(b===a)b=AVC[(h>>>4)%AVC.length^1];return 'linear-gradient(135deg,'+a+','+b+')';};
+/* `size` is either a number (pixels) or a CSS length, so a row that
+   follows the reference frame can size its avatar from a token
+   (e.g. 'var(--row-av)') instead of a hard-coded pixel value. */
 const avat=(name,size)=>{const c=(typeof db!=='undefined'&&db&&db.data)?(DD().customers.find(x=>x.name===name)||null):null;
- if(c&&c.photo)return '<span class="av" style="width:'+size+'px;height:'+size+'px;padding:0"><img src="'+c.photo+'" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></span>';
- return '<span class="av" style="width:'+size+'px;height:'+size+'px;font-size:'+Math.round(size*0.34)+'px;background:'+avColor(name)+'">'+esc(initials(name))+'</span>'};
+ const len=typeof size==='number'?size+'px':size;
+ const fs=typeof size==='number'?Math.round(size*0.34)+'px':'calc('+size+' * 0.34)';
+ if(c&&c.photo)return '<span class="av" style="width:'+len+';height:'+len+';padding:0"><img src="'+c.photo+'" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></span>';
+ return '<span class="av" style="width:'+len+';height:'+len+';font-size:'+fs+';background:'+avColor(name)+'">'+esc(initials(name))+'</span>'};
 const esc=s=>String(s).replace(/[<>&"]/g,m=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[m]));
 const STLBL={open:()=>t('open'),part:()=>t('part'),paid:()=>t('paid')};
 const badge=st=>'<span class="chip b-'+st+'"><span class="dot"></span>'+STLBL[st]()+'</span>';

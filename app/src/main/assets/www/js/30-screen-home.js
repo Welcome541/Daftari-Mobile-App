@@ -18,6 +18,6 @@ const S_home=()=>{
  '<button class="hbtn" style="height:46px;position:relative" onclick="openHomeFilter()" aria-label="'+t('filter')+'">'+ic('sliders',18)+hfBadge()+'</button>'+
  '</div>'
  +'<div class="pad" style="margin:12px 20px 4px;font-weight:800;font-size:16.5px;display:flex;align-items:center;gap:8px">'+t('lastOps')+' <span class="chip" style="background:#efece6;color:var(--soft)"><span class="num" id="txn">'+n+'</span></span></div>'
- +'<div class="pad list" id="txlist" style="padding-bottom:14px">'+feedHtml()+'</div>';
+ +'<div class="pad list ops" id="txlist" style="padding-bottom:14px">'+feedHtml()+'</div>';
 };
 function selBarHtml(){return '<button class="btn btn-line selin" style="flex:1.1;font-size:14.5px;white-space:nowrap" onclick="selExit()">'+ic('x',16)+t('cancel')+'</button><button class="btn btn-soft selin" style="flex:1.3;font-size:14.5px;white-space:nowrap" onclick="selAllVisible()">'+ic('checkc',16)+t('selAllS')+'</button><button class="btn btn-soft selin" style="flex:.9" onclick="selShare()" aria-label="'+t('share')+'">'+ic('share',18)+'</button><button class="btn btn-soft selin" style="flex:.9" onclick="selXlsx()" aria-label="'+t('repXlsx')+'">'+ic('excel',18)+'</button><button class="btn btn-red selin" style="flex:.9" onclick="selDelete()" aria-label="'+t('del')+'">'+ic('trash',18)+'</button>'}

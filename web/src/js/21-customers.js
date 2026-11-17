@@ -12,17 +12,38 @@ function filteredCustomers(all){const cq=normAr(ui.cq||'');const qd=pdig(ui.cq);
  if(cq)list=list.filter(c=>normAr(c.name).includes(cq)||(qd.length>=3&&pdig(c.phone).endsWith(qd)));
  if(f.status==='owed')list=list.filter(c=>custOpen(c.id)>0);
  if(f.status==='none')list=list.filter(c=>custOpen(c.id)<=0);
- list.sort((a,b)=>(!!b.pinned-!!a.pinned)||(f.sort==='name'?String(a.name).localeCompare(String(b.name),'ar'):f.sort==='debt'?(custOpen(a.id)-custOpen(b.id)):f.sort==='low'?(custOpen(b.id)-custOpen(a.id)):(lastAct(a.id)-lastAct(b.id))));
+ /* "آخر نشاط" must show the most recent activity first. */
+ list.sort((a,b)=>(!!b.pinned-!!a.pinned)||(f.sort==='name'?String(a.name).localeCompare(String(b.name),'ar'):f.sort==='debt'?(custOpen(a.id)-custOpen(b.id)):f.sort==='low'?(custOpen(b.id)-custOpen(a.id)):(lastAct(b.id)-lastAct(a.id))));
  return list;
 }
+/* The most recent operation of a customer - the reference row shows its
+   kind and the clock time, e.g. "فاتورة · 5:33 ص". */
+function lastOpOf(id){
+ const inv=DD().invoices.filter(i=>i.cust===id&&!i.arch).sort((a,b)=>b.ts-a.ts)[0];
+ const pay=DD().payments.filter(p=>p.cust===id&&!p.arch).sort((a,b)=>b.ts-a.ts)[0];
+ if(inv&&pay)return inv.ts>=pay.ts?{k:'d',ts:inv.ts,label:t('invoice')}:{k:'p',ts:pay.ts,label:t('pay')+' '+t(pay.method||'cash')};
+ if(inv)return {k:'d',ts:inv.ts,label:t('invoice')};
+ if(pay)return {k:'p',ts:pay.ts,label:t('pay')+' '+t(pay.method||'cash')};
+ return null;
+}
+/* The row frame follows the reference canvas - see the "Operation row
+   frame" block in css/tokens.css for the measured geometry. */
 function custRow(c,showPhone){
- const open=custOpen(c.id);
- const amt=open>0?'<span class="amt red"><span class="num">'+fmt(open)+'</span> '+CUR()+'</span>':'<span class="amt gray"><span class="num">0.00</span> '+CUR()+'</span>';
+ const open=custOpen(c.id),credit=custCredit(c.id);
+ const amt=open>0
+  ?'<span class="orow-amt red"><span class="num">'+fmt(open)+'</span><span class="cur">'+CUR()+'</span></span>'
+  :credit>0
+  ?'<span class="orow-amt green"><span class="num">'+fmt(-credit)+'</span><span class="cur">'+CUR()+'</span></span>'
+  :'<span class="orow-amt gray"><span class="num">0.00</span><span class="cur">'+CUR()+'</span></span>';
  const sel=ui.csel&&ui.csel.on,isSel=sel&&ui.csel.ids.includes(c.id);
- const box=sel?'<span style="width:24px;height:24px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;border:2px solid '+(isSel?'var(--navy);background:var(--navy);color:#fff':'var(--line)')+'">'+(isSel?ic('check',13):'')+'</span>':'';
- return '<div class="card litem'+(isSel?' sel':'')+'" '+(sel?'onclick="cselToggle(\''+c.id+'\')"':'onclick="clOpen(\''+c.id+'\')" onpointerdown="clDownP(event,\''+c.id+'\')" onpointerup="clUpC()" onpointerleave="clUpC()" ontouchstart="clDownT(event,\''+c.id+'\')" ontouchend="clUpC()" ontouchmove="clMoveC(event)" oncontextmenu="return false"')+' role="button" tabindex="0">'+box+
- avat(c.name,46)+'<div class="sp"><div class="row" style="gap:6px"><b>'+esc(c.name)+'</b>'+(c.pinned?ic('pin',13).replace('class="ic"','class="ic" style="color:#c9a06c"'):'')+'</div>'+(showPhone&&c.phone?'<div class="muted num" style="font-size:12.5px">'+esc(c.phone)+'</div>':'')+'<div class="muted" style="font-size:12px">'+t('lastOp')+': '+lastOpTxt(lastAct(c.id))+'</div></div>'+
- '<div style="text-align:end">'+amt+'</div></div>';
+ const box=sel?'<span class="orow-sel" style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid '+(isSel?'var(--navy);background:var(--navy);color:#fff':'var(--line)')+'">'+(isSel?ic('check',13):'')+'</span>':'';
+ const op=lastOpOf(c.id);
+ const meta=op
+  ?'<div class="orow-meta">'+ic(op.k==='pay'?'banknote':'receipt')+'<span class="tx">'+esc(op.label)+'</span><span class="sep">•</span>'+timeStr(op.ts)+'</div>'
+  :'<div class="orow-meta">'+ic('clock')+'<span class="tx">'+esc(t('noOps'))+'</span></div>';
+ return '<div class="card litem orow'+(isSel?' sel':'')+'" '+(sel?'onclick="cselToggle(\''+c.id+'\')"':'onclick="clOpen(\''+c.id+'\')" onpointerdown="clDownP(event,\''+c.id+'\')" onpointerup="clUpC()" onpointerleave="clUpC()" ontouchstart="clDownT(event,\''+c.id+'\')" ontouchend="clUpC()" ontouchmove="clMoveC(event)" oncontextmenu="return false"')+' role="button" tabindex="0">'+box+
+ avat(c.name,'var(--row-av)')+'<div class="orow-mid"><div class="orow-name"><span>'+esc(c.name)+'</span>'+(c.pinned?ic('pin',13).replace('class="ic"','class="ic" style="color:#c9a06c;flex:none"'):'')+'</div>'+meta+'</div>'+
+ '<div class="orow-side">'+amt+'</div></div>';
 }
 let clKey='';
 const clLP={t:null,x:0,y:0};

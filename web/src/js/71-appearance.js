@@ -63,6 +63,22 @@ const Appearance = {
     if (!root) return;
     root.style.setProperty('--s', String(Appearance.scale));
     root.style.setProperty('--density', String(Appearance.density));
+    Appearance.measure();
+  },
+
+  /* The operation row frame is drawn on a 1080 px wide reference
+     canvas, so one reference pixel equals shell width / 1080 CSS
+     pixels. That ratio is published as --u and every row dimension
+     is calc(<reference px> * var(--u) * var(--s)).
+     The CSS declaration in tokens.css is the fallback; this keeps it
+     exact once the shell has been laid out. */
+  measure: function () {
+    const root = document.documentElement;
+    if (!root) return;
+    const shell = document.getElementById('phone');
+    const w = shell && shell.clientWidth ? shell.clientWidth : (window.innerWidth || 0);
+    if (!w) return;
+    root.style.setProperty('--u', (w / 1080) + 'px');
   },
 
   setScale: function (v) {
@@ -118,3 +134,20 @@ const Appearance = {
 /* Apply the stored dimensions immediately - before the first paint. */
 Appearance.load();
 Appearance.apply();
+
+/* Keep --u in step with the shell: rotation, split view, and the
+   desktop phone frame all change the available width. */
+if (typeof window !== 'undefined' && window.addEventListener) {
+  window.addEventListener('resize', function () { Appearance.measure(); });
+  window.addEventListener('orientationchange', function () { Appearance.measure(); });
+}
+if (typeof window !== 'undefined' && window.ResizeObserver) {
+  var _observeShell = function () {
+    var shell = document.getElementById('phone');
+    if (!shell) return;
+    Appearance.measure();
+    new window.ResizeObserver(function () { Appearance.measure(); }).observe(shell);
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _observeShell);
+  else _observeShell();
+}

@@ -101,6 +101,44 @@
   --gutter: calc(16px * var(--s));
   --tabbar-h: calc(68px + env(safe-area-inset-bottom));
   --safe-b: env(safe-area-inset-bottom);
+
+  /* ---------------------------------------------------------------
+   * 8. Operation row frame - measured from the reference canvas
+   * ---------------------------------------------------------------
+   * Every operation row (a customer balance row, a transaction feed
+   * row) is laid out on the 1080 x 472 design canvas that came with
+   * the brief. --u converts one reference pixel into CSS pixels:
+   *
+   *     --u = phone width / 1080
+   *
+   * so the frame keeps the proportions of the drawing at every width,
+   * and still follows the user's --s interface scale on top of it.
+   * js/71-appearance.js refines --u from the measured shell width; the
+   * declaration below is the CSS-only fallback.
+   *
+   * Measured from the canvas (all values in reference pixels):
+   *   card height 128 | gap 22 | radius 28 | avatar 101
+   *   avatar gap  60 | amount column 300 | amount inset 32
+   *   divider 3 x 96 | name 44 | meta 30 | amount 62 | currency 26
+   * --------------------------------------------------------------- */
+  --u: calc(min(100vw, 430px) / 1080);
+
+  --row-h:      calc(128 * var(--u) * var(--s));
+  --row-gap:    calc(22  * var(--u) * var(--s));
+  --row-r:      calc(28  * var(--u) * var(--s));
+  --row-av:     calc(101 * var(--u) * var(--s));
+  --row-gapx:   calc(60  * var(--u) * var(--s));
+  --row-pady:   calc(15  * var(--u) * var(--s));
+  --row-padx:   calc(20  * var(--u) * var(--s));
+  --row-side-w: calc(300 * var(--u) * var(--s));
+  --row-side-p: calc(32  * var(--u) * var(--s));
+  --row-div-w:  calc(3   * var(--u) * var(--s));
+  --row-div-h:  calc(96  * var(--u) * var(--s));
+  --row-name:   calc(44  * var(--u) * var(--s));
+  --row-meta:   calc(30  * var(--u) * var(--s));
+  --row-amt:    calc(62  * var(--u) * var(--s));
+  --row-cur:    calc(26  * var(--u) * var(--s));
+  --row-ic:     calc(41  * var(--u) * var(--s));
 }
 
 /* ---------------------------------------------------------------------

@@ -46,7 +46,7 @@ const S_settings=()=>{const cur=curAcc();const st=sec.enabled?'var(--green)':'va
  kv('var(--navy-bg)','var(--navy)','up',t('restoreT'),ic('fwd',16),'document.getElementById(\'bkFile\').click()')+
  '<input type="file" id="bkFile" accept=".json" style="display:none" onchange="Backup.pick(this)">'+
  '<div class="sep"></div>'+
- kv('var(--navy-bg)','var(--navy)','excel',t('exportAll'),ic('fwd',16),'exportAll()')+
+ kv('var(--navy-bg)','var(--navy)','excel',t('exportAll'),ic('fwd',16),'exportAll()')+ '<div class="sep"></div>'+ kv('var(--amber-bg)','var(--amber)','zap',t('demoT'),ic('fwd',16),'openDemoSheet()')+
   '<div class="sep"></div>'+
    '<div class="sep"></div>'+
   kv('var(--red-bg)','var(--red)','trash',t('reset'),ic('fwd',16),'reset()')+
