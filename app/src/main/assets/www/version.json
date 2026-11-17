@@ -4,7 +4,7 @@
   "version": "3.0.0",
   "build": 300,
   "channel": "stable",
-  "generatedAt": "2026-11-17T20:51:28.190Z",
+  "generatedAt": "2026-11-17T20:52:21.224Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -53,7 +53,7 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "63173744d52927e41f9e3312f61590af1d58040162d2524c0905b485fb8ba12d",
+      "sha256": "0eb1f66769627fb86c145cc1577099d8e7810621bf952a9fd2f1467fae2224d1",
       "size": 6225
     },
     "js/00-icons.js": {
