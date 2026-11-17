@@ -4,7 +4,7 @@
   "version": "3.0.0",
   "build": 300,
   "channel": "stable",
-  "generatedAt": "2026-11-17T23:13:38.241Z",
+  "generatedAt": "2026-11-17T23:22:43.588Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -13,8 +13,8 @@
       "size": 821
     },
     "css/components.css": {
-      "sha256": "0c5dd2df157c7dfcce365637372bac1ea31c886e7cb83ad5567ca6bd9323731f",
-      "size": 22705
+      "sha256": "3ed1fda4b57893d237e76acbc206e9fcd05c945232bbe6ccc47e3f82d8e0aa72",
+      "size": 23444
     },
     "css/layout.css": {
       "sha256": "fbc49090963b4423c251a3a82d079fd05b703985bbb94de1db822ad8908a47e2",
@@ -53,12 +53,12 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "aeb177eb0237e2162b756f4da5e361ff09cde46d65688e09f32857bcc2ad913b",
+      "sha256": "976e52cc20185d716d2da17ca9af6aefd06c337ddc7c8e8f08b38474823970df",
       "size": 6225
     },
     "js/00-icons.js": {
-      "sha256": "819c8d4994ece04c85a2b8fa7c9988ec7c2a98631965d2643258966413e23c43",
-      "size": 9354
+      "sha256": "3c874b8d8cb024a2d085a83abe064dc9a71e7d4cf08456dba0d60a53a375cc79",
+      "size": 9402
     },
     "js/01-i18n.js": {
       "sha256": "7f3e3c90e35853f8a09f89fc8aa17bb2e7e58f2df3b2f4d5469f0350faf96826",
@@ -125,16 +125,16 @@
       "size": 8498
     },
     "js/25-feed.js": {
-      "sha256": "46609466b58ca49091d6af36263193ba6e6a5fe0c54e50a974a796385672261d",
-      "size": 4690
+      "sha256": "6979a29828101cb077c2b03940580a4510ea4ad3c0cab5ee0b2a26f3eca45197",
+      "size": 5860
     },
     "js/26-notifications.js": {
       "sha256": "e8c2f015fbac20fad7bc6faa60bdf17b6df592b9a6bfb21ee0adcbb7a26c0234",
       "size": 2578
     },
     "js/30-screen-home.js": {
-      "sha256": "0a3bd4c0364b2f83fbe82d0b31470ab30b5742efc2250b906571a519122d21a3",
-      "size": 4110
+      "sha256": "8bb3398f51ed2fc7e57504b624c369e1a096718a6d9f9d618e190dab9ea0f4e6",
+      "size": 4107
     },
     "js/31-screen-customers.js": {
       "sha256": "6d0f85a1b6a5b3ff80c79f54424a85f1a01de130175d7924f3371fb98c26706b",

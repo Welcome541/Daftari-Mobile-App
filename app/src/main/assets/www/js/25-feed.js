@@ -22,11 +22,35 @@ function togglePay(){if(ui.tf.kind==='pay'){ui.tf={kind:'all',period:'today'}}el
 function dayLabel(ts){const d=new Date(ts),n0=new Date();const a=new Date(d);a.setHours(0,0,0,0);const b=new Date(n0);b.setHours(0,0,0,0);const diff=Math.round((b-a)/864e5);
  if(diff<=0)return t('today');if(diff===1)return t('yest');
  return d.toLocaleDateString(db.lang==='ar'?'ar':'en-GB',{weekday:'long'})+' · '+d.getDate()+'/'+(d.getMonth()+1)}
+function dayKey(ts){const d=new Date(ts);return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function selDay(dk){
+ const L=filteredTx();
+ const keys=L.filter(x=>dayKey(x.ts)===dk).map(x=>x.key);
+ if(!keys.length)return;
+ if(!ui.sel||!ui.sel.on){ui.sel={on:true,ids:keys.slice()};try{if(navigator.vibrate)navigator.vibrate(18)}catch(e){}render();return}
+ const all=keys.every(k=>ui.sel.ids.includes(k));
+ if(all) ui.sel.ids=ui.sel.ids.filter(k=>!keys.includes(k));
+ else keys.forEach(k=>{if(!ui.sel.ids.includes(k))ui.sel.ids.push(k)});
+ try{if(navigator.vibrate)navigator.vibrate(14)}catch(e){}
+ render();
+}
+function dayCheckHtml(dk,dl,first){
+ const L=filteredTx();
+ const keys=L.filter(x=>dayKey(x.ts)===dk).map(x=>x.key);
+ const sel=ui.sel&&ui.sel.on;
+ const n=keys.length, c=sel?keys.filter(k=>ui.sel.ids.includes(k)).length:0;
+ let cls='',inner='';
+ if(sel){
+  if(c===n&&n>0){cls=' on';inner=ic('checkb',11)}
+  else if(c>0&&c<n){cls=' partial';inner=ic('minus',11)}
+ }
+ return '<div class="daysep'+(first?' daysep-first':'')+'"><span>'+dl+'</span><button class="daycheck'+cls+'" onclick="selDay(\''+dk+'\')" aria-label="'+t('sel')+' · '+dl+'">'+inner+'</button></div>';
+}
 function feedHtml(){const L=filteredTx();
  if(!L.length){const any=DD().invoices.length+DD().payments.length;
  if(any&&ui.tf.period==='today')return '<div class="muted" style="text-align:center;padding:24px 16px">'+t('noToday')+'<div style="margin-top:10px"><button class="btn btn-line" style="width:auto;padding:10px 18px;font-size:13.5px" onclick="ui.tf={kind:\'all\',period:\'all\'};ui.txLimit=60;refreshHome()">'+t('showAll')+'</button></div></div>';
  return '<div class="muted" style="text-align:center;padding:28px 16px">'+(any?t('noRes'):ic('mic',26)+'<div style="margin-top:10px;font-weight:700;line-height:1.7">'+t('emptyHome')+'</div>')+'</div>'}
- let out='',last='',first=true;L.forEach(x=>{const dl=dayLabel(x.ts);if(dl!==last){out+='<div class="daysep'+(first?' daysep-first':'')+'">'+dl+'</div>';last=dl;first=false}out+=txRow(x)});
+ let out='',last='',first=true;L.forEach(x=>{const dl=dayLabel(x.ts);const dk=dayKey(x.ts);if(dl!==last){out+=dayCheckHtml(dk,dl,first);last=dl;first=false}out+=txRow(x)});
  if(window.__txFull>L.length)out+='<div style="text-align:center;margin-top:10px"><button class="btn btn-line" style="width:auto;padding:10px 22px;font-size:13px" onclick="ui.txLimit='+L.length+'+60;refreshHome()">'+ic('chevD',15)+' '+t('showMore')+' (<span class="num">'+(window.__txFull-L.length)+'</span>)</button></div>';
  return out}
 const privBtn=()=>'<button class="hbtn" onclick="sec.priv=!sec.priv;saveSec();render()" aria-label="'+t('hideAmt')+'">'+ic(sec.priv?'eyeoff':'eye',18)+'</button>';
