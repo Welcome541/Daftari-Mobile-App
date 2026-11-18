@@ -4,7 +4,7 @@
   "version": "3.0.0",
   "build": 300,
   "channel": "stable",
-  "generatedAt": "2026-11-18T05:06:37.697Z",
+  "generatedAt": "2026-11-18T05:09:51.311Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -17,16 +17,16 @@
       "size": 23710
     },
     "css/layout.css": {
-      "sha256": "6eaa428a6fc51bd0da41e715e90b5025edc20663b07487d116b3dde0981ad2ba",
-      "size": 6974
+      "sha256": "482d25a68458955659b31ff97e13fef83ac9e42a03af85b70cbbaa70397f3965",
+      "size": 7471
     },
     "css/print.css": {
       "sha256": "a4dbbed73a8904d1eb07efaea0aa5d82fdf931090300d92c42178403d8ac7d07",
       "size": 321
     },
     "css/responsive.css": {
-      "sha256": "1de3c260cc30c31481ea12c1fbfb678373e24b96ae3d91824cbfa9ffcbb78be2",
-      "size": 13267
+      "sha256": "5023faf34800e481c1d16fe5f3cbd1a6ed9dcfc3e9249e065c64b1c4ca3094b7",
+      "size": 13352
     },
     "css/tokens.css": {
       "sha256": "5129cd4b063f995127455073747a84d7657112cab5b2d186a6be58a39b9b11ea",
@@ -53,7 +53,7 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "8623eb05a580b9f210a8e3b5e7ca48b3a2ea2b6a4a6d91d8e6cbf40ee814af15",
+      "sha256": "81265eac6584ee24c6df0c6ea444f4485e6bf8d22e5fa8f6292cce1bfec1ad16",
       "size": 6225
     },
     "js/00-icons.js": {

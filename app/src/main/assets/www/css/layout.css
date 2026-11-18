@@ -16,15 +16,16 @@ body[lang="en"]{font-family:'Inter',system-ui,sans-serif}
 .accid h1{min-width:0}
 .accchev{display:flex;align-items:center;justify-content:center;width:calc(26px * var(--s));height:calc(26px * var(--s));border-radius:calc(8px * var(--s));color:var(--soft);flex:none;transition:transform .12s}
 .accid:active .accchev{transform:scale(.9)}
-#tabbar{flex-shrink:0;position:sticky;bottom:calc(10px + env(safe-area-inset-bottom));background:#000;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;height:calc(66px + env(safe-area-inset-bottom));padding:0 6px env(safe-area-inset-bottom);margin:0 auto calc(10px + env(safe-area-inset-bottom));width:calc(100% - 20px);max-width:420px;border-radius:999px;box-shadow:0 8px 28px rgba(0,0,0,.22),0 2px 8px rgba(0,0,0,.14);z-index:40}
-#tabbar button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(4px * var(--s));color:#fff;font-size:calc(11px * var(--s));font-weight:700;border:none;background:none;min-height:66px;transition:color .18s}
-#tabbar .tbind{position:relative;width:calc(56px * var(--s));height:calc(32px * var(--s));border-radius:calc(16px * var(--s));display:flex;align-items:center;justify-content:center;transition:transform .12s}
+#tabbar{flex-shrink:0;position:sticky;bottom:calc(10px + env(safe-area-inset-bottom));background:var(--navy2);display:grid;grid-template-columns:repeat(5,1fr);align-items:center;height:calc(72px + env(safe-area-inset-bottom));padding:0 6px env(safe-area-inset-bottom);margin:0 auto calc(10px + env(safe-area-inset-bottom));width:calc(100% - 20px);max-width:420px;border-radius:999px;box-shadow:0 8px 28px rgba(0,0,0,.22),0 2px 8px rgba(0,0,0,.14);z-index:40}
+#tabbar button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(5px * var(--s));color:#fff;font-size:calc(12.5px * var(--s));font-weight:800;border:none;background:none;min-height:72px;transition:color .18s, filter .18s, transform .12s}
+#tabbar .tbind{position:relative;width:calc(64px * var(--s));height:calc(36px * var(--s));border-radius:calc(16px * var(--s));display:flex;align-items:center;justify-content:center;transition:transform .12s, background .18s, box-shadow .18s}
 #tabbar .tbind::after{content:'';position:absolute;bottom:0;left:50%;width:calc(4px * var(--s));height:calc(4px * var(--s));border-radius:50%;background:#fff;transform:translateX(-50%) scale(0);transition:transform .18s}
-#tabbar button:active .tbind{transform:scale(.92)}
-#tabbar button.on{color:#fff}
+#tabbar button:active .tbind{transform:scale(.92);background:rgba(255,255,255,.10);box-shadow:0 0 14px rgba(255,255,255,.45)}
+#tabbar button.on{color:#fff;filter:drop-shadow(0 0 6px rgba(255,255,255,.35))}
+#tabbar button.on .tbind{background:rgba(255,255,255,.14);box-shadow:0 0 12px rgba(255,255,255,.38),0 0 22px rgba(255,255,255,.18)}
 #tabbar button.on .tbind::after{transform:translateX(-50%) scale(1)}
-#tabbar .tabplus{justify-self:center;width:calc(48px * var(--s));height:calc(48px * var(--s));min-height:0;border-radius:50%;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;box-shadow:none;transform:none;align-self:center}
-#tabbar .tabplus:active{transform:scale(.94)}
+#tabbar .tabplus{justify-self:center;width:calc(54px * var(--s));height:calc(54px * var(--s));min-height:0;border-radius:50%;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.25);transform:none;align-self:center;transition:box-shadow .18s, transform .12s}
+#tabbar .tabplus:active{transform:scale(.94);box-shadow:0 0 0 6px rgba(255,255,255,.18),0 8px 20px rgba(0,0,0,.32)}
 #actionrow{flex-shrink:0;position:sticky;bottom:calc(86px + env(safe-area-inset-bottom));display:flex;gap:calc(8px * var(--s));padding:calc(8px * var(--s)) calc(10px * var(--s)) calc(10px * var(--s));z-index:35;background:var(--bg);box-shadow:0 -10px 22px rgba(13,31,58,.07)}
 #actionrow .btn{flex:1 1 0;border-radius:calc(16px * var(--s));height:calc(64px * var(--s));font-size:calc(17px * var(--s));font-weight:800;gap:calc(10px * var(--s));min-width:0;max-width:100%}
 #actionrow .selin{animation:dockIn .22s ease both}

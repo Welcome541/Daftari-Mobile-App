@@ -190,8 +190,11 @@ svg.ic {
   height: calc(20px * var(--s)) !important;
 }
 #tabbar svg.ic {
-  width: calc(22px * var(--s)) !important;
-  height: calc(22px * var(--s)) !important;
+  width: calc(26px * var(--s)) !important;
+  height: calc(26px * var(--s)) !important;
+}
+#tabbar button.on svg.ic {
+  filter: drop-shadow(0 0 4px rgba(255,255,255,.55));
 }
 .micwrap {
   width: 100%;
@@ -259,27 +262,27 @@ svg.ic {
 #tabbar {
   width: calc(100% - 20px * var(--s));
   max-width: var(--dock-max);
-  height: calc(66px * var(--s) + env(safe-area-inset-bottom));
+  height: calc(72px * var(--s) + env(safe-area-inset-bottom));
   margin-inline: auto;
   padding-inline: calc(clamp(2px, 1vw, 10px) * var(--s));
   border-radius: 999px;
 }
 #tabbar button {
   min-width: 0;
-  min-height: calc(64px * var(--s));
-  gap: calc(3px * var(--s));
+  min-height: calc(68px * var(--s));
+  gap: calc(5px * var(--s));
   padding-block: calc(2px * var(--s));
   padding-inline: calc(1px * var(--s));
-  font-size: calc(clamp(10px, 1vw, 12px) * var(--s));
+  font-size: calc(clamp(11px, 1.1vw, 13px) * var(--s));
   line-height: 1.2;
 }
 #tabbar .tbind {
-  width: calc(44px * var(--s));
-  height: calc(28px * var(--s));
+  width: calc(60px * var(--s));
+  height: calc(34px * var(--s));
 }
 #tabbar .tabplus {
-  width: calc(48px * var(--s));
-  height: calc(48px * var(--s));
+  width: calc(54px * var(--s));
+  height: calc(54px * var(--s));
   transform: none;
 }
 #tabbar .tabplus:active {
@@ -289,7 +292,7 @@ svg.ic {
   width: 100%;
   max-width: var(--dock-max);
   margin-inline: auto;
-  bottom: calc(86px * var(--s) + env(safe-area-inset-bottom));
+  bottom: calc(92px * var(--s) + env(safe-area-inset-bottom));
   gap: calc(8px * var(--s));
   padding-block: calc(6px * var(--s));
   padding-inline: calc(clamp(8px, 1.5vw, 16px) * var(--s));
