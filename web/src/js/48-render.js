@@ -20,7 +20,8 @@ function render(){_IX=null;if(!db){document.getElementById('app').innerHTML='';r
  /* While items are selected the action bar lives inside the screen,
     under the last row - so the scroll position must survive. */
  const selMode=!!((ui.sel&&ui.sel.on)||(ui.csel&&ui.csel.on));
- const sy=window.scrollY||0;
+ const _scEl=document.getElementById('app');
+ const sy=_scEl? _scEl.scrollTop : (window.scrollY||0);
  applyLang();
  if(locked){document.getElementById('app').innerHTML=S_lock();document.getElementById('tabbar').style.display='none';document.getElementById('actionrow').innerHTML='';document.getElementById('fabAdd').classList.add('hide');return}
  const tp=curScr();const S=SCREENS[tp.s]||S_home;
@@ -33,4 +34,4 @@ function render(){_IX=null;if(!db){document.getElementById('app').innerHTML='';r
  ar.innerHTML=isTab?(selMode?'':(tp.s==='home'?lpBtn('debt','btn-red','receipt',t('newDebt'))+lpBtn('pay','btn-green','coins',t('pay')):'')):'';
  document.getElementById('fabAdd').classList.add('hide');
  if(!locked&&typeof drawCharts==='function'&&['reports','repb'].includes((curScr()||{}).s))requestAnimationFrame(()=>{try{if(!locked&&['reports','repb'].includes((curScr()||{}).s))drawCharts()}catch(e){}});
- window.scrollTo(0,selMode?sy:0);}
+ if(_scEl) _scEl.scrollTop=selMode?sy:0; else window.scrollTo(0,selMode?sy:0);}

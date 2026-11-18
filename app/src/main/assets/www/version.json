@@ -4,7 +4,7 @@
   "version": "3.0.0",
   "build": 300,
   "channel": "stable",
-  "generatedAt": "2026-11-18T00:39:57.280Z",
+  "generatedAt": "2026-11-18T01:02:14.343Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -17,8 +17,8 @@
       "size": 23456
     },
     "css/layout.css": {
-      "sha256": "fbc49090963b4423c251a3a82d079fd05b703985bbb94de1db822ad8908a47e2",
-      "size": 6731
+      "sha256": "504430306a00f9476d1226674fe24372bb45df179e1dc7c9564e81d7a365838e",
+      "size": 6886
     },
     "css/print.css": {
       "sha256": "a4dbbed73a8904d1eb07efaea0aa5d82fdf931090300d92c42178403d8ac7d07",
@@ -53,7 +53,7 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "df17a781fdff5f2ffae0624b12c08994d83beb3d23c8c203c19383e972d93f51",
+      "sha256": "27f8c9657d83228ea1abb5c6e3b3198031207f716792bcf0487afe35a398f7c0",
       "size": 6225
     },
     "js/00-icons.js": {
@@ -201,12 +201,12 @@
       "size": 1642
     },
     "js/47-pullrefresh.js": {
-      "sha256": "1cb70f5b527a5169ea04f6634f6167a11e4cea9631908a8fdb6e323cc68d7217",
-      "size": 1568
+      "sha256": "cfa5436e4671544fcf3ddbe85bd823d8234665edf285bfa31ef746fecb126578",
+      "size": 1873
     },
     "js/48-render.js": {
-      "sha256": "0504197468679a69506523d498b27369ed635d8de16091baee60ee307de1afdf",
-      "size": 4221
+      "sha256": "35183fe62d440354e4ed5c7696e8349a0391ec68c2c19f7b7ec6573892c9a488",
+      "size": 4338
     },
     "js/49-charts.js": {
       "sha256": "c80a755b648ad425cbff082ff8068aeccd2b9b0e846bfe89927d7842a7959740",
