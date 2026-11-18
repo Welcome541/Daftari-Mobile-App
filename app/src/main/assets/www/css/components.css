@@ -78,10 +78,10 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
 .orow-sel{flex:none;margin-inline-end:var(--row-gapx);width:calc(26 * var(--u) * var(--s));height:calc(26 * var(--u) * var(--s));border-radius:50%;border:calc(2 * var(--u) * var(--s)) solid var(--line2);background:var(--card);display:flex;align-items:center;justify-content:center;color:#fff;transition:background .12s,border-color .12s,transform .12s,box-shadow .12s}
 .orow-sel.on{background:var(--navy);border-color:var(--navy);box-shadow:0 calc(2 * var(--u) * var(--s)) calc(6 * var(--u) * var(--s)) rgba(18,41,74,.32);transform:scale(1.06)}
 .orow-sel .ic{width:calc(15 * var(--u) * var(--s));height:calc(15 * var(--u) * var(--s))}
-.orow .orow-mid{flex:1 1 auto;min-width:0}
-.orow .orow-side{flex:0 0 var(--row-side-w);position:relative;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:calc(2 * var(--u) * var(--s));padding-inline-end:var(--row-side-p);min-width:0}
-.orow .orow-name{display:flex;align-items:center;gap:calc(8 * var(--u) * var(--s));font-weight:800;font-size:var(--row-name);line-height:1.15;color:var(--ink);min-width:0}
-.orow .orow-name > span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.orow .orow-mid{flex:1 1 0;min-width:0;overflow:hidden}
+.orow .orow-side{flex:0 0 auto;position:relative;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:calc(2 * var(--u) * var(--s));padding-inline-end:var(--row-side-p);min-width:0;max-width:70%}
+.orow .orow-name{display:flex;align-items:center;gap:calc(8 * var(--u) * var(--s));font-weight:800;font-size:var(--row-name);line-height:1.15;color:var(--ink);min-width:0;overflow:hidden}
+.orow .orow-name > span{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
 .orow .orow-name .chip{flex:none;font-size:calc(10.5px * var(--s));padding:calc(2px * var(--s)) calc(8px * var(--s))}
 .orow .orow-meta{display:flex;align-items:center;gap:calc(10 * var(--u) * var(--s));margin-top:calc(4 * var(--u) * var(--s));font-size:var(--row-meta);line-height:1.3;color:var(--muted);min-width:0;overflow:hidden}
 .orow .orow-meta > *{flex:none}
@@ -90,7 +90,9 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
 .orow .orow-meta .sep{opacity:.5}
 .orow .orow-meta .chip{font-size:calc(10.5px * var(--s));padding:calc(2px * var(--s)) calc(8px * var(--s))}
 .orow .orow-time{white-space:nowrap;font-size:calc(11px * var(--s));font-weight:600;color:var(--muted);opacity:.72;line-height:1}
-.orow .orow-amt{display:flex;align-items:baseline;gap:calc(6 * var(--u) * var(--s));font-weight:800;font-size:var(--row-amt);line-height:1;white-space:nowrap}
+.orow .orow-amt{flex:0 0 auto;display:flex;align-items:baseline;gap:calc(6 * var(--u) * var(--s));font-weight:800;font-size:var(--row-amt);line-height:1;white-space:nowrap;max-width:none;overflow:visible;text-overflow:clip}
+.orow .orow-phone{flex:none;white-space:nowrap;direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums;max-width:100%;overflow:hidden;text-overflow:ellipsis;font-size:calc(11px * var(--s));font-weight:600;color:var(--muted);background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:1px 7px;line-height:1.2}
+.orow .orow-name .orow-phone{font-size:var(--row-meta);font-weight:600}
 .orow .orow-amt .num{font-size:var(--row-amt)}
 .orow .orow-amt .cur{font-size:var(--row-cur);font-weight:700}
 .orow .orow-amt.red{color:var(--red)}

@@ -4,7 +4,7 @@
   "version": "3.0.0",
   "build": 300,
   "channel": "stable",
-  "generatedAt": "2026-11-18T05:09:51.311Z",
+  "generatedAt": "2026-11-18T22:17:36.669Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -13,8 +13,8 @@
       "size": 821
     },
     "css/components.css": {
-      "sha256": "cbf5cccbcefc8a35f5863c29007fc9cc5cd7e5f2aa771529b838600a6f5e5675",
-      "size": 23710
+      "sha256": "229b025ddc08fb6e3cbd200dd44b532eaea83d193ad72ae797304d3e758e9e85",
+      "size": 24260
     },
     "css/layout.css": {
       "sha256": "482d25a68458955659b31ff97e13fef83ac9e42a03af85b70cbbaa70397f3965",
@@ -53,7 +53,7 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "81265eac6584ee24c6df0c6ea444f4485e6bf8d22e5fa8f6292cce1bfec1ad16",
+      "sha256": "548f1ca70d0e0c5056bd5863876abf56261c4be1df05f5410c68f54f75cf98f6",
       "size": 6225
     },
     "js/00-icons.js": {
@@ -89,8 +89,8 @@
       "size": 6155
     },
     "js/08-format.js": {
-      "sha256": "b0afdb3ea0c8792936d9c91017febbf9a4a0c7a88e872b777ac8291c92accbb5",
-      "size": 4532
+      "sha256": "ef74aa228514939e6d7159db94ca1b58c1bc2d28f9c8d9b0472d6fed0a9dd27d",
+      "size": 6138
     },
     "js/09-feedback.js": {
       "sha256": "963d578a7cfac442501f17aaacfdbeb044bf46ae2e73f09ff327b3c288bddfed",
@@ -109,8 +109,8 @@
       "size": 3024
     },
     "js/21-customers.js": {
-      "sha256": "f6ed07d388fe060e5aa6c98752867d5f7ca0dcc1c05a4305cceb7e6fdb0a128b",
-      "size": 13742
+      "sha256": "dd0c5969468898b23bca3e932cbea04174de51dc8afac0d5d6854d9ed2a8b588",
+      "size": 13935
     },
     "js/22-tx.js": {
       "sha256": "bcba665ad27b3b101861e144041a923893fbd3da99718bf19bfc593333eba14c",
@@ -169,8 +169,8 @@
       "size": 8731
     },
     "js/39-screen-newcust.js": {
-      "sha256": "93c4044df9402e0ebcf2d094b2e7f67599d75b5412dffb46f7e2536028578f25",
-      "size": 5286
+      "sha256": "17b572a4fd92a9cd22b11f13a435b57fd52b4bcc036947cf1444e551455bf978",
+      "size": 6458
     },
     "js/40-sheets.js": {
       "sha256": "c467a8188341240a5d7c0852d425bc93a5961e8de492f7ab8f9120f73a92cfca",

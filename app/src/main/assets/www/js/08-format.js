@@ -8,6 +8,11 @@
  * Load order is defined by web/build.mjs (filename prefix = order).
  * ===================================================================== */
 const normAr=v=>{const AR='٠١٢٣٤٥٦٧٨٩';let t=String(v||'').replace(/[\u064B-\u0652\u0670]/g,'').replace(/[\u0623\u0625\u0622\u0671]/g,'\u0627');return t.split('').map(ch=>{const i=AR.indexOf(ch);return i>=0?String(i):ch}).join('').replace(/\s+/g,' ').trim()};
+/* Similar-name helpers for dozens of "محمد أحمد" — show phone when close */
+function nameTokens(nm){let t=normAr(nm).toLowerCase().replace(/[\u0640]/g,'').replace(/[^\p{L}\p{N}\s]/gu,' ').replace(/\s+/g,' ').trim();if(!t) return [];return t.split(/\s+/).map(w=>{if(w.length>3&&w.startsWith('\u0627\u0644')) return w.slice(2);return w;}).filter(Boolean);}
+function levDist(a,b){const m=a.length,n=b.length;if(!m) return n;if(!n) return m;let p=new Array(n+1),c=new Array(n+1);for(let j=0;j<=n;j++) p[j]=j;for(let i=1;i<=m;i++){c[0]=i;for(let j=1;j<=n;j++){c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));}[p,c]=[c,p];}return p[n];}
+function similarScore(a,b){const an=normAr(a).toLowerCase().trim(),bn=normAr(b).toLowerCase().trim();if(!an||!bn) return 0;if(an===bn) return 1;const at=nameTokens(a),bt=nameTokens(b);const as=new Set(at),bs=new Set(bt);let inter=0;for(const x of as) if(bs.has(x)) inter++;const uni=as.size+bs.size-inter;const jac=uni?inter/uni:0;const ld=levDist(an,bn),ml=Math.max(an.length,bn.length);const levS=ml?1-ld/ml:0;let sub=0;if(an.includes(bn)||bn.includes(an)){const r=Math.min(an.length,bn.length)/Math.max(an.length,bn.length);if(r>0.65) sub=r;}return Math.max(jac,levS,sub);}
+function findSimilarCustomers(inputName,excludeId){if(!inputName||!inputName.trim()) return [];const res=[];for(const cc of DD().customers){if(cc.archived) continue;if(excludeId&&cc.id===excludeId) continue;const sc=similarScore(inputName,cc.name);if(sc>=0.6) res.push({c:cc,score:sc});}res.sort((a,b)=> b.score-a.score || a.c.name.localeCompare(b.c.name,'ar'));return res;}
 const MU=()=>{try{const a=curAcc();return (a&&a.minorUnit)||2}catch(e){return 2}};
 /* Whole amounts print without decimals ("150"); an amount that really
    has a fraction keeps its two decimals ("150.50"). */
