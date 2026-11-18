@@ -257,11 +257,12 @@ svg.ic {
   overflow-wrap: anywhere;
 }
 #tabbar {
-  width: 100%;
+  width: calc(100% - 20px * var(--s));
   max-width: var(--dock-max);
-  height: var(--tabbar-h);
+  height: calc(66px * var(--s) + env(safe-area-inset-bottom));
   margin-inline: auto;
   padding-inline: calc(clamp(2px, 1vw, 10px) * var(--s));
+  border-radius: 999px;
 }
 #tabbar button {
   min-width: 0;
@@ -277,18 +278,18 @@ svg.ic {
   height: calc(28px * var(--s));
 }
 #tabbar .tabplus {
-  width: calc(50px * var(--s));
-  height: calc(50px * var(--s));
-  transform: translateY(-8px);
+  width: calc(48px * var(--s));
+  height: calc(48px * var(--s));
+  transform: none;
 }
 #tabbar .tabplus:active {
-  transform: translateY(-8px) scale(.94);
+  transform: scale(.94);
 }
 #actionrow {
   width: 100%;
   max-width: var(--dock-max);
   margin-inline: auto;
-  bottom: var(--tabbar-h);
+  bottom: calc(86px * var(--s) + env(safe-area-inset-bottom));
   gap: calc(8px * var(--s));
   padding-block: calc(6px * var(--s));
   padding-inline: calc(clamp(8px, 1.5vw, 16px) * var(--s));
@@ -437,7 +438,7 @@ svg.ic {
   .pad { padding-inline: calc(clamp(20px, 3vw, 36px) * var(--s)); }
   .stats { gap: calc(clamp(14px, 2vw, 22px) * var(--s)); }
   .mic { width: calc(108px * var(--s)); height: calc(108px * var(--s)); }
-  #tabbar { border-radius: 18px 18px 0 0; }
+  #tabbar { border-radius: 999px; }
 }
 
 @media (min-width: 1100px) {
@@ -450,9 +451,9 @@ svg.ic {
 @media (max-height: 520px) and (orientation: landscape) {
   .sbar { display: none; }
   .hdr { padding-block: 4px; }
-  #tabbar { height: calc(58px * var(--s) + env(safe-area-inset-bottom)); }
+  #tabbar { height: calc(58px * var(--s) + env(safe-area-inset-bottom)); border-radius: 999px; }
   #tabbar button { min-height: calc(54px * var(--s)); }
-  #actionrow { bottom: calc(58px * var(--s) + env(safe-area-inset-bottom)); }
+  #actionrow { bottom: calc(78px * var(--s) + env(safe-area-inset-bottom)); }
   .micwrap { padding-top: 8px; }
   .mic { width: calc(76px * var(--s)); height: calc(76px * var(--s)); }
   .mic svg.ic { width: calc(38px * var(--s)) !important; height: calc(38px * var(--s)) !important; }
