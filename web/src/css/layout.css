@@ -32,6 +32,12 @@ body[lang="en"]{font-family:'Inter',system-ui,sans-serif}
 #actionrow .btn svg{width:calc(22px * var(--s));height:calc(22px * var(--s))}
 #actionrow .btn{padding:calc(13px * var(--s))}
 #actionrow .btn,.bottombar .btn{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+#scrollTopBtn{position:absolute;bottom:calc(98px + env(safe-area-inset-bottom));inset-inline-start:50%;transform:translateX(-50%) scale(0);width:calc(44px * var(--s));height:calc(44px * var(--s));border-radius:50%;background:#111214;border:2.4px solid #5e5e5e;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.38),0 2px 6px rgba(0,0,0,.22);z-index:38;transition:transform .28s cubic-bezier(.2,.9,.3,1),opacity .22s;opacity:0;pointer-events:none}
+#scrollTopBtn.show{transform:translateX(-50%) scale(1);opacity:1;pointer-events:auto}
+#scrollTopBtn.hide{transform:translateX(-50%) scale(0);opacity:0;pointer-events:none}
+#scrollTopBtn:active{transform:translateX(-50%) scale(.92);opacity:.96}
+#scrollTopBtn .icwrap{display:flex;align-items:center;justify-content:center}
+#scrollTopBtn svg.ic{width:calc(20px * var(--s))!important;height:calc(20px * var(--s))!important}
 #fabAdd{display:none;position:absolute;bottom:calc(132px * var(--s));inset-inline-end:18px;width:calc(56px * var(--s));height:calc(56px * var(--s));border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(13,31,58,.35);z-index:36;transition:transform .25s,opacity .25s}
 #fabAdd.hid{transform:scale(0);opacity:0}
 #sheetWrap{position:fixed;inset:0;z-index:60;display:none}

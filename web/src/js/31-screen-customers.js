@@ -37,6 +37,5 @@ function custListBody(){const list=filteredCustomers(true);
   return '<div class="muted" style="text-align:center;padding:28px 0">'+t('noRes')+'</div>'}
  const max=ui.cmax||60,vis=list.slice(0,max);
  let h=vis.map(c=>custRow(c,true)).join('');
- if(list.length>max)h+='<button class="btn btn-line" style="margin-top:10px" onclick="ui.cmax=(ui.cmax||60)+60;document.getElementById(\'clist2\').innerHTML=custListBody()">'+t('showMore')+' ('+(list.length-max)+')</button>';
- else if(list.length<6&&!(ui.cq||'').trim()&&cFCount()===0)h+='<div style="text-align:center;margin-top:16px"><button class="btn btn-line" style="width:auto;padding:10px 18px" onclick="ui.nc={name:\'\',phone:\'\',limit:\'\',photo:null,edit:null,forceDup:false};go(\'newcust\',{})">'+t('addCustBtn')+'</button></div>';
+ if(list.length<6&&!(ui.cq||'').trim()&&cFCount()===0)h+='<div style="text-align:center;margin-top:16px"><button class="btn btn-line" style="width:auto;padding:10px 18px" onclick="ui.nc={name:\'\',phone:\'\',limit:\'\',photo:null,edit:null,forceDup:false};go(\'newcust\',{})">'+t('addCustBtn')+'</button></div>';
  return h}

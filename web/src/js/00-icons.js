@@ -43,6 +43,7 @@ coins:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.66 3.13 3 7 3s
 star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/>',
 tag:'<path d="M20.59 13.41 12 22 2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"/><circle cx="7" cy="7" r="1.5"/>',
 x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+toTop:'<line x1="7.2" y1="7.2" x2="16.8" y2="7.2" stroke-width="2.3" stroke-linecap="round"/><polyline points="8.2 13.8 12 10 15.8 13.8" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>',
 minus:'<line x1="5" y1="12" x2="19" y2="12"/>',
 save:'<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>',
 contact:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M6 15.5a3 3 0 0 1 6 0"/><path d="M15 9h4M15 13h4"/>',
