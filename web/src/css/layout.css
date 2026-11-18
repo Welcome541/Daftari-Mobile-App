@@ -16,7 +16,7 @@ body[lang="en"]{font-family:'Inter',system-ui,sans-serif}
 .accid h1{min-width:0}
 .accchev{display:flex;align-items:center;justify-content:center;width:calc(26px * var(--s));height:calc(26px * var(--s));border-radius:calc(8px * var(--s));color:var(--soft);flex:none;transition:transform .12s}
 .accid:active .accchev{transform:scale(.9)}
-#tabbar{flex-shrink:0;position:relative;bottom:0;background:var(--navy2);display:grid;grid-template-columns:repeat(5,1fr);height:calc(80px + env(safe-area-inset-bottom));padding:0 4px env(safe-area-inset-bottom);box-shadow:0 -1px 0 rgba(255,255,255,.07),0 -12px 28px rgba(9,17,34,.28);z-index:40}
+#tabbar{flex-shrink:0;position:sticky;bottom:0;background:var(--navy2);display:grid;grid-template-columns:repeat(5,1fr);height:calc(80px + env(safe-area-inset-bottom));padding:0 4px env(safe-area-inset-bottom);box-shadow:0 -1px 0 rgba(255,255,255,.07),0 -12px 28px rgba(9,17,34,.28);z-index:40}
 #tabbar button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(6px * var(--s));color:#8ea1bd;font-size:calc(11.5px * var(--s));font-weight:700;border:none;background:none;min-height:80px;transition:color .18s}
 #tabbar .tbind{position:relative;width:calc(56px * var(--s));height:calc(32px * var(--s));border-radius:calc(16px * var(--s));display:flex;align-items:center;justify-content:center;transition:transform .12s}
 #tabbar .tbind::after{content:'';position:absolute;bottom:0;left:50%;width:calc(4px * var(--s));height:calc(4px * var(--s));border-radius:50%;background:#fff;transform:translateX(-50%) scale(0);transition:transform .18s}
@@ -25,8 +25,8 @@ body[lang="en"]{font-family:'Inter',system-ui,sans-serif}
 #tabbar button.on .tbind::after{transform:translateX(-50%) scale(1)}
 #tabbar .tabplus{justify-self:center;width:calc(56px * var(--s));height:calc(56px * var(--s));min-height:0;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px var(--navy2),0 8px 18px rgba(167,25,73,.4);transform:translateY(-14px);align-self:center}
 #tabbar .tabplus:active{transform:translateY(-14px) scale(.94)}
-#actionrow{flex-shrink:0;position:relative;bottom:calc(80px + env(safe-area-inset-bottom));display:flex;gap:calc(8px * var(--s));padding:calc(8px * var(--s)) calc(10px * var(--s)) calc(10px * var(--s));z-index:35;background:var(--bg);box-shadow:0 -10px 22px rgba(13,31,58,.07)}
-#actionrow .btn{border-radius:calc(16px * var(--s));height:calc(64px * var(--s));font-size:calc(17px * var(--s));font-weight:800;gap:calc(10px * var(--s));min-width:0}
+#actionrow{flex-shrink:0;position:sticky;bottom:calc(80px + env(safe-area-inset-bottom));display:flex;gap:calc(8px * var(--s));padding:calc(8px * var(--s)) calc(10px * var(--s)) calc(10px * var(--s));z-index:35;background:var(--bg);box-shadow:0 -10px 22px rgba(13,31,58,.07)}
+#actionrow .btn{flex:1 1 0;border-radius:calc(16px * var(--s));height:calc(64px * var(--s));font-size:calc(17px * var(--s));font-weight:800;gap:calc(10px * var(--s));min-width:0;max-width:100%}
 #actionrow .selin{animation:dockIn .22s ease both}
 #actionrow .btn svg{width:calc(22px * var(--s));height:calc(22px * var(--s))}
 #actionrow .btn{padding:calc(13px * var(--s))}

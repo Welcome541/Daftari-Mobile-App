@@ -22,7 +22,7 @@ const S_home=()=>{
     while selecting it becomes the action bar so the icons appear
     exactly where the title was. */
  +(selMode
-   ?'<div class="pad" style="margin:12px 0 4px">'+selHeadHtml()+'</div>'
+   ?'<div class="pad" style="position:sticky;top:0;z-index:28;background:var(--bg);margin:12px 0 4px;padding-block:6px">'+selHeadHtml()+'</div>'
    :'<div class="pad" style="margin:12px 20px 4px;font-weight:800;font-size:16.5px;display:flex;align-items:center;gap:8px">'+t('lastOps')+' <span class="chip" style="background:#efece6;color:var(--soft)"><span class="num" id="txn">'+n+'</span></span></div>')
  +'<div class="pad list ops" id="txlist" style="padding-bottom:14px">'+feedHtml()+'</div>';
 };

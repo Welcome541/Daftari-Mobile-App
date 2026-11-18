@@ -22,7 +22,7 @@ const S_customers=()=>{
 
  +'<div class="pad list ops" id="clist2" style="margin-top:12px;padding-bottom:14px">'+custListBody()+'</div>'
  /* the selection bar closes the list, right under the last customer */
- +((ui.csel&&ui.csel.on)?'<div class="pad" style="padding-bottom:18px">'+custSelBar()+'</div>':'');
+ +((ui.csel&&ui.csel.on)?'<div class="pad" style="position:sticky;bottom:calc(80px + env(safe-area-inset-bottom) + 8px);z-index:28;background:var(--bg);padding:8px 0 12px">'+custSelBar()+'</div>':'');
 };
 function archCount(){return DD().customers.filter(c=>c.archived).length}
 function archBtn(){const n=archCount();if(!n)return '';return '<button class="hbtn" style="height:42px;gap:6px" onclick="ui.arch=true;ui.archQ=\'\';render()" aria-label="'+t('archListT')+'">'+ic('archive',18)+'<span class="num" style="background:var(--amber);color:#fff;border-radius:999px;font-size:10.5px;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-weight:900">'+n+'</span></button>'}
