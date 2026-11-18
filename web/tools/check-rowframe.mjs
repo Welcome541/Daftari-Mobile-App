@@ -239,9 +239,10 @@ async function main() {
     !!rows[0].querySelector('.orow-side .orow-amt .cur'));
 
   const css = await readFile(path.join(DIR, 'css/components.css'), 'utf8');
-  check('the rule is drawn at the side column edge',
-    /\.orow \.orow-side::before\{[^}]*inset-inline-start:0/.test(css));
-  check('the rule uses the measured height', /height:var\(--row-div-h\)/.test(css));
+  check('the vertical separator is removed as requested',
+    !/\.orow \.orow-side::before/.test(css), 'still present');
+  check('the time now sits below the amount, faded',
+    /\.orow \.orow-time\{[^}]*opacity:\.72/.test(css) && css.includes('.orow-side{') && css.includes('flex-direction:column'));
   check('the list uses the measured gap', /\.list\.ops\{gap:var\(--row-gap\)\}/.test(css));
   /* responsive.css re-declares .litem after components.css, so the frame
      must out-specify it - otherwise the media queries would win. */

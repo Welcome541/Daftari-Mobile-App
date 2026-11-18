@@ -79,8 +79,7 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
 .orow-sel.on{background:var(--navy);border-color:var(--navy);box-shadow:0 calc(2 * var(--u) * var(--s)) calc(6 * var(--u) * var(--s)) rgba(18,41,74,.32);transform:scale(1.06)}
 .orow-sel .ic{width:calc(15 * var(--u) * var(--s));height:calc(15 * var(--u) * var(--s))}
 .orow .orow-mid{flex:1 1 auto;min-width:0}
-.orow .orow-side{flex:0 0 var(--row-side-w);position:relative;display:flex;align-items:center;justify-content:flex-end;padding-inline-end:var(--row-side-p);min-width:0}
-.orow .orow-side::before{content:'';position:absolute;inset-inline-start:0;top:50%;transform:translateY(-50%);width:var(--row-div-w);height:var(--row-div-h);border-radius:999px;background:var(--line2)}
+.orow .orow-side{flex:0 0 var(--row-side-w);position:relative;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:calc(2 * var(--u) * var(--s));padding-inline-end:var(--row-side-p);min-width:0}
 .orow .orow-name{display:flex;align-items:center;gap:calc(8 * var(--u) * var(--s));font-weight:800;font-size:var(--row-name);line-height:1.15;color:var(--ink);min-width:0}
 .orow .orow-name > span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .orow .orow-name .chip{flex:none;font-size:calc(10.5px * var(--s));padding:calc(2px * var(--s)) calc(8px * var(--s))}
@@ -90,7 +89,7 @@ label.lb{display:block;font-size:calc(13.5px * var(--s));font-weight:700;color:v
 .orow .orow-meta .ic{width:var(--row-ic);height:var(--row-ic)}
 .orow .orow-meta .sep{opacity:.5}
 .orow .orow-meta .chip{font-size:calc(10.5px * var(--s));padding:calc(2px * var(--s)) calc(8px * var(--s))}
-.orow .orow-time{flex:none;white-space:nowrap;font-weight:600;color:var(--muted);min-width:calc(62 * var(--u) * var(--s));text-align:end}
+.orow .orow-time{white-space:nowrap;font-size:calc(11px * var(--s));font-weight:600;color:var(--muted);opacity:.72;line-height:1}
 .orow .orow-amt{display:flex;align-items:baseline;gap:calc(6 * var(--u) * var(--s));font-weight:800;font-size:var(--row-amt);line-height:1;white-space:nowrap}
 .orow .orow-amt .num{font-size:var(--row-amt)}
 .orow .orow-amt .cur{font-size:var(--row-cur);font-weight:700}
