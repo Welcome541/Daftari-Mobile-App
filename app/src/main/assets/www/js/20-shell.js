@@ -27,4 +27,13 @@ const custOverAmt=id=>DD().invoices.filter(i=>i.cust===id&&isOverdue(i)).reduce(
 const custOverSince=id=>DD().invoices.filter(i=>i.cust===id&&isOverdue(i)).reduce((m,i)=>(!m||i.due<m)?i.due:m,0);
 const NEARLIM=0.1;
 const limitState=c=>{if(!c.limit)return 'ok';const o=custOpen(c.id);if(o>c.limit)return 'over';if(o>0&&(c.limit-o)<=c.limit*NEARLIM)return 'near';return 'ok'};
-const lastOpTxt=ts=>(!ts?t('noOps'):(Date.now()-ts>14*D?dateStr(ts):rel(ts)));
+const lastOpTxt=ts=>{
+ if(!ts) return t('noOps');
+ const d=new Date(ts),n0=new Date();
+ const a=new Date(d);a.setHours(0,0,0,0);
+ const b=new Date(n0);b.setHours(0,0,0,0);
+ const diff=Math.round((b-a)/864e5);
+ if(diff<=0) return t('today');
+ if(diff===1) return t('yest');
+ return dateStr(ts);
+};

@@ -35,7 +35,7 @@ function openNotifSheet(){
  +'<div class="muted" style="font-size:12.5px;margin-bottom:14px;line-height:1.8">'+esc(t('notifD'))+'</div>'
  +(list.length
    ?list.map(c=>'<button class="srow" onclick="closeSheet();go(\'profile\',{id:\''+c.id+'\'})">'
-     +avat(c.name,44)
+     +avat(c.name,44,c.id)
      +'<span class="sp" style="text-align:start"><span class="t">'+esc(c.name)+'</span>'
      +'<span class="d">'+(custOverdue(c.id)?'<span class="chip b-open" style="padding:2px 8px;font-size:10.5px"><span class="dot"></span>'+esc(t('lateF'))+'</span> ':'')
      +esc(t('totalDue'))+': <span class="num">'+fmt(custOpen(c.id))+'</span> '+esc(CUR())+'</span></span>'

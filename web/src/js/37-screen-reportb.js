@@ -21,7 +21,7 @@ function repData(){const rp=ui.rp||{};const [a,b]=repRangeCalc();const cid=rp.cu
  return {a,b,invs,pays,debt:invs.reduce((x,i)=>x+i.amount,0),pay:pays.reduce((x,p)=>x+p.amount,0)}}
 function repNm(id){const c=id?cust(id):null;return c?c.name:t('deposit')}
 function repRows(){const r=repData();const rows=[[t('date'),t('time'),t('cust'),t('type'),CUR(),t('remind')]];
- [...r.invs.map(i=>({ts:i.ts,nm:repNm(i.cust),ty:t('debt'),amt:i.amount,note:i.note||''})),...r.pays.map(p=>({ts:p.ts,nm:repNm(p.cust),ty:t('pay'),amt:p.amount,note:''}))].sort((x,y)=>y.ts-x.ts).forEach(x=>rows.push([dateStr(x.ts),timeStr(x.ts),x.nm,x.ty,fmt(x.amt),x.note]));
+ [...r.invs.map(i=>({ts:i.ts,nm:repNm(i.cust),ty:t('debt'),amt:i.amount,note:i.note||'',hasTime:i.hasTime})),...r.pays.map(p=>({ts:p.ts,nm:repNm(p.cust),ty:t('pay'),amt:p.amount,note:'',hasTime:p.hasTime}))].sort((x,y)=>y.ts-x.ts).forEach(x=>rows.push([dateStr(x.ts),(x.hasTime?timeStr(x.ts):''),x.nm,x.ty,fmt(x.amt),x.note]));
  return rows}
 function exportRepXlsx(){if(typeof XLSX==='undefined'){toastMsg('Excel');return}try{const ws=XLSX.utils.aoa_to_sheet(repRows());const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'report');XLSX.writeFile(wb,'dafter-report.xlsx');toastMsg(t('done'))}catch(e){toastMsg('Excel')}}
 function printRep(){const r=repData();const rows=repRows().slice(1);const hd=repRows()[0].map(c=>'<th style="padding:6px 8px;text-align:right">'+esc(c)+'</th>').join('');
@@ -29,7 +29,7 @@ function printRep(){const r=repData();const rows=repRows().slice(1);const hd=rep
  window.print()}
 function openRepCust(){openSheet('<div class="row" style="margin-bottom:10px"><h3 style="margin:0">'+t('cust')+'</h3><span class="sp"></span><button class="hbtn" onclick="closeSheet()">'+ic('x',17)+'</button></div>'
  +'<button class="srow" onclick="ui.rp.cust=null;closeSheet();render()"><span class="sic2" style="background:var(--navy-bg);color:var(--navy)">'+ic('users',20)+'</span><span class="sp" style="text-align:start"><span class="t">'+t('repCustAll')+'</span></span>'+(!ui.rp.cust?ic('checkc',18):'')+'</button>'
- +DD().customers.filter(c=>!c.archived).map(c=>'<button class="srow" onclick="ui.rp.cust=\''+c.id+'\';closeSheet();render()"><span class="sic2">'+avat(c.name,26)+'</span><span class="sp" style="text-align:start"><span class="t">'+esc(c.name)+'</span></span>'+(ui.rp.cust===c.id?ic('checkc',18):'')+'</button>').join(''))}
+ +DD().customers.filter(c=>!c.archived).map(c=>'<button class="srow" onclick="ui.rp.cust=\''+c.id+'\';closeSheet();render()"><span class="sic2">'+avat(c.name,26,c.id)+'</span><span class="sp" style="text-align:start"><span class="t">'+esc(c.name)+'</span></span>'+(ui.rp.cust===c.id?ic('checkc',18):'')+'</button>').join(''))}
 function repBars(r){const days=Math.min(31,Math.max(1,Math.round((r.b-r.a)/D)));const bw=(r.b-r.a)/days;const buckets=[...Array(days)].map(()=>({d:0,p:0}));
  r.invs.forEach(i=>{const k=Math.min(days-1,Math.floor((i.ts-r.a)/bw));buckets[k].d+=i.amount});
  r.pays.forEach(p=>{const k=Math.min(days-1,Math.floor((p.ts-r.a)/bw));buckets[k].p+=p.amount});

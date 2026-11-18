@@ -34,7 +34,7 @@ function custRow(c,showPhone){
   ?'<span class="orow-amt red"><span class="num">'+fmt(open)+'</span><span class="cur">'+CUR()+'</span></span>'
   :credit>0
   ?'<span class="orow-amt green"><span class="num">'+fmt(-credit)+'</span><span class="cur">'+CUR()+'</span></span>'
-  :'<span class="orow-amt gray"><span class="num">0.00</span><span class="cur">'+CUR()+'</span></span>';
+  :'<span class="orow-amt gray"><span class="num">'+fmt(0)+'</span><span class="cur">'+CUR()+'</span></span>';
  const sel=ui.csel&&ui.csel.on,isSel=sel&&ui.csel.ids.includes(c.id);
  const box=sel?'<span class="orow-sel'+(isSel?' on':'')+'">'+(isSel?ic('checkb',15):'')+'</span>':'';
  const op=lastOpOf(c.id);
@@ -43,7 +43,7 @@ function custRow(c,showPhone){
  const metaInner = op ? esc(op.label) : esc(t('noOps'));
  const meta='<div class="orow-meta"><span class="tx">'+metaInner+'</span></div>';
  return '<div class="card litem orow'+(isSel?' sel':'')+'" '+(sel?'onclick="cselToggle(\''+c.id+'\')"':'onclick="clOpen(\''+c.id+'\')" onpointerdown="clDownP(event,\''+c.id+'\')" onpointerup="clUpC()" onpointerleave="clUpC()" ontouchstart="clDownT(event,\''+c.id+'\')" ontouchend="clUpC()" ontouchmove="clMoveC(event)" oncontextmenu="return false"')+' role="button" tabindex="0">'+box+
- avat(c.name,'var(--row-av)')+'<div class="orow-mid"><div class="orow-name"><span>'+esc(c.name)+'</span>'+phoneChip+'</div>'+meta+'</div>'
+ avat(c.name,'var(--row-av)',c.id)+'<div class="orow-mid"><div class="orow-name"><span>'+esc(c.name)+'</span>'+phoneChip+'</div>'+meta+'</div>'
  +(c.pinned?'<span class="orow-pin" aria-label="'+esc(t('pinned'))+'">'+ic('pinf',13)+'</span>':'')+
  '<div class="orow-side">'+amt+'</div></div>';
 }
@@ -115,7 +115,7 @@ function openCustPinSheet(){
  openSheet('<div class="row" style="margin-bottom:12px"><h3 style="margin:0">'+t('pinCust')+'</h3><span class="sp"></span>'
  +'<button class="hbtn" onclick="closeSheet()" aria-label="'+esc(t('close'))+'">'+ic('x',17)+'</button></div>'
  +'<div class="muted" style="font-size:12.5px;margin-bottom:12px;line-height:1.8">'+t('pinPickHint')+'</div>'
- +(cs.length?cs.map(c=>'<button class="srow" onclick="pinToggle(\''+c.id+'\')">'+avat(c.name,44)
+ +(cs.length?cs.map(c=>'<button class="srow" onclick="pinToggle(\''+c.id+'\')">'+avat(c.name,44,c.id)
    +'<span class="sp" style="text-align:start"><span class="t">'+esc(c.name)+'</span>'
    +'<span class="d">'+esc(c.pinned?t('pinned'):t('pinU'))+'</span></span>'
    +(c.pinned?'<span class="sic2" style="background:var(--amber-bg);color:var(--amber)">'+ic('pin',19)+'</span>':ic('fwd',17))+'</button>').join('')

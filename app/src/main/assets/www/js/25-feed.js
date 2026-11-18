@@ -21,7 +21,7 @@ function toggleDebt(){if(ui.tf.kind==='debt'){ui.tf={kind:'all',period:'today'}}
 function togglePay(){if(ui.tf.kind==='pay'){ui.tf={kind:'all',period:'today'}}else{ui.tf={kind:'pay',period:'month'}}refreshHome()}
 function dayLabel(ts){const d=new Date(ts),n0=new Date();const a=new Date(d);a.setHours(0,0,0,0);const b=new Date(n0);b.setHours(0,0,0,0);const diff=Math.round((b-a)/864e5);
  if(diff<=0)return t('today');if(diff===1)return t('yest');
- return d.toLocaleDateString(db.lang==='ar'?'ar':'en-GB',{weekday:'long'})+' · '+d.getDate()+'/'+(d.getMonth()+1)}
+ return dateStr(ts);}
 function dayKey(ts){const d=new Date(ts);return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function selDay(dk){
  const L=filteredTx();

@@ -8,7 +8,7 @@
  * Load order is defined by web/build.mjs (filename prefix = order).
  * ===================================================================== */
 function seed(){
- return {meta:{schemaVersion:2},lang:((navigator.language||'').slice(0,2).toLowerCase()==='ar'?'ar':'en'),active:'a1',accounts:[{id:'a1',name:'بقالة الندى',type:'grocery',cur:'ر.س',minorUnit:2}],data:{a1:{customers:[],invoices:[],payments:[],seq:500}}};
+ return {meta:{schemaVersion:3},lang:((navigator.language||'').slice(0,2).toLowerCase()==='ar'?'ar':'en'),active:'a1',accounts:[{id:'a1',name:'بقالة الندى',type:'grocery',cur:'ر.س',minorUnit:2}],data:{a1:{customers:[],invoices:[],payments:[],seq:500}}};
 }
 /* Demo ledger - the three rows of the reference design lead the customer
    list, with the exact balances, kinds and clock times of the drawing:
@@ -19,8 +19,22 @@ function seed(){
    newest-first exactly like the reference. */
 function demoFixtures(){
  const c=(id,nm,ph,since,pin,extra)=>({id,name:nm,phone:ph,since,archived:false,pinned:!!pin,limit:(extra&&extra.limit)||null,photo:null,...extra});
- const at=(day,h,m)=>{const d=new Date();d.setDate(d.getDate()-day);d.setHours(h,m,0,0);return d.getTime()};
- const iv=(id,code,cu,ts,amount,note,due)=>({id,code,cust:cu,ts,amount,note,due:due||null});
+ const at=(day,h,m)=>{
+   const d=new Date();
+   d.setDate(d.getDate()-day);
+   if(day>=6){
+     d.setHours(0,0,0,0);
+   } else {
+     d.setHours(h,m,0,0);
+   }
+   return d.getTime();
+ };
+ const hasTimeForDay=day=> day<6;
+ const iv=(id,code,cu,ts,amount,note,due)=>{
+   const d=new Date(ts);
+   const has=!(d.getHours()===0&&d.getMinutes()===0&&d.getSeconds()===0);
+   return {id,code,cust:cu,ts,amount,note,due:due||null,createdAt:Date.now(),hasTime:has};
+ };
  // --- 6 original reference customers (must stay first, checked by tests) ---
  const cs=[
   c('c1','محمد العلي','050 456 7291','2024'),
@@ -94,30 +108,46 @@ function demoFixtures(){
  ];
  const is=[];
  const ps=[];
- // original 6 invoices (reference)
+ // helper to create invoice with correct hasTime based on age
+ const mkIv=(id,code,cu,day,h,m,amount,note,due)=>{
+   const ts=at(day,h,m);
+   const has=hasTimeForDay(day);
+   const rec={id,code,cust:cu,ts,amount,note,due:due||null,createdAt:Date.now(),hasTime:has};
+   return rec;
+ };
+ const mkPay=(id,cu,day,h,m,amount,method,alloc)=>{
+   const ts=at(day,h,m);
+   const has=hasTimeForDay(day);
+   return {id,cust:cu,ts,amount,method,alloc:alloc||[],createdAt:Date.now(),hasTime:has};
+ };
+ // original 6 invoices (reference) – keep times for recent 0-5 days
  const origIs=[
-  iv('i1','A500','c1',at(0,5,33),200,'مواد تموينية'),
-  iv('i2','A499','c2',at(1,0,30),150,'خضروات وفواكه'),
-  iv('i3','A498','c3',at(2,22,22),80,'خبز وحليب'),
-  iv('i4','A497','c4',at(3,9,15),320,'رز وزيت'),
-  iv('i5','A496','c5',at(4,17,5),460,'دقيق وسكر'),
-  iv('i6','A495','c6',at(5,12,45),150,'عصائر وأجبان')
+  mkIv('i1','A500','c1',0,5,33,200,'مواد تموينية'),
+  mkIv('i2','A499','c2',1,0,30,150,'خضروات وفواكه'),
+  mkIv('i3','A498','c3',2,22,22,80,'خبز وحليب'),
+  mkIv('i4','A497','c4',3,9,15,320,'رز وزيت'),
+  mkIv('i5','A496','c5',4,17,5,460,'دقيق وسكر'),
+  mkIv('i6','A495','c6',5,12,45,150,'عصائر وأجبان')
  ];
  const origPs=[
-  {id:'p1',cust:'c2',ts:at(1,1,40),amount:300,method:'cash',alloc:[{inv:'i2',amt:150}]},
-  {id:'p2',cust:'c4',ts:at(3,10,0),amount:120,method:'cash',alloc:[{inv:'i4',amt:120}]},
-  {id:'p3',cust:'c5',ts:at(4,18,0),amount:460,method:'transfer',alloc:[{inv:'i5',amt:460}]}
+  mkPay('p1','c2',1,1,40,300,'cash',[{inv:'i2',amt:150}]),
+  mkPay('p2','c4',3,10,0,120,'cash',[{inv:'i4',amt:120}]),
+  mkPay('p3','c5',4,18,0,460,'transfer',[{inv:'i5',amt:460}])
  ];
  is.push(...origIs); ps.push(...origPs);
  // --- Edge invoices for comprehensive coverage ---
  let seq=494;
  function addInv(cust,day,h,m,amount,note,due){
-  is.push(iv('i'+(is.length+1),'A'+(seq--),cust,at(day,h,m),amount,note,due));
+  const ts=at(day,h,m);
+  const has=hasTimeForDay(day);
+  is.push({id:'i'+(is.length+1),code:'A'+(seq--),cust,ts,amount,note,due:due||null,createdAt:Date.now(),hasTime:has});
  }
  function addPay(cust,day,h,m,amount,method,alloc){
-  ps.push({id:'p'+(ps.length+1),cust,ts:at(day,h,m),amount,method,alloc:alloc||[]});
+  const ts=at(day,h,m);
+  const has=hasTimeForDay(day);
+  ps.push({id:'p'+(ps.length+1),cust,ts,amount,method,alloc:alloc||[],createdAt:Date.now(),hasTime:has});
  }
- // Very long names already have normal invoices - add them older
+ // Very long names already have normal invoices - add them older (no time)
  addInv('c7',6,10,0,500,'طلبية كبيرة جداً تشمل جميع أصناف البقالة من أرز وسكر وزيت وحليب وخبز ومعلبات ومشروبات ومثلجات وحلويات وبسكويت ومعكرونة وتوابل وخضروات وفواكه طازجة');
  addInv('c7',6,11,30,250,'تكملة الطلبية السابقة — جزء ثان');
  addInv('c8',7,8,0,100,'فاتورة يومية');
@@ -126,7 +156,7 @@ function demoFixtures(){
  addInv('c12',7,10,5,50,'اختبار تشابه الأسماء 2 - بدون همزة');
  addInv('c13',7,10,10,50,'اختبار تشابه الأسماء 3');
  addInv('c14',7,10,15,50,'اختبار تشابه الأسماء 4');
- // Large / small / decimal amounts
+ // Large / small / decimal amounts (older, no time)
  addInv('c40',8,9,0,480,'قريب من السقف — 480 من 500');
  addInv('c41',8,9,0,500,'تجاوز السقف — 500 من 300');
  addInv('c42',8,10,0,999999,'مبلغ كبير جداً — اختبار تنسيق الأرقام الكبيرة');
@@ -136,7 +166,7 @@ function demoFixtures(){
  addInv('c42',10,9,0,100000,'100,000 — اختبار الفواصل');
  addInv('c43',10,10,0,2000,'دين أولي لدائن كبير');
  addPay('c43',10,11,0,5000,'cash',[]);
- // Bulk: create 2 invoices per remaining customers with varying amounts/times
+ // Bulk: create 2 invoices per remaining customers with varying amounts/times (older, no clock time)
  const bulkNotes=['مواد غذائية','خضروات','لحوم','أدوات منزلية','إيجار','فاتورة كهرباء','فاتورة ماء','', 'طلبية خاصة — لا يوجد وصف','Test English note','ملاحظة طويلة جداً تحتوي على تفاصيل كثيرة عن المنتجات والكميات والأسعار والخصومات والعروض الخاصة لهذا اليوم','نقداً','آجل','معدل — تم تعديل المبلغ'];
  for(let idx=18; idx<cs.length; idx++){
   const cid=cs[idx].id;
@@ -150,21 +180,22 @@ function demoFixtures(){
    addPay(cid, day+1, h, m, payAmt, ['cash','transfer','cardpay'][idx%3], []);
   }
  }
- // Overdue / due date edge
+ // Overdue / due date edge (no clock time for op date)
  addInv('c40',12,8,0,100,'فاتورة متأخرة', new Date(Date.now()-5*864e5).toISOString().slice(0,10));
  addInv('c41',12,9,0,200,'فاتورة متأخرة جداً', new Date(Date.now()-20*864e5).toISOString().slice(0,10));
- // Edited flag test
- const editedInv=iv('i-ed','A100','c7',at(6,14,0),300,'فاتورة معدلة — تم التعديل');
+ // Edited flag test (recent enough to keep time)
+ const editedTs=at(6,14,0);
+ const editedInv={id:'i-ed',code:'A100',cust:'c7',ts:editedTs,amount:300,note:'فاتورة معدلة — تم التعديل',due:null,createdAt:Date.now(),hasTime:false};
  editedInv.edits=[{from:20000,to:30000,ts:Date.now()}];
  is.push(editedInv);
- // Amount with zero / negative edge via payment overpay
+ // Amount with zero / negative edge via payment overpay (older)
  addPay('c40',13,10,0,1000,'cash',[]);
 
  is.forEach(i=>i.amount=Math.round(i.amount*100));
  ps.forEach(pp=>{pp.amount=Math.round(pp.amount*100);pp.alloc.forEach(a=>a.amt=Math.round(a.amt*100))});
  // ensure customers with limits in halala
  cs.forEach(cobj=>{if(cobj.limit) cobj.limit=Math.round(cobj.limit);});
- return {meta:{schemaVersion:2},lang:((navigator.language||'').slice(0,2).toLowerCase()==='ar'?'ar':'en'),active:'a1',accounts:[{id:'a1',name:'بقالة الندى',type:'grocery',cur:'ر.س',minorUnit:2}],data:{a1:{customers:cs,invoices:is,payments:ps,seq:600}}};
+ return {meta:{schemaVersion:3},lang:((navigator.language||'').slice(0,2).toLowerCase()==='ar'?'ar':'en'),active:'a1',accounts:[{id:'a1',name:'بقالة الندى',type:'grocery',cur:'ر.س',minorUnit:2}],data:{a1:{customers:cs,invoices:is,payments:ps,seq:600}}};
 }
 /* Replace the ledger with the demo one (or with an empty one). The
    language choice is kept - only the data changes. */
@@ -186,14 +217,36 @@ function openDemoSheet(){
  +'<button class="btn btn-navy" style="margin-top:14px" onclick="applyDemo()">'+ic('zap',17)+t('demoLoad')+'</button>'
  +'<button class="btn btn-line-red" style="margin-top:10px" onclick="clearDemo()">'+ic('trash',17)+t('demoClear')+'</button>');
 }
-const MIGRATIONS=[{to:2,run(x){for(const aid in x.data){const d=x.data[aid];(d.invoices||[]).forEach(i=>{i.amount=Math.round((Number(i.amount)||0)*100);(i.edits||[]).forEach(e=>{e.from=Math.round((Number(e.from)||0)*100);e.to=Math.round((Number(e.to)||0)*100)})});(d.payments||[]).forEach(pp=>{pp.amount=Math.round((Number(pp.amount)||0)*100);(pp.alloc||[]).forEach(a=>a.amt=Math.round((Number(a.amt)||0)*100))});(d.customers||[]).forEach(c=>{if(c.limit)c.limit=Math.round(Number(c.limit)*100)})}(x.accounts||[]).forEach(a=>a.minorUnit=a.minorUnit||2);return x}}];
+const MIGRATIONS=[
+ {to:2,run(x){for(const aid in x.data){const d=x.data[aid];(d.invoices||[]).forEach(i=>{i.amount=Math.round((Number(i.amount)||0)*100);(i.edits||[]).forEach(e=>{e.from=Math.round((Number(e.from)||0)*100);e.to=Math.round((Number(e.to)||0)*100)})});(d.payments||[]).forEach(pp=>{pp.amount=Math.round((Number(pp.amount)||0)*100);(pp.alloc||[]).forEach(a=>a.amt=Math.round((Number(a.amt)||0)*100))});(d.customers||[]).forEach(c=>{if(c.limit)c.limit=Math.round(Number(c.limit)*100)})}(x.accounts||[]).forEach(a=>a.minorUnit=a.minorUnit||2);return x}},
+ {to:3,run(x){
+   for(const aid in x.data){
+     const d=x.data[aid];
+     (d.invoices||[]).forEach(i=>{
+       if(i.createdAt==null) i.createdAt=i.ts;
+       if(i.hasTime==null){
+         const dt=new Date(i.ts);
+         i.hasTime=!(dt.getHours()===0 && dt.getMinutes()===0 && dt.getSeconds()===0);
+       }
+     });
+     (d.payments||[]).forEach(p=>{
+       if(p.createdAt==null) p.createdAt=p.ts;
+       if(p.hasTime==null){
+         const dt=new Date(p.ts);
+         p.hasTime=!(dt.getHours()===0 && dt.getMinutes()===0 && dt.getSeconds()===0);
+       }
+     });
+   }
+   return x;
+ }}
+];
 function migrate(x){
  let base;
  if(x&&x.accounts&&x.data)base=x;
  else{base=seed();if(x&&x.customers){base.data.a1={customers:x.customers,invoices:x.invoices||[],payments:x.payments||[],seq:x.seq||500};if(x.lang)base.lang=x.lang;if(x.cur)base.accounts[0].cur=x.cur;if(x.accName)base.accounts[0].name=x.accName}}
  base.meta=base.meta||{schemaVersion:1};
  const from=base.meta.schemaVersion||1;
- if(from<2){try{localStorage.setItem('v1raw',JSON.stringify(base))}catch(e){}}
+ if(from<3){try{localStorage.setItem('v1raw',JSON.stringify(base))}catch(e){}}
  for(const m of MIGRATIONS){if((base.meta.schemaVersion||1)<m.to){try{base=m.run(base);base.meta.schemaVersion=m.to;const bad=Invariants.check(base);if(bad)throw new Error(bad)}catch(e){try{const r=JSON.parse(localStorage.getItem('v1raw')||'null');if(r)return r}catch(_){}}}}
  return base;
 }

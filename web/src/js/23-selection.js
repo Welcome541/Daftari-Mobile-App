@@ -34,7 +34,7 @@ document.addEventListener('pointercancel',locUp);
 function txOpen(kind,inv,cid){if(Date.now()-lxFired<900)return;if(cid)go('profile',{id:cid,focus:(kind==='debt'?'d:':'p:')+(inv||'')});else if(kind==='debt'&&inv)go('invoice',{id:inv})}
 function selXlsx(){if(!ui.sel||!ui.sel.on||!ui.sel.ids.length){toastMsg(t('selEmpty'));return}if(typeof XLSX==='undefined'){toastMsg('Excel');return}
  const rows=[[t('date'),t('time'),t('cust'),t('type'),CUR(),t('remind')]];
- ui.sel.ids.map(selFind).filter(Boolean).sort((a,b)=>b.ts-a.ts).forEach(o=>{const c=o.cust?cust(o.cust):null;rows.push([dateStr(o.ts),timeStr(o.ts),c?c.name:'',t(o.kind==='debt'?'debt':'pay'),fmt(o.amount),o.kind==='debt'?(o.note||''):(o.method||'')])});
+ ui.sel.ids.map(selFind).filter(Boolean).sort((a,b)=>b.ts-a.ts).forEach(o=>{const c=o.cust?cust(o.cust):null;rows.push([dateStr(o.ts),(o.hasTime!=null? (o.hasTime?timeStr(o.ts):'') : timeStr(o.ts)),c?c.name:'',t(o.kind==='debt'?'debt':'pay'),fmt(o.amount),o.kind==='debt'?(o.note||''):(o.method||'')])});
  try{const ws=XLSX.utils.aoa_to_sheet(rows);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'sel');XLSX.writeFile(wb,'dafter-selection.xlsx');toastMsg(t('done'))}catch(e){toastMsg('Excel')}}
 function openHomeMenu(){openSheet('<h3>'+t('menu')+'</h3>'
  +'<button class="srow" onclick="closeSheet();selStart()"><span class="sic2" style="background:var(--navy-bg);color:var(--navy)">'+ic('checkc',20)+'</span><span class="sp" style="text-align:start"><span class="t">'+t('sel')+'</span></span>'+ic('fwd',17)+'</button>'
