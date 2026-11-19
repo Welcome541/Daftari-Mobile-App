@@ -221,9 +221,9 @@ async function main() {
     const m = rows[i].querySelector('.orow-meta');
     return m ? m.textContent.replace(/\s+/g, ' ').trim() : '';
   };
-  check('row 1 meta reads فاتورة', metaOf(0).indexOf('فاتورة') === 0, metaOf(0));
-  check('row 2 meta reads a cash payment', metaOf(1).indexOf('سداد نقدًا') === 0, metaOf(1));
-  check('row 3 meta reads فاتورة', metaOf(2).indexOf('فاتورة') === 0, metaOf(2));
+  check('row 1 meta reads phone', metaOf(0).indexOf('050 456 7291') === 0 || metaOf(0).indexOf('0504567291') === 0, metaOf(0));
+  check('row 2 meta reads phone', metaOf(1).indexOf('053 246 8101') === 0 || metaOf(1).indexOf('0532468101') === 0, metaOf(1));
+  check('row 3 meta reads phone', metaOf(2).indexOf('056 135 7924') === 0 || metaOf(2).indexOf('0561357924') === 0, metaOf(2));
   check('the customer rows no longer show the time', metaOf(0).indexOf('ص') === -1 && metaOf(0).indexOf('م') === -1 || metaOf(0).indexOf(':') === -1, metaOf(0));
 
   /* --- 4. the frame classes are on the row ----------------------- */
