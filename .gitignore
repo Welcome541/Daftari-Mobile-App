@@ -11,3 +11,9 @@ signing.local.properties
 .idea/
 *.iml
 .DS_Store
+
+# web toolchain
+web/node_modules/
+web/dist/
+web/scratch/
+dist/

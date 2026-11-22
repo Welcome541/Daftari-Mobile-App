@@ -1,0 +1,6 @@
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+input,select,textarea{font-family:inherit;color:var(--ink)}
+select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--soft) 50%),linear-gradient(135deg,var(--soft) 50%,transparent 50%);background-position:calc(0% + 18px) 55%,calc(0% + 13px) 55%;background-size:5px 5px;background-repeat:no-repeat}
+.hide{display:none!important}
+button:focus-visible,.hbtn:focus-visible,.litem:focus-visible,.stat:focus-visible,#tabbar button:focus-visible{outline:2.5px solid var(--navy);outline-offset:2px}
+.recdot{width:calc(10px * var(--s));height:calc(10px * var(--s));border-radius:50%;background:var(--red);display:inline-block;margin-inline-end:7px;animation:recpulse 1.1s ease-in-out infinite;vertical-align:middle}
