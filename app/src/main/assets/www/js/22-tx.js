@@ -22,7 +22,7 @@ function txRow(x){const c=x.cust?cust(x.cust):null;if(!c&&!isP())return '';const
  const detail=x.kind==='debt'?(x.note||''):(x.note||t('cash'));
  const metaText=detail ? typeLbl+' \u00b7 '+esc(detail) : typeLbl;
  const amtClass=x.kind==='debt'?'red':'green';
- const timeHtml=x.hasTime?'<span class="orow-time">'+timeStr(x.ts)+'</span>':'';
+ const timeHtml=x.hasTime?'<span class="orow-time '+amtClass+'">'+timeStr(x.ts)+'</span>':'';
  return '<div class="card litem orow'+(isSel?' sel':'')+'" '+(sel?'onclick="selToggle(\''+x.key+'\')"':'onclick="txOpen(\''+x.kind+'\',\''+(x.inv||'')+'\',\''+(c?c.id:'')+'\')" onpointerdown="txDownP(event,\''+x.key+'\')" onpointerup="txUpC()" onpointerleave="txUpC()" ontouchstart="txDownT(event,\''+x.key+'\')" ontouchend="txUpC()" ontouchmove="txMoveC(event)" oncontextmenu="return false" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')this.click()"')+'>'+box+av+
  '<div class="orow-mid"><div class="orow-name"><span>'+esc(nm)+'</span>'+late+'</div>'+
  '<div class="orow-meta">'+edt+'<span class="tx">'+metaText+'</span></div></div>'+

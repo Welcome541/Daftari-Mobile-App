@@ -2,9 +2,9 @@
   "format": "dafter-web-bundle",
   "formatVersion": 1,
   "version": "3.0.0",
-  "build": 300,
+  "build": 318,
   "channel": "stable",
-  "generatedAt": "2026-11-18T22:49:20.114Z",
+  "generatedAt": "2026-11-22T01:01:20.595Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -13,8 +13,8 @@
       "size": 821
     },
     "css/components.css": {
-      "sha256": "7ed4cf1cb9f99e41e464d01b25afc243d9a90a75974c96e0d2b08f44f3e69245",
-      "size": 24288
+      "sha256": "09a1046d65488ab8c0009af26243c4cdf4fa0a32107d3bc6e05cc36e8f244e9f",
+      "size": 24390
     },
     "css/layout.css": {
       "sha256": "6af83f6d5d1e595c61f1ea3b4419447d11bdb43e790119f7a611596609a7c627",
@@ -53,7 +53,7 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "b1c9ad41cff402c5363540c4b610a64558dbe167943bb41053d2d199f778c210",
+      "sha256": "7ef4c253d9730da63552afd83dc73b7c854d21b706a08012fec3586efea6699d",
       "size": 6289
     },
     "js/00-icons.js": {
@@ -109,12 +109,12 @@
       "size": 3242
     },
     "js/21-customers.js": {
-      "sha256": "c2fbf196ab5b981c4722c6b86fcc24e486ea912e68255fa648dac5dc31a17ba9",
-      "size": 13951
+      "sha256": "e29011e2d398e69bf49049cdf8b3dbb288942cb737f04801081ee6dc4d04f9d0",
+      "size": 13948
     },
     "js/22-tx.js": {
-      "sha256": "8f017d6a4ba826cb0ed2a907fcb7e8060c34fd185d0422baa20aeaabdc413b5d",
-      "size": 4695
+      "sha256": "a2b22f8b95ee18cd978fc4a81c440ec28e45bb6b35af1ba9fa3253c7e88cbaa8",
+      "size": 4708
     },
     "js/23-selection.js": {
       "sha256": "83ec221569cc4cb5d069cae30af65ce577d4a571eecf61049568dcc01ed0333f",
@@ -165,8 +165,8 @@
       "size": 5705
     },
     "js/38-screen-wizard.js": {
-      "sha256": "cf2a4f299ff16b601381557e64ab308b9afe06fef7376e213fdf7584c0ec9960",
-      "size": 8822
+      "sha256": "88f74e4aceac4b78492d27e3c5296a35b0aa71efdf8fed42a99bad1632fe497b",
+      "size": 8607
     },
     "js/39-screen-newcust.js": {
       "sha256": "4885e9e0e4219e7014a82399c4a981335bc57388133f854f93037a022856bf5c",

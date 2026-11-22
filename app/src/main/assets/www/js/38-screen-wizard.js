@@ -19,7 +19,7 @@ function wzLive(){const el=document.getElementById('wzLive');if(el)el.innerHTML=
 function wizConfirm(){const wz=ui.wz;if(!wz)return;const c=isP()?null:cust(wz.custId);const amt=Money.parse(wz.amt);
  if(dedupe('wz|'+(c?c.id:'p')+'|'+amt))return;
  if(!isP()&&!c){toastMsg(t('chooseFirst'));return}if(amt<=0){toastMsg(t('enterAmt'));return}
- if(wz.kind==='debt'){const now=Date.now();const inv={id:uid(),code:'A'+(DD().seq++),cust:c?c.id:null,ts:now,createdAt:now,hasTime:true,amount:amt,note:(wz.note||'').trim(),due:wz.due?+new Date(wz.due):null,src:'manual'};DD().invoices.push(inv);save();feedback('debt');doneSnack('debt',inv.id,c?c.id:null,amt);speak((c?c.name+'، ':'')+t('newDebt')+' '+amt+' '+CUR())}
+ if(wz.kind==='debt'){const now=Date.now();const inv={id:uid(),code:'A'+(DD().seq++),cust:c?c.id:null,ts:now,createdAt:now,hasTime:true,amount:amt,note:(wz.note||'').trim(),due:null,src:'manual'};DD().invoices.push(inv);save();feedback('debt');doneSnack('debt',inv.id,c?c.id:null,amt);speak((c?c.name+'، ':'')+t('newDebt')+' '+amt+' '+CUR())}
  else{const open=c?custInvoices(c.id).filter(i=>invRem(i)>0&&!i.k).sort((a,b)=>a.ts-b.ts):[];let left=amt;const alloc=[];
   open.forEach(i=>{if(left<=0)return;const use=Math.min(invRem(i),left);left-=use;alloc.push({inv:i.id,amt:use})});
   const now=Date.now();const pyv={id:uid(),cust:c?c.id:null,ts:now,createdAt:now,hasTime:true,amount:amt,method:wz.method,alloc,src:'manual'};DD().payments.push(pyv);save();feedback('pay');doneSnack('pay',pyv.id,c?c.id:null,amt);speak((c?c.name+'، ':'')+t('pay')+' '+amt+' '+CUR())}
@@ -36,7 +36,7 @@ const S_wiz=p=>{const wz=ui.wz;if(!wz)return '<div class="pad"></div>';
  else{const col=wz.kind==='debt'?'var(--red)':'var(--green)';
   body='<div class="pad" style="margin-top:12px">'+(isP()?'':wizCustCard())
   +'<label class="lb">'+(wz.kind==='debt'?t('debtAmt'):t('amountNow'))+' ('+CUR()+')</label><div class="card" style="display:flex;align-items:center;border:1.8px solid '+col+'"><input id="wzA" class="num" autofocus enterkeyhint="done" style="flex:1;min-width:0;border:none;outline:none;background:none;font-size:28px;font-weight:900;padding:12px 14px" inputmode="decimal" placeholder="0" value="'+esc(wz.amt)+'" oninput="ui.wz.amt=this.value;wzLive()"></div><div id="wzLive">'+wzLiveHtml()+'</div>'
-  +(wz.kind==='debt'?'<label class="lb">'+t('remind')+' — '+t('optF')+'</label><input class="inp" id="wzN" placeholder="'+t('remindPh')+'" value="'+esc(wz.note)+'" oninput="ui.wz.note=this.value"><label class="lb">'+t('due')+' — '+t('optF')+'</label><input class="inp num" id="wzD" type="date" style="min-width:0;font-size:13px" value="'+esc(wz.due)+'" oninput="ui.wz.due=this.value">'
+  +(wz.kind==='debt'?'<label class="lb">'+t('remind')+' — '+t('optF')+'</label><input class="inp" id="wzN" placeholder="'+t('remindPh')+'" value="'+esc(wz.note)+'" oninput="ui.wz.note=this.value">'
   :'<label class="lb">'+t('method')+'</label><div class="seg">'+['cash','transfer','cardpay'].map(m=>'<button class="'+(wz.method===m?'on':'')+'" onclick="ui.wz.method=\''+m+'\';render()">'+t(m)+'</button>').join('')+'</div>')+'</div>'}
  let nav='<div class="bottombar" style="display:flex;gap:10px">';
  if(cur==='cust')nav+='<button class="btn btn-line" style="flex:1" onclick="wizExit()">'+ic('x',16)+t('cancel')+'</button>';
