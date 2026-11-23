@@ -28,14 +28,21 @@ function lpBtn(kind,cls,icon,label){return '<button class="btn '+cls+'" aria-lab
 function btnDown(kind){if(recPend)return;recPend=setTimeout(()=>{recPend=null;try{if(sec.vib&&navigator.vibrate)navigator.vibrate([18,40,18])}catch(e){}startRec(kind)},380)}
 function btnCancelRec(){clearTimeout(recPend)}
 function btnUp(kind){if(recPend){clearTimeout(recPend);recPend=null;
- goWiz(kind,ctxCust())}}
+ goWiz(kind,ctxCust());return}
+ if(ui.rec && ui.rec.st==='rec'){
+  clearTimeout(recEnd);
+  if(sec.vosk && window.voskEngine && window.voskEngine.recording && !ui.rec._voskStopRequested){
+   ui.rec._voskStopRequested=true; window.voskEngine.stop(); recEnd=setTimeout(()=>{if(ui.rec&&ui.rec.st==='rec') endRec()},600); return;
+  }
+  endRec();
+ }}
 function startRec(kind,custId){ui.rec={kind,st:'rec',edit:false,d:{},cands:[],pre:custId||null,t0:Date.now()};window.__wvCol=kind==='debt'?'#a71949':'#0e7a52';go('rec',{kind});clearTimeout(recEnd);
  clearInterval(window.__recTick);window.__recTick=setInterval(()=>{if(!ui.rec||ui.rec.st!=='rec')return;const el=document.getElementById('recT');const sc=Math.floor((Date.now()-ui.rec.t0)/1000);if(el)el.textContent=('0'+Math.floor(sc/60)).slice(-2)+':'+('0'+sc%60).slice(-2);const rf=document.getElementById('recFields');if(rf)rf.innerHTML=recFieldsHtml();if(sc>=30){toastMsg(t('recLong'));endRec()}},500);
  startMicMeter();
  if(sec.vosk){if(window.voskEngine&&window.voskEngine.ready){window.voskEngine.start(kind,custId);return}
   toastMsg(t('voskLoad'));libLoad('lib/vosk-browser.js').then(()=>{window.voskReinit&&window.voskReinit();setTimeout(()=>{if(window.voskEngine&&window.voskEngine.ready){window.voskEngine.start(kind,custId)}else toastMsg(t('voskNo'))},300)}).catch(()=>toastMsg(t('voskNo')));return}
  if(tryWebASR(kind))return;
- recEnd=setTimeout(endRec,2600)}
+ ui.rec.engineError=true; render();}
 function learnCorrection(text,amtMinor){if(!text||!amtMinor)return;const c=sec.corrections||(sec.corrections=[]);const e=c.find(x=>x.t===text);if(e){e.a=amtMinor;e.n=(e.n||1)+1}else{c.push({t:text,a:amtMinor,n:1});if(c.length>200)c.shift()}saveSec()}
 function amtFromText(text){const lc=(sec.corrections||[]).find(x=>x.t&&text&&text.includes(x.t));if(lc)return {amt:lc.a,start:0,end:0,raw:true};
   const nd=String(text).replace(/[٠-٩]/g,c=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(c))).replace(/[۰-۹]/g,c=>String('۰۱۲۳۴٥٦٨٩'.indexOf(c)));
@@ -140,7 +147,7 @@ function recFieldsHtml(){const r=ui.rec||{d:{}},d=r.d||{};
  return h}
 const S_rec=p=>{const r=ui.rec||{st:'rec',kind:(p&&p.kind)||'debt'};
  if(r.st==='rec')return headerBar('<span class="recdot"></span>'+(r.kind==='debt'?t('recDebt'):t('recPay')),null,'cancelRec()',null,'<span class="num" id="recT" style="font-weight:900;font-size:15px;color:var(--red);min-width:52px;text-align:end">00:00</span>')
- +'<div class="micwrap"><button class="mic live" style="background:radial-gradient(circle at 35% 30%,#5c1030,#7a1236 70%);box-shadow:0 14px 34px rgba(167,25,73,.35),0 0 0 10px rgba(167,25,73,.08)">'+ic('mic',50)+'</button><canvas id="wv" width="260" height="40" style="margin:4px auto 0;display:block"></canvas><div class="wave red" id="wvfall">'+waveHtml()+'</div><div class="transcript" id="liveTx" aria-live="polite" style="min-height:22px"></div><div style="font-weight:800;color:var(--red)">'+t('recOn')+'</div><div class="muted" style="margin-top:10px;text-align:center;line-height:1.8;padding:0 28px">'+t('voiceHint')+'</div></div>'
+ +'<div class="micwrap"><button class="mic live" style="background:radial-gradient(circle at 35% 30%,#5c1030,#7a1236 70%);box-shadow:0 14px 34px rgba(167,25,73,.35),0 0 0 10px rgba(167,25,73,.08)">'+ic('mic',50)+'</button><canvas id="wv" width="260" height="40" style="margin:4px auto 0;display:block"></canvas><div class="wave red" id="wvfall">'+waveHtml()+'</div><div class="transcript" id="liveTx" aria-live="polite" style="min-height:22px"></div>'+(r.engineError?'<div class="card" style="margin:8px 16px 0;padding:10px 14px;background:var(--amber-bg);border:1px solid var(--amber-line)"><div style="font-weight:900;color:var(--amber);font-size:13px">'+ic('warn',14)+' '+t('voskNo')+'</div><div class="muted" style="font-size:11.5px;margin-top:4px">'+t('webNo')+'</div></div>':'')+'<div style="font-weight:800;color:var(--red)">'+t('recOn')+'</div><div class="muted" style="margin-top:10px;text-align:center;line-height:1.8;padding:0 28px">'+t('voiceHint')+'</div></div>'
  +'<div class="pad" style="margin-top:12px"><div class="card" style="padding:10px 16px" id="recFields">'+recFieldsHtml()+'</div></div>'
  +'<div class="card" style="margin:12px 16px 0;padding:10px 14px;text-align:start"><div style="font-weight:900;font-size:12.5px;color:var(--navy)">'+ic('shield',14)+' '+t('strictT')+'</div><div class="muted" style="margin-top:6px;font-size:11.5px;line-height:1.9;white-space:pre-line">'+t('strictRules')+'</div></div>'
  +'<div style="display:flex;gap:10px;padding:14px 16px 6px"><button class="btn btn-line" style="flex:1" onclick="cancelRec()">'+ic('x',16)+t('cancel')+'</button><button class="btn '+(r.kind==='debt'?'btn-red':'btn-green')+'" style="flex:1.4" onclick="endRec()">'+ic('checkc',16)+t('recStop')+'</button></div>'
