@@ -1,0 +1,10 @@
+{
+  "extensions": [
+    {
+      "file": "hello.js",
+      "name": "hello",
+      "version": "1.0.0",
+      "requires": ">=3.0.0"
+    }
+  ]
+}
