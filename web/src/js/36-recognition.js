@@ -109,7 +109,7 @@ function handleSay(kind,text,conf){const r0=ui.rec;if(!r0||!(r0.st==='rec'||(r0.
  if(!text||!String(text).trim())warn='nospeech';else if(pr.amt<=0)warn='noamt';else if(pr.amt>1000000)warn='toobig';else if((conf==null?1:conf)<0.45)warn='lowconf';
  r0.warn=warn;if(warn)toastMsg(t('warn_'+warn));
  r0.d=kind==='debt'?{name:pr.name,amt:pr.amt,note:pr.note,due:null,say:text,custId:pr.custId}:{name:pr.name,amt:pr.amt,method:'cash',say:text,custId:pr.custId};
- r0.st='edit';render()}
+ r0.edit=false; r0.st='edit';render()}
 window.voskOnText=(k,txt,conf)=>handleSay(k,txt,conf);
 window.voskOnEnd=()=>{const r0=ui.rec;if(r0&&r0.st==='rec'){clearTimeout(recEnd);recEnd=setTimeout(endRec,400)}};
 function extSay(text){text=String(text||'').trim();if(!text)return false;
@@ -137,7 +137,7 @@ function endRec(){const r=ui.rec;if(!r||r.st!=='rec')return;if(sec.vosk&&window.
  r.warn=r.warn||'nospeech';
  r.d=r.kind==='debt'?{name:pre?pre.name:'',amt:0,note:'',due:null,say:'',custId:pre?pre.id:null}:{name:pre?pre.name:'',amt:0,method:'cash',say:'',custId:pre?pre.id:null};
  r.cands=pre?[]:DD().customers.filter(c=>!c.archived).slice(0,5);
- r.st='edit';render()}
+ r.edit=false; r.st='edit';render()}
 function payImpactFor(cid,amt){const c=cid?cust(cid):null;if(!c||!amt)return '';const open=custInvoices(c.id).filter(i=>invRem(i)>0&&!i.k).sort((a,b)=>a.ts-b.ts);let left=amt;const rows=[];open.forEach(i=>{if(left<=0)return;const r2=invRem(i);const use=Math.min(r2,left);left-=use;rows.push({i,use,r:r2})});const after=custOpen(c.id)-amt;const will=after<=0?'willPaid':(rows.length?'willPart':'willOpen');
  return '<div class="card" style="padding:4px 16px;margin-top:12px"><div class="kv"><span class="kic" style="background:'+(will==='willPaid'?'var(--green-bg);color:var(--green)':'var(--amber-bg);color:var(--amber)')+'">'+(will==='willPaid'?ic('checkc',17):ic('clock',17))+'</span><span class="k">'+t(will)+'</span><span class="v amt" style="color:'+(will==='willPaid'?'var(--green)':'var(--amber)')+'">'+money(after)+'</span></div></div>';}
 function recFieldsHtml(){const r=ui.rec||{d:{}},d=r.d||{};
@@ -156,14 +156,14 @@ const S_rec=p=>{const r=ui.rec||{st:'rec',kind:(p&&p.kind)||'debt'};
  +'<div style="display:flex;gap:10px;padding:14px 16px 6px"><button class="btn btn-line" style="flex:1" onclick="cancelRec()">'+ic('x',16)+t('cancel')+'</button><button class="btn '+(r.kind==='debt'?'btn-red':'btn-green')+'" style="flex:1.4" onclick="endRec()">'+ic('checkc',16)+t('recStop')+'</button></div>'
  +'<div class="pad" style="padding:0 16px 18px"><button class="btn btn-soft" style="width:100%" onclick="openExtSheet()">'+ic('mic',16)+' '+t('extBtn')+'</button></div>';
  const d=r.d;
- const rows=r.st==='edit'?
+ const rows=r.edit?
  (!isP()?'<div class="kv"><span class="k">'+ic('user',16)+t('cust')+'</span><span class="v" style="min-width:55%"><select class="inp" style="padding:8px 10px" id="re_c">'+DD().customers.filter(c=>!c.archived).map(c=>'<option value="'+c.id+'"'+(c.id===d.custId?' selected':'')+'>'+esc(c.name)+'</option>').join('')+'</select></span></div>':'')
  +'<div class="kv"><span class="k">'+ic('wallet',16)+t('amount')+'</span><span class="v" style="min-width:35%"><input class="inp num" style="padding:8px 10px" id="re_a" type="number" value="'+(d.amt?Money.dec(d.amt):'')+'"></span></div>'
- +(r.kind==='debt'?'<div class="kv"><span class="k">'+ic('tag',16)+t('remind')+'</span><span class="v" style="min-width:55%"><input class="inp" style="padding:8px 10px" id="re_n" value="'+esc(d.note)+'" placeholder="'+t('remindPh')+'"></span></div><div class="kv"><span class="k">'+ic('cal',16)+t('due')+'</span><span class="v" style="min-width:45%"><input class="inp num" style="padding:8px 10px" type="date" id="re_d" value="'+(d.due?new Date(d.due).toISOString().slice(0,10):'')+'"></span></div>':'')
+ +(r.kind==='debt'?'<div class="kv"><span class="k">'+ic('tag',16)+t('remind')+'</span><span class="v" style="min-width:55%"><input class="inp" style="padding:8px 10px" id="re_n" value="'+esc(d.note)+'" placeholder="'+t('remindPh')+'"></span></div>':'')
  :
  '<div class="kv"><span class="kic">'+ic('user',17)+'</span><span class="k">'+t('cust')+'</span><span class="v">'+esc(d.name)+'</span></div>'
  +'<div class="kv"><span class="kic" style="color:'+(r.kind==='debt'?'var(--red)':'var(--green)')+'">'+ic('wallet',17)+'</span><span class="k">'+t('amount')+'</span><span class="v amt '+(r.kind==='debt'?'red':'green')+'">'+money(d.amt)+'</span></div>'
- +(r.kind==='debt'&&d.due?'<div class="kv"><span class="kic" style="color:var(--amber)">'+ic('cal',17)+'</span><span class="k">'+t('due')+'</span><span class="v">'+dateStr(d.due)+(Date.now()>d.due?' · <b style="color:var(--red)">'+t('overdue')+'</b>':'')+'</span></div>':'')
+
  +(r.kind==='debt'?'<div class="kv"><span class="kic">'+ic('tag',17)+'</span><span class="k">'+t('remind')+'</span><span class="v">'+esc(d.note)+'</span></div>':'<div class="kv"><span class="kic">'+ic('banknote',17)+'</span><span class="k">'+t('method')+'</span><span class="v">'+t(d.method||'cash')+'</span></div>');
  const impact=r.kind==='pay'?payImpactFor(d.custId,d.amt):'';
  return headerBar(r.kind==='debt'?t('recDebt'):t('recPay'),null,'cancelRec()')
@@ -172,11 +172,12 @@ const S_rec=p=>{const r=ui.rec||{st:'rec',kind:(p&&p.kind)||'debt'};
  +'<div class="pad"><div class="card" style="padding:5px 16px">'+rows+'</div>'
  +(r.cands.length&&!isP()?'<div class="muted" style="margin:10px 2px 4px;font-weight:700">'+t('cand')+'</div><div class="cand">'+r.cands.map(c=>'<button class="'+(c.id===d.custId?'on':'')+'" onclick="ui.rec.d.custId=\''+c.id+'\';ui.rec.d.name=\''+esc(c.name)+'\';render()">'+esc(c.name)+'</button>').join('')+'<button onclick="recNewCust()">+ '+t('addC')+'</button>'+'</div>':'')
  +impact
- +'<div style="display:flex;gap:10px;margin-top:14px"><button class="btn '+(r.kind==='debt'?'btn-red':'btn-green')+'" style="flex:1.4" onclick="recConfirm()">'+ic('checkc',18)+(r.kind==='debt'?t('confirmReg'):t('confirmPay'))+'</button><button class="btn btn-line" style="flex:1" onclick="retryRec()">'+ic('mic',16)+t('retryRec')+'</button><button class="hbtn" onclick="cancelRec()">'+ic('x',18)+'</button></div>'
+ +'<div style="display:flex;gap:10px;margin-top:14px"><button class="btn '+(r.kind==='debt'?'btn-red':'btn-green')+'" style="flex:1.4" onclick="recConfirm()">'+ic('checkc',18)+(r.kind==='debt'?t('confirmReg'):t('confirmPay'))+'</button><button class="btn btn-line" style="flex:1" onclick="recToggleEdit()">'+ic('edit',16)+t('editL')+'</button><button class="hbtn" onclick="cancelRec()">'+ic('x',18)+'</button></div>'
  +'<div class="muted" style="text-align:center;margin-top:12px">'+ic('lock',12)+' '+t('privacyC')+'</div></div>';};
-function readRecFields(){const r=ui.rec;const rc=document.getElementById('re_c');if(rc){r.d.custId=rc.value;r.d.name=rc.selectedOptions[0].text}const ra=document.getElementById('re_a');if(ra)r.d.amt=Money.parse(ra.value);if(r.kind==='debt'){const rn=document.getElementById('re_n');if(rn)r.d.note=rn.value;const rd=document.getElementById('re_d');if(rd)r.d.due=rd.value?new Date(rd.value+'T12:00:00').getTime():null}}
+function recToggleEdit(){const r=ui.rec;if(!r) return; if(r.edit) readRecFields(); r.edit=!r.edit; render();}
+function readRecFields(){const r=ui.rec;const rc=document.getElementById('re_c');if(rc){r.d.custId=rc.value;r.d.name=rc.selectedOptions[0].text}const ra=document.getElementById('re_a');if(ra)r.d.amt=Money.parse(ra.value);if(r.kind==='debt'){const rn=document.getElementById('re_n');if(rn)r.d.note=rn.value;}}
 function cancelRec(){clearTimeout(recEnd);if(window.voskEngine&&window.voskEngine.stop)window.voskEngine.stop();stopMicMeter();clearInterval(window.__recTick);ui.rec=null;back()}
 function recConfirm(){const r=ui.rec;readRecFields();const c=isP()?null:(cust(r.d.custId)||cust(ctxCust()));if((!c&&!isP())||!r.d.amt){toastMsg(t('chooseFirst'));return}
  learnCorrection(r.d.say,r.d.amt);
- if(r.kind==='debt'){const now2=Date.now();const inv={id:uid(),code:'A'+(DD().seq++),cust:c?c.id:null,ts:now2,createdAt:now2,hasTime:true,amount:r.d.amt,note:r.d.note,due:r.d.due||null,src:r.src||'voice'};DD().invoices.push(inv);save();feedback('debt');speak((c?c.name+'، ':'')+t('newDebt')+' '+r.d.amt+' '+CUR());ui.rec=null;stack=[c?{s:'profile',p:{id:c.id}}:{s:'home'}];render();doneSnack('debt',inv.id,c?c.id:null,inv.amount)}
+ if(r.kind==='debt'){const now2=Date.now();const inv={id:uid(),code:'A'+(DD().seq++),cust:c?c.id:null,ts:now2,createdAt:now2,hasTime:true,amount:r.d.amt,note:r.d.note,due:null,src:r.src||'voice'};DD().invoices.push(inv);save();feedback('debt');speak((c?c.name+'، ':'')+t('newDebt')+' '+r.d.amt+' '+CUR());ui.rec=null;stack=[c?{s:'profile',p:{id:c.id}}:{s:'home'}];render();doneSnack('debt',inv.id,c?c.id:null,inv.amount)}
  else{const amt=r.d.amt;const open=c?custInvoices(c.id).filter(i=>invRem(i)>0&&!i.k).sort((a,b)=>a.ts-b.ts):[];let left=amt;const alloc=[];open.forEach(i=>{if(left<=0)return;const use=Math.min(invRem(i),left);left-=use;alloc.push({inv:i.id,amt:use})});const now3=Date.now();const pyv={id:uid(),cust:c?c.id:null,ts:now3,createdAt:now3,hasTime:true,amount:amt,method:r.d.method||'cash',alloc,src:'voice'};DD().payments.push(pyv);save();feedback('pay');doneSnack('pay',pyv.id,c?c.id:null,amt);speak((c?c.name+'، ':'')+t('pay')+' '+r.d.amt+' '+CUR());ui.rec=null;ui.pay={cust:null,amt:'',method:'cash',done:{cid:c?c.id:null,cname:c?c.name:t('deposit'),amt,after:c?custOpen(c.id):0}};stack=[{s:'pay'}];render()}}
