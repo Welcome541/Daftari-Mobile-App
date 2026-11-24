@@ -2,9 +2,9 @@
   "format": "dafter-web-bundle",
   "formatVersion": 1,
   "version": "3.0.0",
-  "build": 300,
+  "build": 327,
   "channel": "stable",
-  "generatedAt": "2026-11-24T01:14:55.536Z",
+  "generatedAt": "2026-11-24T01:15:10.803Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -53,7 +53,7 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "fa13c9914c25df8f14f0deb08af80d3ae6f239d7a4763d6c1bdd8f7c9ce8c69a",
+      "sha256": "39e87c5edcbc166be9e9fe3fc47d57602f31920586012aecc16c528fdede9b20",
       "size": 6289
     },
     "js/00-icons.js": {
