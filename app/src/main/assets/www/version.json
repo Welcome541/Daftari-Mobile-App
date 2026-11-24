@@ -2,9 +2,9 @@
   "format": "dafter-web-bundle",
   "formatVersion": 1,
   "version": "3.0.0",
-  "build": 318,
+  "build": 300,
   "channel": "stable",
-  "generatedAt": "2026-11-22T01:01:20.595Z",
+  "generatedAt": "2026-11-24T01:14:55.536Z",
   "minAppVersion": "3.0.0",
   "appVersion": "3.0.0",
   "files": {
@@ -53,7 +53,7 @@
       "size": 19212
     },
     "index.html": {
-      "sha256": "7ef4c253d9730da63552afd83dc73b7c854d21b706a08012fec3586efea6699d",
+      "sha256": "fa13c9914c25df8f14f0deb08af80d3ae6f239d7a4763d6c1bdd8f7c9ce8c69a",
       "size": 6289
     },
     "js/00-icons.js": {
@@ -61,8 +61,8 @@
       "size": 10181
     },
     "js/01-i18n.js": {
-      "sha256": "7f3e3c90e35853f8a09f89fc8aa17bb2e7e58f2df3b2f4d5469f0350faf96826",
-      "size": 36167
+      "sha256": "aba88d53d03cf9e78f64568c8102158cf11633fcd3a9cca2315748568f9a0bff",
+      "size": 35967
     },
     "js/02-security.js": {
       "sha256": "1ac82c7a47712c118ef116d751114058f9805c022b97eed111c50c9d6657c71b",
@@ -149,16 +149,16 @@
       "size": 10215
     },
     "js/34-screen-profile.js": {
-      "sha256": "12cf91c9fa57dbb1218296e72be99bd25cab3157093e9f788c9674a9ab6ad238",
-      "size": 15475
+      "sha256": "d0f9b07f78ac2ee84d30202baaff554a5bd3c33a18b702534c7be86d9eccb89e",
+      "size": 14543
     },
     "js/35-screen-voice.js": {
       "sha256": "0fffb7ff3224c928c4e417fca6b84d1d47098777c1b75bf3c4310683efd9b154",
       "size": 3737
     },
     "js/36-recognition.js": {
-      "sha256": "74db5b70cf9af3e9665bbc6de588da9c18f38f0e5dd4b981723d54975ff67b50",
-      "size": 22683
+      "sha256": "96268666fca1b740274cef17b60feda20e7aa75fd044c92cdcf0049d1f120d74",
+      "size": 22985
     },
     "js/37-screen-reportb.js": {
       "sha256": "6bc6521cd07e7f8437bec2a48404018f11a713f0dbf448c3a1a6cda170b6e550",
@@ -177,8 +177,8 @@
       "size": 4702
     },
     "js/41-sheets-customer.js": {
-      "sha256": "1910f59f140345fcd210ef4757d956677c8adce692566f7286dae66d79c83bff",
-      "size": 11702
+      "sha256": "6876c40c31d15e6852ffe11a05a1e424327e234a056f884c14dad850833adb79",
+      "size": 11623
     },
     "js/42-quickactions.js": {
       "sha256": "d9cbf6916558574d8d6446b9b810bbbbbd30f2d03e2d2666174957f58f068f98",
