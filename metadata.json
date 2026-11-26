@@ -1,0 +1,8 @@
+{
+  "name": "دَفتَري — Daftari",
+  "description": "دَفتَري — دفتر ديون يعمل محليًا 100% دون إنترنت",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

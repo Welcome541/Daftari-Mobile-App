@@ -1,176 +1,21 @@
-# دَفتَري — Daftari-Mobile-App (3.0)
+# دَفتَري — Daftari (React + TypeScript + Vite)
 
-غلاف Android مستقل لواجهة دَفتَري ومحركات التعرف الصوتي المحلية. يعمل محليًا
-بالكامل دون إنترنت: البيانات على الجهاز، والتشفير AES‑GCM مع PIN، والفتح
-بالبصمة، والتسجيل الصوتي (Vosk/Whisper)، والتصدير إلى Excel/PDF/CSV، ونقل
-الدفاتر عبر QR، والاستيراد عبر OCR.
+An offline-first Arabic & English debt ledger rewritten from the Android WebView application (`Daftari-Mobile-App` 3.0) into a modular React + TypeScript + Vite web application while preserving all core features, ledger invariants, encryption, and exact UI styling.
 
-الإصدار 3.0 هو **إعادة بناء كاملة للبنية**: واجهة واحدة كان حجمها 2.1 ميغابايت
-في ملف واحد صارت حزمة وحدات صغيرة، المقاسات صارت نظام رموز (tokens) موحّدًا،
-والتطبيق صار **قابلًا للتحديث أثناء التشغيل** مع آلية تسجيل مفتوحة للإضافات
-المستقبلية.
+## Features
+- **Double-entry / Indexed Ledger**: Invoices, partial/full FIFO payment allocations, invoice edits log, returns/adjustments, overdue tracking, credit limits, opening balances, and personal expense/deposit mode.
+- **Multi-Account & Multi-Currency**: Grocery and Personal accounts across regional currencies or custom currency codes with configurable minor units.
+- **Arabic / English Bilingual & RTL/LTR**: Instant switching between Arabic (RTL) and English (LTR) with Arabic numeral normalization and fuzzy name/phone matching.
+- **Local Persistence & Encryption**: IndexedDB (`Store`) + `localStorage` fallback with optional 4-digit PIN lock, AES-GCM-256 encrypted database storage, PBKDF2 key wrapping, WebAuthn fingerprint/biometric unlock, and auto-lock timer.
+- **Voice & OCR Input**: Web Speech API (`SpeechRecognition`) voice parsing with audio bar meter, strict voice rules, manual confirmation/editing, external engine text parser, paper-ledger bulk transfer, and Tesseract.js OCR import.
+- **Reports & Exports**: Day/Week/Month/Range analytics with Chart.js (and CSS fallback), XLSX export (`SheetJS`), CSV export, printable customer statements & reports (`PrintView`), QR code transfer/statements (`qrcode.js` / `jsQR.js`), Web Bluetooth thermal printing, WhatsApp/SMS reminders, backup/restore with SHA-256 integrity checks, and Trash bin with restore/purge.
+- **Appearance & Theme**: Dark/Light/Auto theme, amount privacy blur toggle, interface scale (`--s`) and display density (`--density`) sliders.
 
-> لم يتوفر جهاز Android في بيئة البناء؛ لذلك تحقّقنا من طبقة الويب بالكامل
-> (تشغيل حقيقي داخل DOM + اختبارات آلية)، وتحقّقنا من Java بتحليل نحوي كامل
-> لكل ملف. **بناء الـ APK نفسه لم يُنفَّذ هنا** لعدم توفّر JDK وAndroid SDK.
-
----
-
-## 1. بنية المشروع
-
-```
-Daftari-Mobile-App/
-├── web/                          ← مصدر الواجهة (قابل للتعديل)
-│   ├── src/
-│   │   ├── index.html            ← هيكل خفيف (6 كيلوبايت) فقط
-│   │   ├── css/
-│   │   │   ├── tokens.css        ← نظام الرموز: الألوان، --s، --density
-│   │   │   ├── base.css          ← التصفير والأنواع الأساسية
-│   │   │   ├── components.css    ← الأزرار، الحقول، القوائم
-│   │   │   ├── layout.css        ← الهيكل: الشريط، التبويبات، الورقة
-│   │   │   └── responsive.css    ← طبقة المقاسات المرتبطة بالرموز
-│   │   ├── js/                   ← 45 وحدة مرقّمة (00 → 99)
-│   │   ├── lib/                  ← مكتبات الطرف الثالث
-│   │   ├── icons/  manifest.webmanifest
-│   │   └── extensions/           ← نقطة التوسّع (الإضافات)
-│   ├── build.mjs                 ← يبني الحزمة + يولّد version.json
-│   └── tools/
-│       ├── pack-update.mjs       ← يبني حزمة تحديث ZIP
-│       ├── check-bundle.mjs      ← يشغّل الواجهة في DOM حقيقي ويختبرها
-│       └── check-update.mjs      ← يختبر دورة التحديث كاملة
-├── app/src/main/
-│   ├── java/ai/arena/dafter/offline/
-│   │   ├── MainActivity.java     ← ربط وتشغيل فقط
-│   │   ├── web/                  ← خادم الأصول + جذر الواجهة + أمان المسارات
-│   │   ├── update/               ── مُثبِّت التحديثات
-│   │   ├── model/                ← استيراد النماذج والمشاريع
-│   │   ├── bridge/               ← جسور JavaScript الأصلية
-│   │   └── util/                 ← JSON و SHA‑256 بلا اعتماديات
-│   └── assets/www/               ← ناتج البناء (يُنشأ آليًا)
-└── docs/ARCHITECTURE.md          ← تفاصيل البنية
-```
-
----
-
-## 2. المقاسات — نظام رموز كامل
-
-كل بُعد متكيّف في التطبيق صار معرّفًا في `web/src/css/tokens.css`، ويستهلكه
-`responsive.css` بصيغة `calc(<base> * var(--s))`:
-
-| الرمز | المدى | الأثر |
-|---|---|---|
-| `--s` | 0.85 – 1.40 | حجم الواجهة كاملًا: خطوط، أزرار، أيقونات، حقول |
-| `--density` | 0.88 – 1.12 | الإيقاع الرأسي: تباعد الصفوف والحشو |
-| `--sp-1..8` | — | سلّم المسافات |
-| `--r-*`, `--h-*`, `--ic-*`, `--fs-*` | — | أنصاف الأقطار، ارتفاعات العناصر، المقاسات |
-
-المستخدم يضبطها من **الإعدادات ← العرض والمقاسات**، والاختيار يُحفظ محليًا
-ويُطبَّق قبل أول رسم، فلا يوجد وميض عند الفتح.
-
----
-
-## 3. التحديث أثناء التشغيل
-
-حزمة الواجهة صارت **حزمة وصف‑ذاتي** تحمل `version.json` في جذرها:
-
-```json
-{
-  "format": "dafter-web-bundle",
-  "formatVersion": 1,
-  "version": "3.0.0",
-  "build": 300,
-  "channel": "stable",
-  "minAppVersion": "3.0.0",
-  "files": { "js/00-icons.js": { "sha256": "…", "size": 4123 } }
-}
-```
-
-### المسارات
-
-| المسار | الوصف |
-|---|---|
-| **حزمة محلية** | ملف `.zip` يختاره المستخدم من الهاتف — **يعمل دون إنترنت** |
-| **مصدر بعيد** | `version.json` على http(s) — الأصل ينشر نسخة جديدة فيلتقطها التطبيق |
-
-### دورة التثبيت على الجهاز
-
-```
-اختيار ملف .zip
-   ↓  UpdateInstaller.install()      فك الضغط في webroot.staged (مع منع zip-slip)
-   ↓  UpdateInstaller.verify()       SHA‑256 لكل ملف مقابل الـ manifest
-   ↓  UpdateInstaller.activate()     webroot.staged → webroot  (والحفظ القديم في webroot.prev)
-   ↓  إعادة تشغيل الواجهة
-```
-
-فشل أي خطوة → يُحذف المجلد المرحلي ولا يُمَسّ الإصدار الجاري. وبعد التفعيل
-يبقى الإصدار السابق محفوظًا، فيستطيع المستخدم **الرجوع** بضغطة واحدة.
-
-الأصل داخل التطبيق هو ثلاثة مجلدات في التخزين الخاص:
-`webroot` (الفعّال)، `webroot.staged` (بانتظار التفعيل)، `webroot.prev` (للرجوع).
-يركّب خادم الأصول ترتيبًا: **المحتوى المستورد من المستخدم ← الحزمة المثبَّتة
-← الأصول داخل الـ APK**، فلا تنكسر الواجهة أبدًا.
-
-التحقق من السلامة يجري **مرّتين**: في المتصفح قبل التثبيت، وفي Java قبل
-التفعيل.
-
----
-
-## 4. الإضافات المستقبلية
-
-`web/src/js/70-registry.js` يوفّر `DaftariApp` — واجهة إضافة كاملة:
-
-```js
-DaftariApp.register({
-  name: 'my-feature',
-  version: '1.0.0',
-  requires: '>=3.0.0',
-  init: function (app) {
-    app.screen('my-screen', (params) => '<div class="pad">…</div>');
-    app.action('my-action', () => { /* … */ });
-  }
-});
-```
-
-الملفات توضع في `web/src/extensions/` ويُصفف في `extensions/manifest.json`.
-الإضافة التي تتجاوز `requires` تُرفض وتُسجَّل كخطأ، والتطبيق لا يتعطّل.
-راجع `web/src/extensions/README.md` و `sample/`.
-
----
-
-## 5. البناء
+## Development
 
 ```bash
-# حزمة الواجهة (تحدّث app/src/main/assets/www تلقائيًا)
-node web/build.mjs --version 3.0.0 --build 300 --channel stable
-
-# حزمة تحديث قابلة للتثبيت
-node web/tools/pack-update.mjs --in web/dist --out dist/dafter-update.zip \
-     --version 3.0.0 --build 300
-
-# اختبار الواجهة في DOM حقيقي
-npm --prefix web install
-node web/tools/check-bundle.mjs
-
-# اختبار دورة التحديث كاملة
-node web/tools/check-update.mjs
+npm install
+npm run dev      # Vite dev server on http://0.0.0.0:3000
+npm run build    # TypeScript check + production bundle
+npm run lint     # TypeScript type-check (tsc --noEmit)
 ```
-
-ثم `./gradlew assembleDebug` لبناء الـ APK (يحتاج JDK 17+ وAndroid SDK 35).
-
----
-
-## 6. التثبيت والتوافق
-
-- Android 5.0 (API 21) أو أحدث، مع WebView حديث.
-- معرّف الحزمة: `ai.arena.dafter.enhanced`، رقم الإصدار 3.0 (versionCode 300).
-  يختلف عن الـ APK الأصلي `ai.arena.dafter` فيمكن تثبيتهما جنبًا إلى جنب،
-  ولكل منهما بيانات مستقلة.
-- Whisper يحتاج WebAssembly و`SharedArrayBuffer`؛ عند تعذّره يُستخدم Vosk.
-- استيراد النماذج يدوي من الهاتف (لا يُرفع النموذج إلى Git ولا إلى الشبكة).
-
-## 7. استيراد النماذج
-
-1. انقل ملف النموذج إلى الهاتف وثبّت APK من تطبيق الملفات.
-2. **الإعدادات ← استيراد VOSK من الملفات** ← اختر `vosk-model-small-ar-0.3.zip`.
-3. لـ Whisper: استورد ملف GGML مثل `ggml-tiny.bin` ثم فعّل Whisper.
-4. وافق على إذن الميكروفون عند التسجيل. لا يحتاج الاستيراد إلى إنترنت.
